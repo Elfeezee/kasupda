@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react";
@@ -8,24 +7,18 @@ import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 export default function Home() {
   const carouselImages: CarouselImage[] = [
     {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2m3X_yR9qZ_Q0k8F_lW9f2Z6n7P1O0J0_Q&s",
-      alt: "KASUPDA Official Logo",
-      hint: "kasupda logo emblem",
-      customClassName: "object-contain", // Ensures logo is fully visible without cropping
-    },
-    {
-      src: "https://picsum.photos/1200/800?random=1", // Changed to use random for reliability
+      src: "https://picsum.photos/1200/800?random=1",
       alt: "KASUPDA Authority Building or Kaduna Landmark",
       hint: "kaduna landmark building",
       // Will use imageClassName="object-cover" from Carousel prop by default
     },
     {
-      src: "https://picsum.photos/1200/800?random=2", // Changed to use random for reliability
+      src: "https://picsum.photos/1200/800?random=2",
       alt: "Urban Planning in Progress",
       hint: "urban planning city map",
     },
     {
-      src: "https://picsum.photos/1200/800?random=3", // Changed to use random for reliability
+      src: "https://picsum.photos/1200/800?random=3",
       alt: "Kaduna State Development Project",
       hint: "kaduna development aerial",
     },
@@ -49,17 +42,17 @@ export default function Home() {
           <div className="relative">
             <Carousel
               images={carouselImages}
-              className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg" // Adjusted height
-              imageClassName="object-cover" // Default for images without customClassName
+              className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
+              imageClassName="object-cover"
               autoPlay={true}
               interval={5000}
             />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/60 p-4 md:p-8"> {/* Increased overlay opacity */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/60 p-4 md:p-8">
               <div className="space-y-4">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white">
                   Streamlining Urban Development in Kaduna State
                 </h1>
-                <p className="max-w-[700px] mx-auto text-gray-100 md:text-xl"> {/* Slightly lighter text */}
+                <p className="max-w-[700px] mx-auto text-gray-100 md:text-xl">
                   Welcome to the official digital portal of KASUPDA. Discover services, apply for permits, and stay updated on urban planning initiatives in Kaduna.
                 </p>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row sm:justify-center pt-4">
@@ -157,7 +150,7 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src="https://picsum.photos/400/400?random=5" // Using random for reliability
+                src="https://picsum.photos/400/400?random=5"
                 alt="Director General"
                 data-ai-hint="director general portrait"
                 width={400}
