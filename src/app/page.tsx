@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react"; // Added MapPin, FileText
+import { ArrowRight, Sparkles, MapPin, FileText, UserCircle } from "lucide-react"; // Added UserCircle
 import Image from "next/image";
 
 export default function Home() {
@@ -101,6 +101,48 @@ export default function Home() {
                 <Button variant="link" className="p-0">View Planning Data</Button>
               </CardFooter>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="w-full py-12 md:py-24 lg:py-32">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+            <div className="space-y-2">
+              <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">
+                Leadership
+              </div>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                Meet Our Director General
+              </h2>
+            </div>
+          </div>
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+            <div className="flex justify-center">
+              <Image
+                src="https://picsum.photos/400/400" // Placeholder image for DG
+                alt="Director General"
+                data-ai-hint="director general portrait"
+                width={400}
+                height={400}
+                className="rounded-full object-cover aspect-square shadow-2xl border-4 border-primary"
+              />
+            </div>
+            <div className="flex flex-col justify-center space-y-4 text-left">
+              <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                [Director General's Name]
+              </h3>
+              <p className="text-muted-foreground md:text-lg">
+                [Insert a brief and inspiring paragraph about the Director General here. Highlight their vision, commitment, and leadership in driving KASUPDA's mission towards a more developed and sustainable Kaduna State. Mention key achievements or focus areas if appropriate.]
+              </p>
+              <p className="text-muted-foreground md:text-lg">
+                [Another paragraph can go here if more space is needed for their biography, experience, or message to the public.]
+              </p>
+              <Button variant="outline" size="lg" className="self-start">
+                Read Full Bio
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </section>
