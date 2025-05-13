@@ -3,19 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react";
 import Image from "next/image";
-import { Carousel } from "@/components/ui/carousel"; 
+import { Carousel, type CarouselImage } from "@/components/ui/carousel"; 
 
 export default function Home() {
-  const carouselImages = [
+  const carouselImages: CarouselImage[] = [
     {
       src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2m3X_yR9qZ_Q0k8F_lW9f2Z6n7P1O0J0_Q&s",
       alt: "KASUPDA Official Logo",
       hint: "kasupda logo emblem",
+      customClassName: "object-contain", // Ensures logo is fully visible without cropping
     },
     {
       src: "https://picsum.photos/1200/700?random=1",
       alt: "KASUPDA Authority Building or Kaduna Landmark",
       hint: "kaduna landmark building",
+      // Will use imageClassName="object-cover" from Carousel prop by default
     },
     {
       src: "https://picsum.photos/1200/700?random=3",
@@ -37,7 +39,7 @@ export default function Home() {
             <Carousel 
               images={carouselImages} 
               className="w-full h-[60vh] sm:h-[70vh] md:h-[80vh] rounded-none shadow-lg"
-              imageClassName="object-contain" // Changed to object-contain to ensure logo is fully visible
+              imageClassName="object-cover" // Default for images without customClassName
               autoPlay={true} 
               interval={5000} 
             />

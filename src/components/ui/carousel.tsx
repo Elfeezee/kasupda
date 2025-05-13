@@ -13,12 +13,13 @@ export interface CarouselImage {
   src: string | StaticImageData;
   alt: string;
   hint?: string;
+  customClassName?: string; // Added for image-specific classes
 }
 
 interface CarouselProps {
   images: CarouselImage[];
   className?: string;
-  imageClassName?: string;
+  imageClassName?: string; // Fallback/default class for images
   showNavigation?: boolean;
   showDots?: boolean;
   autoPlay?: boolean;
@@ -28,7 +29,7 @@ interface CarouselProps {
 export function Carousel({
   images,
   className,
-  imageClassName,
+  imageClassName, // This will serve as a default for images without customClassName
   showNavigation = true,
   showDots = true,
   autoPlay = true,
@@ -84,7 +85,7 @@ export function Carousel({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden aspect-[16/9] sm:aspect-[16/7] md:aspect-[16/6] lg:aspect-[21/9]", // Adjusted aspect ratio for better hero visuals, taller on larger screens
+        "relative w-full overflow-hidden aspect-[16/9] sm:aspect-[16/7] md:aspect-[16/6] lg:aspect-[21/9]",
         className
       )}
       role="region"
@@ -103,13 +104,14 @@ export function Carousel({
             alt={image.alt}
             data-ai-hint={image.hint}
             fill
-            sizes="100vw" // Ensure image tries to fill viewport width
+            sizes="100vw"
             className={cn(
-              "absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out",
-              index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0",
-              imageClassName
+              "absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out",
+              // Apply image-specific class, then fallback to Carousel's imageClassName prop, then to 'object-cover'
+              image.customClassName || imageClassName || "object-cover",
+              index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
             )}
-            priority={index === 0} // Prioritize loading the first image
+            priority={index === 0}
             aria-hidden={index !== currentIndex}
             role="group"
             aria-roledescription="slide"
@@ -123,10 +125,10 @@ export function Carousel({
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-background/60 hover:bg-background/80 text-foreground z-30 p-2" // Increased z-index
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-background/60 hover:bg-background/80 text-foreground z-30 p-2"
             onClick={() => {
               goToPrevious();
-              resetTimeout(); // Reset autoplay timer on manual navigation
+              resetTimeout();
             }}
             aria-label="Previous image"
           >
@@ -135,10 +137,10 @@ export function Carousel({
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-background/60 hover:bg-background/80 text-foreground z-30 p-2" // Increased z-index
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-background/60 hover:bg-background/80 text-foreground z-30 p-2"
             onClick={() => {
               goToNext();
-              resetTimeout(); // Reset autoplay timer on manual navigation
+              resetTimeout();
             }}
             aria-label="Next image"
           >
@@ -148,13 +150,13 @@ export function Carousel({
       )}
 
       {showDots && images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-30" role="tablist" aria-label="Image slide controls"> {/* Increased z-index */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-30" role="tablist" aria-label="Image slide controls">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => {
                 setCurrentIndex(index);
-                resetTimeout(); // Reset autoplay timer on manual navigation
+                resetTimeout();
               }}
               className={cn(
                 "h-2.5 w-2.5 rounded-full transition-all duration-300 ease-in-out",
@@ -165,7 +167,7 @@ export function Carousel({
               role="tab"
               aria-selected={currentIndex === index}
               aria-label={`Go to image ${index + 1}`}
-              aria-controls={`carousel-image-${index}`} // Assuming images could have IDs like this
+              aria-controls={`carousel-image-${index}`}
             />
           ))}
         </div>
