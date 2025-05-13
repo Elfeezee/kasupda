@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react";
+import { ArrowRight, MapPin, FileText, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 
@@ -32,7 +32,7 @@ export default function Home() {
             <Carousel
               images={carouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-cover" // Default for all images unless overridden
+              imageClassName="object-cover" 
               autoPlay={true}
               interval={5000}
             />
@@ -67,57 +67,57 @@ export default function Home() {
                 Our Services
               </div>
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                Empowering KASUPDA with Modern Tools
+                Core Functions of KASUPDA
               </h2>
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Discover how KASUPDA leverages technology to enhance urban planning and development services in Kaduna State.
+                KASUPDA is responsible for the planning, development, and regulation of urban areas within Kaduna State, ensuring sustainable growth and adherence to building codes.
               </p>
             </div>
           </div>
           <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:max-w-none mt-12">
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
-                <Sparkles className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>AI-Powered Insights</CardTitle>
+                <FileText className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Building Permits & Approvals</CardTitle>
                 <CardDescription>
-                  Leverage AI for smarter urban planning and development analysis.
+                  Streamlined online application and processing for all your construction permits.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p>Utilize AI for land use analysis, compliance checks, and optimizing development proposals.</p>
+                <p>Easily apply for building permits, track your application status, and receive approvals digitally. We ensure compliance with state building codes for safe and legal constructions.</p>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="p-0">Explore AI Solutions</Button>
+                <Button variant="link" className="p-0">Start Application</Button>
               </CardFooter>
             </Card>
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <MapPin className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Digital Land Management</CardTitle>
+                <CardTitle>Urban Planning & Zoning</CardTitle>
                 <CardDescription>
-                  Efficiently manage land records, permits, and approvals online.
+                  Access master plans, zoning regulations, and design guidelines for sustainable development.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p>A centralized platform for transparent and accessible land administration processes and permit applications.</p>
+                <p>Stay informed about Kaduna's urban development framework. Verify land use, check zoning compliance, and access design standards to ensure your project aligns with the state's vision.</p>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="p-0">Access Land Services</Button>
+                <Button variant="link" className="p-0">View Master Plan</Button>
               </CardFooter>
             </Card>
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
-                <FileText className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Data-Driven Decisions</CardTitle>
+                <ShieldCheck className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Compliance & Enforcement</CardTitle>
                 <CardDescription>
-                  Utilize comprehensive data for informed urban planning strategies.
+                  Ensuring adherence to building codes and urban planning regulations across the state.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p>Access reports, analytics, and visualizations to guide development policies and ensure sustainable growth.</p>
+                <p>KASUPDA monitors construction activities and enforces regulations to maintain urban standards, ensure public safety, and promote orderly development in Kaduna State.</p>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="p-0">View Planning Data</Button>
+                <Button variant="link" className="p-0">Report a Violation</Button>
               </CardFooter>
             </Card>
           </div>
@@ -168,3 +168,4 @@ export default function Home() {
     </div>
   );
 }
+
