@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users } from "lucide-react";
+import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users, RefreshCcw } from "lucide-react";
 import Image from "next/image";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 
@@ -49,8 +49,9 @@ export default function Home() {
                     Apply for Permit
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                    Learn More
+                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-primary hover:text-white">
+                    Renew Permit
+                    <RefreshCcw className="ml-2 h-5 w-5" />
                   </Button>
                 </div>
               </div>
