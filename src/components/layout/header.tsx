@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Landmark } from "lucide-react"; // Changed MountainIcon to Landmark
+import { Menu, Landmark } from "lucide-react";
 import Link from "next/link";
 
 export default function Header() {
@@ -19,19 +19,25 @@ export default function Header() {
               href="#"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
-              Services
+              Apply for permit
             </Link>
             <Link
               href="#"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
-              Guidelines
+              Renew permit
             </Link>
             <Link
               href="#"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
-              Public Notices
+              Public notice
+            </Link>
+            <Link
+              href="#"
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
+              About Us
             </Link>
           </nav>
         </div>
@@ -59,19 +65,25 @@ export default function Header() {
                 href="#"
                 className="transition-colors hover:text-foreground/80 text-foreground/60"
               >
-                Services
+                Apply for permit
               </Link>
               <Link
                 href="#"
                 className="transition-colors hover:text-foreground/80 text-foreground/60"
               >
-                Guidelines
+                Renew permit
               </Link>
               <Link
                 href="#"
                 className="transition-colors hover:text-foreground/80 text-foreground/60"
               >
-                Public Notices
+                Public notice
+              </Link>
+              <Link
+                href="#"
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+              >
+                About Us
               </Link>
             </div>
           </SheetContent>
