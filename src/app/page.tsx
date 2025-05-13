@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react";
@@ -10,7 +11,6 @@ export default function Home() {
       src: "https://picsum.photos/1200/800?random=1",
       alt: "KASUPDA Authority Building or Kaduna Landmark",
       hint: "kaduna landmark building",
-      // Will use imageClassName="object-cover" from Carousel prop by default
     },
     {
       src: "https://picsum.photos/1200/800?random=2",
@@ -22,17 +22,6 @@ export default function Home() {
       alt: "Kaduna State Development Project",
       hint: "kaduna development aerial",
     },
-    // If you provide a link for an image, you can replace the 'src' value in one of the items above,
-    // or add a new item like the example below.
-    // Remember to also ensure the domain of your image (e.g., 'your-image-host.com')
-    // is added to the remotePatterns in next.config.ts.
-    // Example structure for a new image:
-    // {
-    //   src: "YOUR_IMAGE_LINK_HERE",
-    //   alt: "Description of your image",
-    //   hint: "relevant keywords",
-    //   customClassName: "object-cover", // or "object-contain"
-    // }
   ];
 
   return (
@@ -43,7 +32,7 @@ export default function Home() {
             <Carousel
               images={carouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-cover"
+              imageClassName="object-cover" // Default for all images unless overridden
               autoPlay={true}
               interval={5000}
             />
@@ -150,9 +139,9 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src="https://picsum.photos/400/400?random=5"
+                src="https://picsum.photos/400/400?random=6" 
                 alt="Director General"
-                data-ai-hint="director general portrait"
+                data-ai-hint="male avatar"
                 width={400}
                 height={400}
                 className="rounded-full object-cover aspect-square shadow-2xl border-4 border-primary"
