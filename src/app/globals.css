@@ -8,78 +8,77 @@ body {
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%; /* Dark Blue-Gray */
-    --foreground: 0 0% 98%; /* Almost White */
-    --card: 240 10% 10%; /* Slightly Lighter Dark Blue-Gray */
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 10%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 210 90% 50%; /* Vibrant Blue */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 220 15% 20%; /* Medium Dark Blue-Gray */
-    --secondary-foreground: 0 0% 98%;
-    --muted: 220 15% 15%; /* Darker Blue-Gray */
-    --muted-foreground: 0 0% 63.9%; /* Light Gray */
-    --accent: 210 90% 60%; /* Lighter Vibrant Blue */
-    --accent-foreground: 0 0% 9%; /* Dark Gray for contrast on accent */
+    --background: 220 20% 10%; /* Dark Desaturated Blue */
+    --foreground: 210 20% 95%; /* Light Grayish Blue */
+    --card: 220 20% 15%; /* Slightly Lighter Dark Desaturated Blue */
+    --card-foreground: 210 20% 95%;
+    --popover: 220 20% 15%;
+    --popover-foreground: 210 20% 95%;
+    --primary: 145 60% 40%; /* Website Green */
+    --primary-foreground: 145 20% 95%; /* Light Green for contrast */
+    --secondary: 220 15% 25%; /* Medium Dark Blue-Gray */
+    --secondary-foreground: 210 20% 95%;
+    --muted: 220 15% 20%; /* Darker Blue-Gray */
+    --muted-foreground: 210 15% 65%; /* Light Gray */
+    --accent: 210 90% 55%; /* Vibrant Blue */
+    --accent-foreground: 210 20% 98%; /* Almost White for contrast on blue */
     --destructive: 0 70% 50%; /* Vibrant Red */
     --destructive-foreground: 0 0% 98%;
-    --border: 220 15% 25%; /* Slightly lighter border */
-    --input: 220 15% 15%; /* Darker input background */
-    --ring: 210 90% 55%; /* Ring color matching primary */
-    --chart-1: 210 90% 50%;
-    --chart-2: 180 70% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 220 15% 30%; /* Slightly lighter border */
+    --input: 220 15% 20%; /* Darker input background */
+    --ring: 145 60% 45%; /* Ring color matching new primary green */
+    --chart-1: 145 60% 45%; /* Green variant */
+    --chart-2: 210 80% 55%; /* Blue variant */
+    --chart-3: 145 50% 30%; /* Darker Green variant */
+    --chart-4: 210 70% 40%; /* Darker Blue variant */
+    --chart-5: 160 50% 50%; /* Teal as complementary */
     --radius: 0.5rem;
 
-    /* Sidebar specific vars, assuming a dark theme for sidebar */
-    --sidebar-background: 240 10% 8%; /* Very Dark Blue-Gray for Sidebar */
-    --sidebar-foreground: 0 0% 95%; /* Light text for Sidebar */
-    --sidebar-primary: 210 90% 55%; /* Vibrant Blue for Sidebar primary elements */
-    --sidebar-primary-foreground: 0 0% 100%; /* White text on Sidebar primary */
-    --sidebar-accent: 210 90% 45%; /* Darker Vibrant Blue for Sidebar accents */
-    --sidebar-accent-foreground: 0 0% 98%; /* Light text on Sidebar accents */
-    --sidebar-border: 240 10% 15%; /* Border for Sidebar elements */
-    --sidebar-ring: 210 90% 60%; /* Ring for Sidebar focus */
+    /* Sidebar specific vars */
+    --sidebar-background: 220 20% 12%; /* Very Dark Desaturated Blue for Sidebar */
+    --sidebar-foreground: 210 20% 90%; /* Light text for Sidebar */
+    --sidebar-primary: 145 60% 45%; /* Website Green for Sidebar primary elements */
+    --sidebar-primary-foreground: 145 20% 98%; /* Light green on Sidebar primary */
+    --sidebar-accent: 210 90% 50%; /* Vibrant Blue for Sidebar accents */
+    --sidebar-accent-foreground: 210 20% 98%; /* Light text on Sidebar accents */
+    --sidebar-border: 220 15% 20%; /* Border for Sidebar elements */
+    --sidebar-ring: 145 60% 50%; /* Ring for Sidebar focus - green */
   }
 
   .dark {
-    /* Keep dark theme variables as they are, or adjust if primary theme is already dark */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 10%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 10%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 210 90% 50%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 220 15% 20%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 220 15% 15%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 210 90% 60%;
-    --accent-foreground: 0 0% 9%;
+    --background: 220 20% 10%;
+    --foreground: 210 20% 95%;
+    --card: 220 20% 15%;
+    --card-foreground: 210 20% 95%;
+    --popover: 220 20% 15%;
+    --popover-foreground: 210 20% 95%;
+    --primary: 145 60% 40%;
+    --primary-foreground: 145 20% 95%;
+    --secondary: 220 15% 25%;
+    --secondary-foreground: 210 20% 95%;
+    --muted: 220 15% 20%;
+    --muted-foreground: 210 15% 65%;
+    --accent: 210 90% 55%;
+    --accent-foreground: 210 20% 98%;
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 15% 25%;
-    --input: 220 15% 15%;
-    --ring: 210 90% 55%;
-    --chart-1: 210 90% 50%;
-    --chart-2: 180 70% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 220 15% 30%;
+    --input: 220 15% 20%;
+    --ring: 145 60% 45%;
+    --chart-1: 145 60% 45%;
+    --chart-2: 210 80% 55%;
+    --chart-3: 145 50% 30%;
+    --chart-4: 210 70% 40%;
+    --chart-5: 160 50% 50%;
 
-    --sidebar-background: 240 10% 8%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 210 90% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 90% 45%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 10% 15%;
-    --sidebar-ring: 210 90% 60%;
+    --sidebar-background: 220 20% 12%;
+    --sidebar-foreground: 210 20% 90%;
+    --sidebar-primary: 145 60% 45%;
+    --sidebar-primary-foreground: 145 20% 98%;
+    --sidebar-accent: 210 90% 50%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 145 60% 50%;
   }
 }
 
