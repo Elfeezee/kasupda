@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react";
 import Image from "next/image";
-import { Carousel } from "@/components/ui/carousel"; // Import the Carousel component
+import { Carousel } from "@/components/ui/carousel"; 
 
 export default function Home() {
   const carouselImages = [
@@ -12,8 +12,6 @@ export default function Home() {
       hint: "kaduna landmark building",
     },
     {
-      // Placeholder for KASUPDA Logo - ideally an SVG or transparent PNG
-      // Using a general placeholder that might suggest a logo or official symbol
       src: "https://picsum.photos/1200/700?random=2",
       alt: "KASUPDA Logo",
       hint: "kasupda logo emblem",
@@ -36,7 +34,20 @@ export default function Home() {
         <div className="container px-4 md:px-6">
           <div className="grid gap-8 lg:grid-cols-1 lg:gap-12">
             <div className="flex flex-col items-center space-y-8 text-center">
-              <Carousel images={carouselImages} className="w-full max-w-5xl rounded-xl overflow-hidden shadow-2xl" autoPlay={true} interval={5000} />
+              <div className="space-y-4">
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-primary">
+                  Streamlining Urban Development in Kaduna State
+                </h1>
+                <p className="max-w-[700px] mx-auto text-muted-foreground md:text-xl">
+                  Welcome to the official digital portal of KASUPDA. Discover services, apply for permits, and stay updated on urban planning initiatives in Kaduna.
+                </p>
+              </div>
+              <Carousel 
+                images={carouselImages} 
+                className="w-full rounded-xl overflow-hidden shadow-2xl" 
+                autoPlay={true} 
+                interval={5000} 
+              />
               <div className="flex flex-col gap-2 min-[400px]:flex-row sm:justify-center pt-4">
                 <Button size="lg">
                   Apply for Permit
