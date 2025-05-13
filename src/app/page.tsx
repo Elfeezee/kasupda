@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react";
 import Image from "next/image";
-import { Carousel, type CarouselImage } from "@/components/ui/carousel"; 
+import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 
 export default function Home() {
   const carouselImages: CarouselImage[] = [
@@ -14,41 +14,52 @@ export default function Home() {
       customClassName: "object-contain", // Ensures logo is fully visible without cropping
     },
     {
-      src: "https://picsum.photos/1200/700?random=1",
+      src: "https://picsum.photos/1200/800?random=1", // Changed to use random for reliability
       alt: "KASUPDA Authority Building or Kaduna Landmark",
       hint: "kaduna landmark building",
       // Will use imageClassName="object-cover" from Carousel prop by default
     },
     {
-      src: "https://picsum.photos/1200/700?random=3",
+      src: "https://picsum.photos/1200/800?random=2", // Changed to use random for reliability
       alt: "Urban Planning in Progress",
       hint: "urban planning city map",
     },
     {
-      src: "https://picsum.photos/1200/700?random=4",
+      src: "https://picsum.photos/1200/800?random=3", // Changed to use random for reliability
       alt: "Kaduna State Development Project",
       hint: "kaduna development aerial",
     },
+    // If you provide a link for an image, you can replace the 'src' value in one of the items above,
+    // or add a new item like the example below.
+    // Remember to also ensure the domain of your image (e.g., 'your-image-host.com')
+    // is added to the remotePatterns in next.config.ts.
+    // Example structure for a new image:
+    // {
+    //   src: "YOUR_IMAGE_LINK_HERE",
+    //   alt: "Description of your image",
+    //   hint: "relevant keywords",
+    //   customClassName: "object-cover", // or "object-contain"
+    // }
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-12">
+    <div className="flex flex-col items-center space-y-12">
       <section className="w-full">
         <div className="container px-0 md:px-0 max-w-full">
           <div className="relative">
-            <Carousel 
-              images={carouselImages} 
-              className="w-full h-[60vh] sm:h-[70vh] md:h-[80vh] rounded-none shadow-lg"
+            <Carousel
+              images={carouselImages}
+              className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg" // Adjusted height
               imageClassName="object-cover" // Default for images without customClassName
-              autoPlay={true} 
-              interval={5000} 
+              autoPlay={true}
+              interval={5000}
             />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/50 p-4 md:p-8">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/60 p-4 md:p-8"> {/* Increased overlay opacity */}
               <div className="space-y-4">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white">
                   Streamlining Urban Development in Kaduna State
                 </h1>
-                <p className="max-w-[700px] mx-auto text-gray-200 md:text-xl">
+                <p className="max-w-[700px] mx-auto text-gray-100 md:text-xl"> {/* Slightly lighter text */}
                   Welcome to the official digital portal of KASUPDA. Discover services, apply for permits, and stay updated on urban planning initiatives in Kaduna.
                 </p>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row sm:justify-center pt-4">
@@ -146,7 +157,7 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src="https://picsum.photos/400/400" 
+                src="https://picsum.photos/400/400?random=5" // Using random for reliability
                 alt="Director General"
                 data-ai-hint="director general portrait"
                 width={400}

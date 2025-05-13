@@ -22,6 +22,14 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       }
+      // If you add images from a new host (e.g., by providing your own image link),
+      // you need to add its configuration here. For example:
+      // {
+      //   protocol: 'https',
+      //   hostname: 'your-image-host.com', // Replace with the actual hostname
+      //   port: '',
+      //   pathname: '/**', // Or be more specific if needed
+      // },
     ],
   },
 };
