@@ -30,32 +30,33 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center space-y-12">
-      <section className="w-full py-16 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-8 lg:grid-cols-1 lg:gap-12">
-            <div className="flex flex-col items-center space-y-8 text-center">
+      <section className="w-full">
+        <div className="container px-0 md:px-0 max-w-full">
+          <div className="relative"> {/* Added relative positioning */}
+            <Carousel 
+              images={carouselImages} 
+              className="w-full rounded-none shadow-lg" // Changed to rounded-none, potentially keep shadow
+              imageClassName="object-cover" // Ensure images cover the area
+              autoPlay={true} 
+              interval={5000} 
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/50 p-4 md:p-8"> {/* Overlay div */}
               <div className="space-y-4">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-primary">
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white"> {/* Changed text color to white for contrast */}
                   Streamlining Urban Development in Kaduna State
                 </h1>
-                <p className="max-w-[700px] mx-auto text-muted-foreground md:text-xl">
+                <p className="max-w-[700px] mx-auto text-gray-200 md:text-xl"> {/* Changed text color for contrast */}
                   Welcome to the official digital portal of KASUPDA. Discover services, apply for permits, and stay updated on urban planning initiatives in Kaduna.
                 </p>
-              </div>
-              <Carousel 
-                images={carouselImages} 
-                className="w-full rounded-xl overflow-hidden shadow-2xl" 
-                autoPlay={true} 
-                interval={5000} 
-              />
-              <div className="flex flex-col gap-2 min-[400px]:flex-row sm:justify-center pt-4">
-                <Button size="lg">
-                  Apply for Permit
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button size="lg" variant="outline">
-                  Learn More
-                </Button>
+                <div className="flex flex-col gap-2 min-[400px]:flex-row sm:justify-center pt-4">
+                  <Button size="lg">
+                    Apply for Permit
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary"> {/* Adjusted button style for overlay */}
+                    Learn More
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

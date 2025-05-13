@@ -84,7 +84,7 @@ export function Carousel({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden aspect-[16/7] md:aspect-[16/6] lg:aspect-[16/5]", // Adjust aspect ratio for better hero visuals
+        "relative w-full overflow-hidden aspect-[16/9] sm:aspect-[16/7] md:aspect-[16/6] lg:aspect-[21/9]", // Adjusted aspect ratio for better hero visuals, taller on larger screens
         className
       )}
       role="region"
@@ -103,7 +103,7 @@ export function Carousel({
             alt={image.alt}
             data-ai-hint={image.hint}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1024px"
+            sizes="100vw" // Ensure image tries to fill viewport width
             className={cn(
               "absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out",
               index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0",
@@ -123,7 +123,7 @@ export function Carousel({
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-background/60 hover:bg-background/80 text-foreground z-20 p-2"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-background/60 hover:bg-background/80 text-foreground z-30 p-2" // Increased z-index
             onClick={() => {
               goToPrevious();
               resetTimeout(); // Reset autoplay timer on manual navigation
@@ -135,7 +135,7 @@ export function Carousel({
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-background/60 hover:bg-background/80 text-foreground z-20 p-2"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-background/60 hover:bg-background/80 text-foreground z-30 p-2" // Increased z-index
             onClick={() => {
               goToNext();
               resetTimeout(); // Reset autoplay timer on manual navigation
@@ -148,7 +148,7 @@ export function Carousel({
       )}
 
       {showDots && images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20" role="tablist" aria-label="Image slide controls">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-30" role="tablist" aria-label="Image slide controls"> {/* Increased z-index */}
           {images.map((_, index) => (
             <button
               key={index}
