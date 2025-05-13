@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, MapPin, FileText, ShieldCheck } from "lucide-react";
+import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users } from "lucide-react";
 import Image from "next/image";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 
@@ -118,6 +118,51 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <Button variant="link" className="p-0">Report a Violation</Button>
+              </CardFooter>
+            </Card>
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardHeader>
+                <SearchCheck className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Land Use Verification</CardTitle>
+                <CardDescription>
+                  Verify land use status and obtain necessary clearances for property development.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>Our services include thorough verification of land records and designated use, helping you make informed decisions and avoid potential conflicts in your development projects.</p>
+              </CardContent>
+              <CardFooter>
+                <Button variant="link" className="p-0">Verify Land Use</Button>
+              </CardFooter>
+            </Card>
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardHeader>
+                <Building className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Development Control</CardTitle>
+                <CardDescription>
+                  Monitoring and controlling physical development to ensure it aligns with approved plans.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>We actively monitor ongoing construction projects to ensure they adhere to approved plans, building codes, and safety standards, fostering a well-organized urban landscape.</p>
+              </CardContent>
+              <CardFooter>
+                <Button variant="link" className="p-0">Learn About Control</Button>
+              </CardFooter>
+            </Card>
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardHeader>
+                <Users className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Public Enlightenment</CardTitle>
+                <CardDescription>
+                  Engaging and educating the public on urban planning matters and regulations.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>KASUPDA is committed to sensitizing the public about urban planning laws, development procedures, and the importance of orderly settlement for a sustainable Kaduna State.</p>
+              </CardContent>
+              <CardFooter>
+                <Button variant="link" className="p-0">Get Informed</Button>
               </CardFooter>
             </Card>
           </div>
