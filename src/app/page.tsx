@@ -35,7 +35,7 @@ export default function Home() {
           <div className="relative"> {/* Added relative positioning */}
             <Carousel 
               images={carouselImages} 
-              className="w-full rounded-none shadow-lg" // Changed to rounded-none, potentially keep shadow
+              className="w-full h-[60vh] sm:h-[70vh] md:h-[80vh] rounded-none shadow-lg" // Adjusted height for better display
               imageClassName="object-cover" // Ensure images cover the area
               autoPlay={true} 
               interval={5000} 
