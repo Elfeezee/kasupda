@@ -3,30 +3,52 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users, RefreshCcw } from "lucide-react";
+import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users, RefreshCcw, Upload } from "lucide-react"; // Added Upload
 import Image from "next/image";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
+import React, { useState, useRef, ChangeEvent } from "react"; // Added React imports
 
 
-const initialCarouselImages: CarouselImage[] = [
-  {
-    src: "https://picsum.photos/seed/kasupda-image1/1200/800",
-    alt: "Replace this with your custom KASUPDA image 1. Example: KASUPDA Headquarters building.",
-    hint: "official building",
-  },
-  {
-    src: "https://picsum.photos/seed/kasupda-image2/1200/800",
-    alt: "Replace this with your custom KASUPDA image 2. Example: An ongoing urban development project in Kaduna.",
-    hint: "urban project",
-  },
-  {
-    src: "https://picsum.photos/seed/kasupda-image3/1200/800",
-    alt: "Replace this with your custom KASUPDA image 3. Example: A completed infrastructure project or community initiative.",
-    hint: "community initiative",
-  },
-];
+// Initial images are now empty as per requirement to remove existing pictures
+const initialCarouselImages: CarouselImage[] = [];
 
 export default function Home() {
+  const [carouselImages, setCarouselImages] = useState<CarouselImage[]>(initialCarouselImages);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const filePromises = Array.from(files).map(file => {
+        return new Promise<CarouselImage>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            resolve({
+              src: reader.result as string,
+              alt: file.name, // Use file name for alt text
+              hint: 'user uploaded', // Generic hint for uploaded images
+            });
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      });
+
+      Promise.all(filePromises)
+        .then(newImages => {
+          setCarouselImages(prevImages => [...prevImages, ...newImages]);
+        })
+        .catch(error => {
+          console.error("Error reading files:", error);
+          // Consider adding a user-facing error message here (e.g., using a toast)
+        });
+
+      // Clear the file input's value to allow re-uploading the same file(s)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col items-center space-y-12">
@@ -34,10 +56,10 @@ export default function Home() {
         <div className="container px-0 md:px-0 max-w-full">
           <div className="relative">
             <Carousel
-              images={initialCarouselImages}
+              images={carouselImages} // Use state-managed images
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
               imageClassName="object-cover" 
-              autoPlay={true}
+              autoPlay={carouselImages.length > 1} // Autoplay only if more than one image
               interval={5000}
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/60 p-4 md:p-8">
@@ -53,13 +75,36 @@ export default function Home() {
                     Apply for Permit
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-primary hover:text-primary-foreground hover:border-primary">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="text-white border-white hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                  >
                     Renew Permit
                     <RefreshCcw className="ml-2 h-5 w-5" />
+                  </Button>
+                  {/* Upload Button */}
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="text-white border-white hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <Upload className="mr-2 h-5 w-5" /> Upload Images
                   </Button>
                 </div>
               </div>
             </div>
+            {/* Hidden File Input - its visual position in JSX doesn't matter as it's hidden */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              multiple
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+              id="carousel-image-upload"
+            />
           </div>
         </div>
       </section>
@@ -218,4 +263,3 @@ export default function Home() {
     </div>
   );
 }
-
