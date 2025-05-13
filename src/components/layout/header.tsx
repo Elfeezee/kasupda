@@ -88,10 +88,11 @@ export default function Header() {
             </div>
           </SheetContent>
         </Sheet>
-        <div className="flex flex-1 items-center justify-end space-x-2">
+        {/* Login and Sign Up buttons removed from here */}
+        {/* <div className="flex flex-1 items-center justify-end space-x-2">
           <Button variant="ghost">Login</Button>
           <Button>Sign Up</Button>
-        </div>
+        </div> */}
       </div>
     </header>
   );
