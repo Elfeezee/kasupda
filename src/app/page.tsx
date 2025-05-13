@@ -140,7 +140,7 @@ export default function Home() {
             <div className="flex justify-center">
               <Image
                 src="https://picsum.photos/400/400?random=6" 
-                alt="Director General"
+                alt="Director General Dr. Abdrrahman Yahya"
                 data-ai-hint="male avatar"
                 width={400}
                 height={400}
@@ -149,13 +149,13 @@ export default function Home() {
             </div>
             <div className="flex flex-col justify-center space-y-4 text-left">
               <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
-                [Director General's Name]
+                Dr. Abdrrahman Yahya
               </h3>
               <p className="text-muted-foreground md:text-lg">
-                Our Director General is a visionary leader, deeply committed to the advancement and modernization of KASUPDA. With a steadfast dedication to progress, they champion innovative strategies and foster a culture of excellence within the authority. Their tireless efforts are geared towards transforming Kaduna State into a model of sustainable urban development, ensuring a brighter future for all its citizens.
+                Our Director General, Dr. Abdrrahman Yahya, is a visionary leader, deeply committed to the advancement and modernization of KASUPDA. With a steadfast dedication to progress, he champions innovative strategies and fosters a culture of excellence within the authority. His tireless efforts are geared towards transforming Kaduna State into a model of sustainable urban development, ensuring a brighter future for all its citizens.
               </p>
               <p className="text-muted-foreground md:text-lg">
-                Under their guidance, KASUPDA has embraced cutting-edge technologies and community-centric approaches to urban planning. The Director General's unwavering commitment to transparency, efficiency, and public service continues to drive the authority towards achieving new heights in urban governance and development.
+                Under his astute guidance, KASUPDA has embraced cutting-edge technologies and community-centric approaches to urban planning. Dr. Yahya's unwavering commitment to transparency, efficiency, and public service continues to drive the authority towards achieving new heights in urban governance and development, significantly bettering the lives of the people and the operational capacity of the authority.
               </p>
               <Button variant="outline" size="lg" className="self-start">
                 Read Full Bio
@@ -168,4 +168,3 @@ export default function Home() {
     </div>
   );
 }
-
