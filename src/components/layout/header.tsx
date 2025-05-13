@@ -7,7 +7,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
-        <div className="mr-4 hidden md:flex">
+        {/* Desktop Navigation */}
+        <div className="mr-4 hidden md:flex md:flex-1 items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Landmark className="h-6 w-6 text-primary" />
             <span className="hidden font-bold sm:inline-block">
@@ -41,58 +42,55 @@ export default function Header() {
             </Link>
           </nav>
         </div>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              aria-label="Toggle Menu"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="pr-0">
-            <Link
-              href="/"
-              className="flex items-center space-x-2 mb-6 ml-4"
-            >
-              <Landmark className="h-6 w-6 text-primary" />
-              <span className="font-bold">KASUPDA</span>
-            </Link>
-            <div className="flex flex-col space-y-3 ml-4">
-              <Link
-                href="#"
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
+
+        {/* Mobile Navigation Header Bar */}
+        <div className="flex w-full items-center justify-between md:hidden">
+          <Link href="/" className="flex items-center space-x-2">
+            <Landmark className="h-6 w-6 text-primary" />
+            <span className="font-bold">
+              KASUPDA
+            </span>
+          </Link>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Toggle Menu"
               >
-                Apply for permit
-              </Link>
-              <Link
-                href="#"
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
-              >
-                Renew permit
-              </Link>
-              <Link
-                href="#"
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
-              >
-                Public notice
-              </Link>
-              <Link
-                href="#"
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
-              >
-                About Us
-              </Link>
-            </div>
-          </SheetContent>
-        </Sheet>
-        {/* Login and Sign Up buttons removed from here */}
-        {/* <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button variant="ghost">Login</Button>
-          <Button>Sign Up</Button>
-        </div> */}
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="pr-0 pt-8">
+              <nav className="flex flex-col space-y-3 ml-4">
+                <Link
+                  href="#"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60"
+                >
+                  Apply for permit
+                </Link>
+                <Link
+                  href="#"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60"
+                >
+                  Renew permit
+                </Link>
+                <Link
+                  href="#"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60"
+                >
+                  Public notice
+                </Link>
+                <Link
+                  href="#"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60"
+                >
+                  About Us
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );
