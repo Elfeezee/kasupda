@@ -175,14 +175,16 @@ function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
   React.useEffect(() => {
-    listeners.push(setState)
+    // Capture the current setState instance for cleanup.
+    const currentSetState = setState;
+    listeners.push(currentSetState)
     return () => {
-      const index = listeners.indexOf(setState)
+      const index = listeners.indexOf(currentSetState)
       if (index > -1) {
         listeners.splice(index, 1)
       }
     }
-  }, [state])
+  }, []); // Empty dependency array ensures this runs only on mount and unmount
 
   return {
     ...state,
