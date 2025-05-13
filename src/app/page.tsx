@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react";
@@ -7,14 +8,14 @@ import { Carousel } from "@/components/ui/carousel";
 export default function Home() {
   const carouselImages = [
     {
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2m3X_yR9qZ_Q0k8F_lW9f2Z6n7P1O0J0_Q&s",
+      alt: "KASUPDA Official Logo",
+      hint: "kasupda logo emblem",
+    },
+    {
       src: "https://picsum.photos/1200/700?random=1",
       alt: "KASUPDA Authority Building or Kaduna Landmark",
       hint: "kaduna landmark building",
-    },
-    {
-      src: "https://picsum.photos/1200/700?random=2",
-      alt: "KASUPDA Logo",
-      hint: "kasupda logo emblem",
     },
     {
       src: "https://picsum.photos/1200/700?random=3",
@@ -32,20 +33,20 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center space-y-12">
       <section className="w-full">
         <div className="container px-0 md:px-0 max-w-full">
-          <div className="relative"> {/* Added relative positioning */}
+          <div className="relative">
             <Carousel 
               images={carouselImages} 
-              className="w-full h-[60vh] sm:h-[70vh] md:h-[80vh] rounded-none shadow-lg" // Adjusted height for better display
-              imageClassName="object-cover" // Ensure images cover the area
+              className="w-full h-[60vh] sm:h-[70vh] md:h-[80vh] rounded-none shadow-lg"
+              imageClassName="object-contain" // Changed to object-contain to ensure logo is fully visible
               autoPlay={true} 
               interval={5000} 
             />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/50 p-4 md:p-8"> {/* Overlay div */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/50 p-4 md:p-8">
               <div className="space-y-4">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white"> {/* Changed text color to white for contrast */}
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white">
                   Streamlining Urban Development in Kaduna State
                 </h1>
-                <p className="max-w-[700px] mx-auto text-gray-200 md:text-xl"> {/* Changed text color for contrast */}
+                <p className="max-w-[700px] mx-auto text-gray-200 md:text-xl">
                   Welcome to the official digital portal of KASUPDA. Discover services, apply for permits, and stay updated on urban planning initiatives in Kaduna.
                 </p>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row sm:justify-center pt-4">
@@ -53,7 +54,7 @@ export default function Home() {
                     Apply for Permit
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary"> {/* Adjusted button style for overlay */}
+                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
                     Learn More
                   </Button>
                 </div>
@@ -143,7 +144,7 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src="https://picsum.photos/400/400" // Placeholder image for DG
+                src="https://picsum.photos/400/400" 
                 alt="Director General"
                 data-ai-hint="director general portrait"
                 width={400}
