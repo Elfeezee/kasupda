@@ -1,24 +1,43 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Sparkles, MapPin, FileText, UserCircle } from "lucide-react"; // Added UserCircle
+import { ArrowRight, Sparkles, MapPin, FileText } from "lucide-react";
 import Image from "next/image";
+import { Carousel } from "@/components/ui/carousel"; // Import the Carousel component
 
 export default function Home() {
+  const carouselImages = [
+    {
+      src: "https://picsum.photos/1200/700?random=1",
+      alt: "KASUPDA Authority Building or Kaduna Landmark",
+      hint: "kaduna landmark building",
+    },
+    {
+      // Placeholder for KASUPDA Logo - ideally an SVG or transparent PNG
+      // Using a general placeholder that might suggest a logo or official symbol
+      src: "https://picsum.photos/1200/700?random=2",
+      alt: "KASUPDA Logo",
+      hint: "kasupda logo emblem",
+    },
+    {
+      src: "https://picsum.photos/1200/700?random=3",
+      alt: "Urban Planning in Progress",
+      hint: "urban planning city map",
+    },
+    {
+      src: "https://picsum.photos/1200/700?random=4",
+      alt: "Kaduna State Development Project",
+      hint: "kaduna development aerial",
+    },
+  ];
+
   return (
-    <div className="flex flex-col items-center justify-center text-center space-y-12">
-      <section className="py-16 md:py-24 lg:py-32">
+    <div className="flex flex-col items-center justify-center space-y-12">
+      <section className="w-full py-16 md:py-24 lg:py-32">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-            <div className="flex flex-col justify-center space-y-4 text-left">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                  Streamlining Urban Development in Kaduna State
-                </h1>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  KASUPDA is dedicated to fostering sustainable urban growth and development through efficient planning, regulation, and management of land use within Kaduna State.
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+          <div className="grid gap-8 lg:grid-cols-1 lg:gap-12">
+            <div className="flex flex-col items-center space-y-8 text-center">
+              <Carousel images={carouselImages} className="w-full max-w-5xl rounded-xl overflow-hidden shadow-2xl" autoPlay={true} interval={5000} />
+              <div className="flex flex-col gap-2 min-[400px]:flex-row sm:justify-center pt-4">
                 <Button size="lg">
                   Apply for Permit
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -28,14 +47,6 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-            <Image
-              src="https://picsum.photos/600/400"
-              alt="Kaduna Cityscape"
-              data-ai-hint="kaduna urban planning"
-              width={600}
-              height={400}
-              className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square shadow-2xl"
-            />
           </div>
         </div>
       </section>
