@@ -152,10 +152,10 @@ export default function Home() {
                 [Director General's Name]
               </h3>
               <p className="text-muted-foreground md:text-lg">
-                [Insert a brief and inspiring paragraph about the Director General here. Highlight their vision, commitment, and leadership in driving KASUPDA's mission towards a more developed and sustainable Kaduna State. Mention key achievements or focus areas if appropriate.]
+                Our Director General is a visionary leader, deeply committed to the advancement and modernization of KASUPDA. With a steadfast dedication to progress, they champion innovative strategies and foster a culture of excellence within the authority. Their tireless efforts are geared towards transforming Kaduna State into a model of sustainable urban development, ensuring a brighter future for all its citizens.
               </p>
               <p className="text-muted-foreground md:text-lg">
-                [Another paragraph can go here if more space is needed for their biography, experience, or message to the public.]
+                Under their guidance, KASUPDA has embraced cutting-edge technologies and community-centric approaches to urban planning. The Director General's unwavering commitment to transparency, efficiency, and public service continues to drive the authority towards achieving new heights in urban governance and development.
               </p>
               <Button variant="outline" size="lg" className="self-start">
                 Read Full Bio
@@ -168,3 +168,4 @@ export default function Home() {
     </div>
   );
 }
+
