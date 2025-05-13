@@ -10,19 +10,19 @@ import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 
 const initialCarouselImages: CarouselImage[] = [
   {
-    src: "https://picsum.photos/1200/800?random=1",
-    alt: "KASUPDA Authority Building or Kaduna Landmark",
-    hint: "kaduna landmark building",
+    src: "https://picsum.photos/seed/kasupda-image1/1200/800",
+    alt: "Replace this with your custom KASUPDA image 1. Example: KASUPDA Headquarters building.",
+    hint: "official building",
   },
   {
-    src: "https://picsum.photos/1200/800?random=2",
-    alt: "Urban Planning in Progress",
-    hint: "urban planning city map",
+    src: "https://picsum.photos/seed/kasupda-image2/1200/800",
+    alt: "Replace this with your custom KASUPDA image 2. Example: An ongoing urban development project in Kaduna.",
+    hint: "urban project",
   },
   {
-    src: "https://picsum.photos/1200/800?random=3",
-    alt: "Kaduna State Development Project",
-    hint: "kaduna development aerial",
+    src: "https://picsum.photos/seed/kasupda-image3/1200/800",
+    alt: "Replace this with your custom KASUPDA image 3. Example: A completed infrastructure project or community initiative.",
+    hint: "community initiative",
   },
 ];
 
@@ -53,7 +53,7 @@ export default function Home() {
                     Apply for Permit
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-primary hover:text-white">
+                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-primary hover:text-primary-foreground hover:border-primary">
                     Renew Permit
                     <RefreshCcw className="ml-2 h-5 w-5" />
                   </Button>
@@ -189,8 +189,8 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src="https://picsum.photos/400/400?random=6" 
-                alt="Director General Dr. Abdrrahman Yahya"
+                src="https://picsum.photos/seed/dg-avatar/400/400" 
+                alt="Director General Dr. Abdrrahman Yahya - Male Avatar"
                 data-ai-hint="male avatar"
                 width={400}
                 height={400}
@@ -218,3 +218,4 @@ export default function Home() {
     </div>
   );
 }
+
