@@ -1,28 +1,55 @@
 
+"use client";
+
+import type { ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users, RefreshCcw } from "lucide-react";
+import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users, RefreshCcw, UploadCloud } from "lucide-react";
 import Image from "next/image";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
+import { useState, useRef } from "react";
+
+const initialCarouselImages: CarouselImage[] = [
+  {
+    src: "https://picsum.photos/1200/800?random=1",
+    alt: "KASUPDA Authority Building or Kaduna Landmark",
+    hint: "kaduna landmark building",
+  },
+  {
+    src: "https://picsum.photos/1200/800?random=2",
+    alt: "Urban Planning in Progress",
+    hint: "urban planning city map",
+  },
+  {
+    src: "https://picsum.photos/1200/800?random=3",
+    alt: "Kaduna State Development Project",
+    hint: "kaduna development aerial",
+  },
+];
 
 export default function Home() {
-  const carouselImages: CarouselImage[] = [
-    {
-      src: "https://picsum.photos/1200/800?random=1",
-      alt: "KASUPDA Authority Building or Kaduna Landmark",
-      hint: "kaduna landmark building",
-    },
-    {
-      src: "https://picsum.photos/1200/800?random=2",
-      alt: "Urban Planning in Progress",
-      hint: "urban planning city map",
-    },
-    {
-      src: "https://picsum.photos/1200/800?random=3",
-      alt: "Kaduna State Development Project",
-      hint: "kaduna development aerial",
-    },
-  ];
+  const [carouselImages, setCarouselImages] = useState<CarouselImage[]>(initialCarouselImages);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const newImage: CarouselImage = {
+          src: e.target?.result as string,
+          alt: "Uploaded custom image",
+          hint: "custom uploaded",
+        };
+        setCarouselImages((prevImages) => [...prevImages, newImage]);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
 
   return (
     <div className="flex flex-col items-center space-y-12">
@@ -53,6 +80,17 @@ export default function Home() {
                     Renew Permit
                     <RefreshCcw className="ml-2 h-5 w-5" />
                   </Button>
+                  <Button size="lg" variant="outline" className="text-white border-white hover:bg-primary hover:text-white" onClick={triggerFileInput}>
+                    Upload Image
+                    <UploadCloud className="ml-2 h-5 w-5" />
+                  </Button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
                 </div>
               </div>
             </div>
@@ -214,4 +252,3 @@ export default function Home() {
     </div>
   );
 }
-
