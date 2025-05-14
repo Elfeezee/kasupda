@@ -61,7 +61,7 @@ export default function Header() {
       "transition-colors px-3 py-2",
       pathname === href
         ? "text-primary font-semibold"
-        : "text-foreground/60 hover:text-foreground/80"
+        : "text-primary/70 hover:text-primary"
     );
   };
 
@@ -70,7 +70,7 @@ export default function Header() {
       "py-2 text-base px-3",
       pathname === href
         ? "text-primary font-semibold"
-        : "text-foreground/60 hover:text-foreground/80"
+        : "text-primary/70 hover:text-primary"
     );
   };
   
@@ -79,7 +79,7 @@ export default function Header() {
       "block py-1.5",
       pathname === href
         ? "text-primary font-semibold"
-        : "text-foreground/60 hover:text-foreground/80"
+        : "text-primary/70 hover:text-primary" 
     );
   };
 
@@ -106,7 +106,12 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className={cn(
+                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
+                    pathname.startsWith("/planning") || planningSubLinks.some(link => pathname === link.href) // Example active state for parent
+                      ? "text-primary font-semibold" 
+                      : "text-primary/70 hover:text-primary"
+                  )}
                 >
                   Planning and Development
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -115,7 +120,7 @@ export default function Header() {
               <DropdownMenuContent>
                 {planningSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
-                    <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "")}>{link.label}</Link>
+                    <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -125,7 +130,12 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className={cn(
+                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
+                     pathname.startsWith("/construction") || constructionSubLinks.some(link => pathname === link.href)
+                      ? "text-primary font-semibold"
+                      : "text-primary/70 hover:text-primary"
+                  )}
                 >
                   Construction
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -134,7 +144,7 @@ export default function Header() {
               <DropdownMenuContent>
                 {constructionSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
-                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "")}>{link.label}</Link>
+                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -144,7 +154,12 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className={cn(
+                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
+                    pathname.startsWith("/eservice") || eServiceSubLinks.some(link => pathname === link.href)
+                      ? "text-primary font-semibold"
+                      : "text-primary/70 hover:text-primary"
+                  )}
                 >
                   e-service
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -153,7 +168,7 @@ export default function Header() {
               <DropdownMenuContent>
                 {eServiceSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
-                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "")}>{link.label}</Link>
+                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -199,7 +214,12 @@ export default function Header() {
                 </Link>
                 <Accordion type="multiple" collapsible className="w-full">
                   <AccordionItem value="planning-dev" className="border-b-0">
-                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline px-3">
+                    <AccordionTrigger className={cn(
+                      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
+                      pathname.startsWith("/planning") || planningSubLinks.some(link => pathname === link.href)
+                        ? "text-primary font-semibold"
+                        : "text-primary/70 hover:text-primary"
+                    )}>
                       Planning and Development
                     </AccordionTrigger>
                     <AccordionContent className="pl-4 pb-1">
@@ -215,7 +235,12 @@ export default function Header() {
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="construction" className="border-b-0">
-                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline px-3">
+                    <AccordionTrigger className={cn(
+                      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
+                      pathname.startsWith("/construction") || constructionSubLinks.some(link => pathname === link.href)
+                        ? "text-primary font-semibold"
+                        : "text-primary/70 hover:text-primary"
+                    )}>
                       Construction
                     </AccordionTrigger>
                     <AccordionContent className="pl-4 pb-1">
@@ -231,7 +256,12 @@ export default function Header() {
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="e-service" className="border-b-0">
-                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline px-3">
+                    <AccordionTrigger className={cn(
+                      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
+                       pathname.startsWith("/eservice") || eServiceSubLinks.some(link => pathname === link.href)
+                        ? "text-primary font-semibold"
+                        : "text-primary/70 hover:text-primary"
+                    )}>
                       e-service
                     </AccordionTrigger>
                     <AccordionContent className="pl-4 pb-1">
