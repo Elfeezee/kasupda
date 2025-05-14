@@ -12,8 +12,18 @@ import KASUPDALogo from '@/image/logo.png'; // Import the local logo
 const initialCarouselImages: CarouselImage[] = [
   {
     src: KASUPDALogo,
-    alt: 'KASUPDA Logo',
+    alt: 'KASUPDA Logo 1',
     hint: 'logo brand', // AI hint for image search
+  },
+  {
+    src: KASUPDALogo,
+    alt: 'KASUPDA Logo 2',
+    hint: 'logo brand',
+  },
+  {
+    src: KASUPDALogo,
+    alt: 'KASUPDA Logo 3',
+    hint: 'logo brand',
   },
 ];
 
@@ -28,7 +38,7 @@ export default function Home() {
             <Carousel
               images={carouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-contain p-4 bg-white" // Reduced padding
+              imageClassName="object-contain p-2 bg-white" // Reduced padding
               autoPlay={carouselImages.length > 1}
               interval={5000}
               showDots={carouselImages.length > 1}
@@ -216,3 +226,4 @@ export default function Home() {
     </div>
   );
 }
+
