@@ -51,7 +51,7 @@ export default function Header() {
       label: "News and Publications",
     },
     {
-      href: "#",
+      href: "/contact",
       label: "Contact Us",
     },
   ];
@@ -76,7 +76,7 @@ export default function Header() {
   
   const getMobileSubLinkClassName = (href: string) => {
     return cn(
-      "block py-1.5",
+      "block py-1.5 px-3", // Added px-3 for consistency
       pathname === href
         ? "text-primary font-semibold"
         : "text-primary/70 hover:text-primary" 
@@ -108,7 +108,7 @@ export default function Header() {
                   variant="ghost"
                   className={cn(
                     "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
-                    pathname.startsWith("/planning") || planningSubLinks.some(link => pathname === link.href) // Example active state for parent
+                    pathname.startsWith("/planning") || planningSubLinks.some(link => pathname === link.href) 
                       ? "text-primary font-semibold" 
                       : "text-primary/70 hover:text-primary"
                   )}
@@ -205,7 +205,7 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="pr-0 pt-8">
-              <nav className="flex flex-col space-y-1">
+              <nav className="flex flex-col space-y-1"> {/* Removed ml-4 */}
                 <Link
                   href="/"
                   className={getMobileLinkClassName("/")}
