@@ -7,14 +7,14 @@ import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users
 import Image from "next/image";
 import Link from "next/link";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
-import React, { useState } from "react";
-import KASUPDALogo from '@/image/logo.png'; // Import the local logo
+import React from "react";
+import KASUPDALogo from '@/image/logo.png'; 
 
 const initialCarouselImages: CarouselImage[] = [
   {
     src: KASUPDALogo,
     alt: 'KASUPDA Logo 1',
-    hint: 'logo brand', // AI hint for image search
+    hint: 'logo brand', 
     customClassName: "object-cover",
   },
   {
@@ -32,21 +32,19 @@ const initialCarouselImages: CarouselImage[] = [
 ];
 
 export default function Home() {
-  const [carouselImages, setCarouselImages] = useState<CarouselImage[]>(initialCarouselImages);
-
   return (
     <div className="flex flex-col items-center space-y-12">
       <section className="w-full">
         <div className="container px-0 md:px-0 max-w-full">
           <div className="relative">
             <Carousel
-              images={carouselImages}
+              images={initialCarouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
               imageClassName="object-cover"
-              autoPlay={carouselImages.length > 1}
+              autoPlay={initialCarouselImages.length > 1}
               interval={5000}
-              showDots={carouselImages.length > 1}
-              showNavigation={carouselImages.length > 1}
+              showDots={initialCarouselImages.length > 1}
+              showNavigation={initialCarouselImages.length > 1}
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/60 p-4 md:p-8">
               <div className="space-y-4">
@@ -102,7 +100,14 @@ export default function Home() {
                 <p>Easily apply for building permits, track your application status, and receive approvals digitally. We ensure compliance with state building codes for safe and legal constructions.</p>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="p-0">Start Application</Button>
+                <div className="flex flex-col space-y-1 items-start">
+                  <Link href="#" className="text-sm text-primary hover:underline p-0">
+                    - Building Permit
+                  </Link>
+                  <Link href="#" className="text-sm text-primary hover:underline p-0">
+                    - Inspection and Completion
+                  </Link>
+                </div>
               </CardFooter>
             </Card>
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -238,4 +243,3 @@ export default function Home() {
     </div>
   );
 }
-
