@@ -1,9 +1,12 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Landmark } from "lucide-react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import KASUPDALogo from '@/image/logo.png'; // Import the local logo
 
 export default function Header() {
   return (
@@ -12,7 +15,7 @@ export default function Header() {
         {/* Desktop Navigation */}
         <div className="mr-4 hidden md:flex md:flex-1 items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Landmark className="h-6 w-6 text-primary" />
+            <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
             <span className="hidden font-bold sm:inline-block">
               KASUPDA
             </span>
@@ -48,7 +51,7 @@ export default function Header() {
         {/* Mobile Navigation Header Bar */}
         <div className="flex w-full items-center justify-between md:hidden">
           <Link href="/" className="flex items-center space-x-2">
-            <Landmark className="h-6 w-6 text-primary" />
+             <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
             <span className="font-bold">
               KASUPDA
             </span>
