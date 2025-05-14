@@ -89,7 +89,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <FileText className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Building Permits & Approvals</CardTitle>
+                <CardTitle>Construction</CardTitle>
                 <CardDescription>
                   Streamlined online application and processing for all your construction permits.
                 </CardDescription>
@@ -104,7 +104,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <MapPin className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Urban Planning & Zoning</CardTitle>
+                <CardTitle>Urban Planning &amp; Zoning</CardTitle>
                 <CardDescription>
                   Access master plans, zoning regulations, and design guidelines for sustainable development.
                 </CardDescription>
@@ -119,7 +119,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <ShieldCheck className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Compliance & Enforcement</CardTitle>
+                <CardTitle>Compliance &amp; Enforcement</CardTitle>
                 <CardDescription>
                   Ensuring adherence to building codes and urban planning regulations across the state.
                 </CardDescription>
@@ -224,3 +224,4 @@ export default function Home() {
     </div>
   );
 }
+
