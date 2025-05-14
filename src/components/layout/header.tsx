@@ -155,7 +155,7 @@ export default function Header() {
               <nav className="flex flex-col space-y-1 ml-4">
                 <Accordion type="multiple" collapsible className="w-full">
                   <AccordionItem value="planning-dev" className="border-b-0">
-                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline">
+                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline px-3">
                       Planning and Development
                     </AccordionTrigger>
                     <AccordionContent className="pl-4 pb-1">
@@ -171,7 +171,7 @@ export default function Header() {
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="construction" className="border-b-0">
-                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline">
+                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline px-3">
                       Construction
                     </AccordionTrigger>
                     <AccordionContent className="pl-4 pb-1">
@@ -187,7 +187,7 @@ export default function Header() {
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="e-service" className="border-b-0">
-                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline">
+                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline px-3">
                       e-service
                     </AccordionTrigger>
                     <AccordionContent className="pl-4 pb-1">
@@ -208,7 +208,7 @@ export default function Header() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base px-3" 
+                    className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base px-3"
                   >
                     {link.label}
                   </Link>
