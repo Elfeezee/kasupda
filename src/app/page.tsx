@@ -38,7 +38,7 @@ export default function Home() {
             <Carousel
               images={carouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-contain p-2 bg-white" // Reduced padding
+              imageClassName="object-cover" // Changed from "object-contain p-2 bg-white"
               autoPlay={carouselImages.length > 1}
               interval={5000}
               showDots={carouselImages.length > 1}
@@ -226,4 +226,3 @@ export default function Home() {
     </div>
   );
 }
-
