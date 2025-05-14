@@ -14,16 +14,19 @@ const initialCarouselImages: CarouselImage[] = [
     src: KASUPDALogo,
     alt: 'KASUPDA Logo 1',
     hint: 'logo brand', // AI hint for image search
+    customClassName: "object-cover",
   },
   {
     src: KASUPDALogo,
     alt: 'KASUPDA Logo 2',
     hint: 'logo brand',
+    customClassName: "object-cover",
   },
   {
     src: KASUPDALogo,
     alt: 'KASUPDA Logo 3',
     hint: 'logo brand',
+    customClassName: "object-cover",
   },
 ];
 
@@ -104,7 +107,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <MapPin className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Urban Planning &amp; Zoning</CardTitle>
+                <CardTitle>Urban Planning and Development</CardTitle>
                 <CardDescription>
                   Access master plans, zoning regulations, and design guidelines for sustainable development.
                 </CardDescription>
