@@ -28,11 +28,11 @@ export default function Home() {
             <Carousel
               images={carouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-contain p-8 md:p-16 lg:p-24 bg-white" // Added bg-white and object-contain with padding for logo
-              autoPlay={carouselImages.length > 1} // Will be false if only one logo
+              imageClassName="object-contain p-4 bg-white" // Reduced padding
+              autoPlay={carouselImages.length > 1}
               interval={5000}
-              showDots={carouselImages.length > 1} // Hide dots if only one logo
-              showNavigation={carouselImages.length > 1} // Hide navigation if only one logo
+              showDots={carouselImages.length > 1}
+              showNavigation={carouselImages.length > 1}
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/60 p-4 md:p-8">
               <div className="space-y-4">
