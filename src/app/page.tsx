@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users, RefreshCcw } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 import React, { useState } from "react";
 import KASUPDALogo from '@/image/logo.png'; // Import the local logo
@@ -116,7 +117,17 @@ export default function Home() {
                 <p>Explore detailed information on Kaduna's master plan, find approved layouts for various areas, and understand zoning requirements for your projects. Ensure your development aligns with the state's strategic urban vision.</p>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="p-0">Explore Planning Details</Button>
+                <div className="flex flex-col space-y-1 items-start">
+                  <Link href="#" className="text-sm text-primary hover:underline p-0">
+                    - Master plan
+                  </Link>
+                  <Link href="#" className="text-sm text-primary hover:underline p-0">
+                    - Approved layout
+                  </Link>
+                  <Link href="#" className="text-sm text-primary hover:underline p-0">
+                    - Zoning
+                  </Link>
+                </div>
               </CardFooter>
             </Card>
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
