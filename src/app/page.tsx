@@ -152,21 +152,6 @@ export default function Home() {
             </Card>
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
-                <Building className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Development Control</CardTitle>
-                <CardDescription>
-                  Monitoring and controlling physical development to ensure it aligns with approved plans.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>We actively monitor ongoing construction projects to ensure they adhere to approved plans, building codes, and safety standards, fostering a well-organized urban landscape.</p>
-              </CardContent>
-              <CardFooter>
-                <Button variant="link" className="p-0">Learn About Control</Button>
-              </CardFooter>
-            </Card>
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardHeader>
                 <Users className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Public Enlightenment</CardTitle>
                 <CardDescription>
