@@ -47,7 +47,7 @@ export default function Header() {
       label: "About Us",
     },
     {
-      href: "#",
+      href: "/news",
       label: "News and Publications",
     },
     {
@@ -91,7 +91,7 @@ export default function Header() {
         <div className="mr-4 hidden md:flex md:flex-1 items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
-            <span className="hidden font-bold sm:inline-block">
+            <span className="hidden font-bold sm:inline-block text-primary">
               KASUPDA
             </span>
           </Link>
@@ -190,7 +190,7 @@ export default function Header() {
         <div className="flex w-full items-center justify-between md:hidden">
           <Link href="/" className="flex items-center space-x-2">
              <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
-            <span className="font-bold">
+            <span className="font-bold text-primary">
               KASUPDA
             </span>
           </Link>
