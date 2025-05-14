@@ -41,7 +41,7 @@ export default function Home() {
             <Carousel
               images={carouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-cover" 
+              imageClassName="object-cover"
               autoPlay={carouselImages.length > 1}
               interval={5000}
               showDots={carouselImages.length > 1}
@@ -109,14 +109,14 @@ export default function Home() {
                 <MapPin className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Urban Planning and Development</CardTitle>
                 <CardDescription>
-                  Access master plans, zoning regulations, and design guidelines for sustainable development.
+                  Access master plans, approved layouts, and zoning regulations for sustainable development.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p>Stay informed about Kaduna's urban development framework. Verify land use, check zoning compliance, and access design standards to ensure your project aligns with the state's vision.</p>
+                <p>Explore detailed information on Kaduna's master plan, find approved layouts for various areas, and understand zoning requirements for your projects. Ensure your development aligns with the state's strategic urban vision.</p>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="p-0">View Master Plan</Button>
+                <Button variant="link" className="p-0">Explore Planning Details</Button>
               </CardFooter>
             </Card>
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -199,7 +199,7 @@ export default function Home() {
             <div className="flex justify-center">
               <Image
                 src={KASUPDALogo}
-                alt="KASUPDA Logo in place of Director General Dr. Abdrrahman Yahya"
+                alt="KASUPDA Logo representing the Director General Dr. Abdrrahman Yahya"
                 data-ai-hint="logo brand"
                 width={400}
                 height={400}
