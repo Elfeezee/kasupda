@@ -59,8 +59,6 @@ export default function Home() {
                   </Button>
                   <Button
                     size="lg"
-                    variant="outline"
-                    className="text-white border-white hover:bg-primary hover:text-primary-foreground hover:border-primary"
                   >
                     Renew Permit
                     <RefreshCcw className="ml-2 h-5 w-5" />
