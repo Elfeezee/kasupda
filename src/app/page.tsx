@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users, RefreshCcw } from "lucide-react";
+import { ArrowRight, MapPin, FileText, ShieldCheck, Building, Users, RefreshCcw } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
@@ -152,21 +152,6 @@ export default function Home() {
             </Card>
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
-                <SearchCheck className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Land Use Verification</CardTitle>
-                <CardDescription>
-                  Verify land use status and obtain necessary clearances for property development.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>Our services include thorough verification of land records and designated use, helping you make informed decisions and avoid potential conflicts in your development projects.</p>
-              </CardContent>
-              <CardFooter>
-                <Button variant="link" className="p-0">Verify Land Use</Button>
-              </CardFooter>
-            </Card>
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <CardHeader>
                 <Building className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Development Control</CardTitle>
                 <CardDescription>
@@ -243,3 +228,4 @@ export default function Home() {
     </div>
   );
 }
+
