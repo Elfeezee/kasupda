@@ -19,8 +19,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function Header() {
+  const pathname = usePathname();
+
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
     { href: "#", label: "Approved layout" },
@@ -52,6 +56,34 @@ export default function Header() {
     },
   ];
 
+  const getLinkClassName = (href: string) => {
+    return cn(
+      "transition-colors px-3 py-2",
+      pathname === href
+        ? "text-primary font-semibold"
+        : "text-foreground/60 hover:text-foreground/80"
+    );
+  };
+
+  const getMobileLinkClassName = (href: string) => {
+    return cn(
+      "py-2 text-base px-3",
+      pathname === href
+        ? "text-primary font-semibold"
+        : "text-foreground/60 hover:text-foreground/80"
+    );
+  };
+  
+  const getMobileSubLinkClassName = (href: string) => {
+    return cn(
+      "block py-1.5",
+      pathname === href
+        ? "text-primary font-semibold"
+        : "text-foreground/60 hover:text-foreground/80"
+    );
+  };
+
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -66,7 +98,7 @@ export default function Header() {
           <nav className="flex items-center gap-1 text-sm">
             <Link
               href="/"
-              className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2"
+              className={getLinkClassName("/")}
             >
               Home
             </Link>
@@ -83,7 +115,7 @@ export default function Header() {
               <DropdownMenuContent>
                 {planningSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
-                    <Link href={link.href}>{link.label}</Link>
+                    <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "")}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -102,7 +134,7 @@ export default function Header() {
               <DropdownMenuContent>
                 {constructionSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
-                    <Link href={link.href}>{link.label}</Link>
+                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "")}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -121,7 +153,7 @@ export default function Header() {
               <DropdownMenuContent>
                 {eServiceSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
-                    <Link href={link.href}>{link.label}</Link>
+                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "")}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -131,7 +163,7 @@ export default function Header() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2"
+                className={getLinkClassName(link.href)}
               >
                 {link.label}
               </Link>
@@ -161,7 +193,7 @@ export default function Header() {
               <nav className="flex flex-col space-y-1">
                 <Link
                   href="/"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base px-3"
+                  className={getMobileLinkClassName("/")}
                 >
                   Home
                 </Link>
@@ -175,7 +207,7 @@ export default function Header() {
                         <Link
                           key={link.label}
                           href={link.href}
-                          className="block py-1.5 transition-colors hover:text-foreground/80 text-foreground/60"
+                          className={getMobileSubLinkClassName(link.href)}
                         >
                           {link.label}
                         </Link>
@@ -191,7 +223,7 @@ export default function Header() {
                         <Link
                           key={link.label}
                           href={link.href}
-                          className="block py-1.5 transition-colors hover:text-foreground/80 text-foreground/60"
+                          className={getMobileSubLinkClassName(link.href)}
                         >
                           {link.label}
                         </Link>
@@ -207,7 +239,7 @@ export default function Header() {
                         <Link
                           key={link.label}
                           href={link.href}
-                          className="block py-1.5 transition-colors hover:text-foreground/80 text-foreground/60"
+                          className={getMobileSubLinkClassName(link.href)}
                         >
                           {link.label}
                         </Link>
@@ -220,7 +252,7 @@ export default function Header() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base px-3"
+                    className={getMobileLinkClassName(link.href)}
                   >
                     {link.label}
                   </Link>
