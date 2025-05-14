@@ -39,7 +39,7 @@ export default function Header() {
 
   const mainNavLinks = [
     {
-      href: "/about", // Updated link
+      href: "/about",
       label: "About Us",
     },
     {
@@ -64,6 +64,12 @@ export default function Header() {
             </span>
           </Link>
           <nav className="flex items-center gap-1 text-sm">
+            <Link
+              href="/"
+              className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2"
+            >
+              Home
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -152,7 +158,13 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="pr-0 pt-8">
-              <nav className="flex flex-col space-y-1"> {/* Removed ml-4 here */}
+              <nav className="flex flex-col space-y-1">
+                <Link
+                  href="/"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base px-3"
+                >
+                  Home
+                </Link>
                 <Accordion type="multiple" collapsible className="w-full">
                   <AccordionItem value="planning-dev" className="border-b-0">
                     <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline px-3">
