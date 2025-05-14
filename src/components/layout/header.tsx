@@ -20,30 +20,42 @@ export default function Header() {
               KASUPDA
             </span>
           </Link>
-          <nav className="flex items-center gap-6 text-sm">
+          <nav className="flex items-center gap-4 text-sm"> {/* Reduced gap from 6 to 4 for more items */}
             <Link
               href="#"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
-              Apply for permit
+              Planning and Development
             </Link>
             <Link
               href="#"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
-              Renew permit
+              Construction
             </Link>
             <Link
               href="#"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
-              Public notice
+              e-service
             </Link>
             <Link
               href="#"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
               About Us
+            </Link>
+            <Link
+              href="#"
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
+              News and Publications
+            </Link>
+            <Link
+              href="#"
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
+              Contact Us
             </Link>
           </nav>
         </div>
@@ -72,25 +84,37 @@ export default function Header() {
                   href="#"
                   className="transition-colors hover:text-foreground/80 text-foreground/60"
                 >
-                  Apply for permit
+                  Planning and Development
                 </Link>
                 <Link
                   href="#"
                   className="transition-colors hover:text-foreground/80 text-foreground/60"
                 >
-                  Renew permit
+                  Construction
                 </Link>
                 <Link
                   href="#"
                   className="transition-colors hover:text-foreground/80 text-foreground/60"
                 >
-                  Public notice
+                  e-service
                 </Link>
                 <Link
                   href="#"
                   className="transition-colors hover:text-foreground/80 text-foreground/60"
                 >
                   About Us
+                </Link>
+                <Link
+                  href="#"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60"
+                >
+                  News and Publications
+                </Link>
+                <Link
+                  href="#"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60"
+                >
+                  Contact Us
                 </Link>
               </nav>
             </SheetContent>
