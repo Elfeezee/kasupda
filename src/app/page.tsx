@@ -87,8 +87,8 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-2 md:gap-12 lg:grid-cols-2 lg:max-w-none mt-12">
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div className="mx-auto grid max-w-5xl items-stretch gap-8 sm:grid-cols-2 md:grid-cols-2 md:gap-12 lg:grid-cols-2 lg:max-w-none mt-12">
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <FileText className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Construction</CardTitle>
@@ -96,7 +96,7 @@ export default function Home() {
                   Streamlined online application and processing for all your construction permits.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-grow">
                 <p>Easily apply for building permits, track your application status, and receive approvals digitally. We ensure compliance with state building codes for safe and legal constructions.</p>
               </CardContent>
               <CardFooter>
@@ -110,7 +110,7 @@ export default function Home() {
                 </div>
               </CardFooter>
             </Card>
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <MapPin className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Urban Planning and Development</CardTitle>
@@ -118,7 +118,7 @@ export default function Home() {
                   Access master plans, approved layouts, and zoning regulations for sustainable development.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-grow">
                 <p>Explore detailed information on Kaduna's master plan, find approved layouts for various areas, and understand zoning requirements for your projects. Ensure your development aligns with the state's strategic urban vision.</p>
               </CardContent>
               <CardFooter>
@@ -135,7 +135,7 @@ export default function Home() {
                 </div>
               </CardFooter>
             </Card>
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <ShieldCheck className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Compliance &amp; Enforcement</CardTitle>
@@ -143,14 +143,14 @@ export default function Home() {
                   Ensuring adherence to building codes and urban planning regulations across the state.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-grow">
                 <p>KASUPDA monitors construction activities and enforces regulations to maintain urban standards, ensure public safety, and promote orderly development in Kaduna State.</p>
               </CardContent>
               <CardFooter>
                 <Button variant="link" className="p-0">Report a Violation</Button>
               </CardFooter>
             </Card>
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <Users className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Public Enlightenment</CardTitle>
@@ -158,7 +158,7 @@ export default function Home() {
                   Engaging and educating the public on urban planning matters and regulations.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-grow">
                 <p>KASUPDA is committed to sensitizing the public about urban planning laws, development procedures, and the importance of orderly settlement for a sustainable Kaduna State.</p>
               </CardContent>
               <CardFooter>
