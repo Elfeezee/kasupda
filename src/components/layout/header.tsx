@@ -39,7 +39,7 @@ export default function Header() {
 
   const mainNavLinks = [
     {
-      href: "#",
+      href: "/about", // Updated link
       label: "About Us",
     },
     {
