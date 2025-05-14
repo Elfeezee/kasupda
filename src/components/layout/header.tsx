@@ -21,11 +21,7 @@ import {
 } from "@/components/ui/accordion";
 
 export default function Header() {
-  const navLinks = [
-    {
-      href: "#",
-      label: "Construction",
-    },
+  const mainNavLinks = [
     {
       href: "#",
       label: "e-service",
@@ -50,6 +46,11 @@ export default function Header() {
     { href: "#", label: "Zoning" },
   ];
 
+  const constructionSubLinks = [
+    { href: "#", label: "Building Permit" },
+    { href: "#", label: "Inspection and Completion" },
+  ];
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -61,12 +62,12 @@ export default function Header() {
               KASUPDA
             </span>
           </Link>
-          <nav className="flex items-center gap-4 text-sm">
+          <nav className="flex items-center gap-1 text-sm">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60 px-1 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0"
                 >
                   Planning and Development
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -81,11 +82,30 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {navLinks.map((link) => (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0"
+                >
+                  Construction
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {constructionSubLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    <Link href={link.href}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {mainNavLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
+                className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2"
               >
                 {link.label}
               </Link>
@@ -113,7 +133,7 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent side="left" className="pr-0 pt-8">
               <nav className="flex flex-col space-y-1 ml-4">
-                <Accordion type="single" collapsible className="w-full">
+                <Accordion type="multiple" collapsible className="w-full">
                   <AccordionItem value="planning-dev" className="border-b-0">
                     <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline">
                       Planning and Development
@@ -130,13 +150,29 @@ export default function Header() {
                       ))}
                     </AccordionContent>
                   </AccordionItem>
+                  <AccordionItem value="construction" className="border-b-0">
+                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline">
+                      Construction
+                    </AccordionTrigger>
+                    <AccordionContent className="pl-4 pb-1">
+                      {constructionSubLinks.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className="block py-1.5 transition-colors hover:text-foreground/80 text-foreground/60"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
                 </Accordion>
 
-                {navLinks.map((link) => (
+                {mainNavLinks.map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base"
+                    className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base px-3" 
                   >
                     {link.label}
                   </Link>
