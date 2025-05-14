@@ -7,20 +7,17 @@ import { ArrowRight, MapPin, FileText, ShieldCheck, SearchCheck, Building, Users
 import Image from "next/image";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 import React, { useState } from "react";
-
+import KASUPDALogo from '@/image/logo.png'; // Import the local logo
 
 const initialCarouselImages: CarouselImage[] = [
   {
-    src: 'https://picsum.photos/seed/kasupda-hero/1920/1080', // Placeholder image
-    alt: 'Kaduna State Urban Planning and Development Authority - Hero Image',
-    hint: 'cityscape building', // AI hint for image search
+    src: KASUPDALogo,
+    alt: 'KASUPDA Logo',
+    hint: 'logo brand', // AI hint for image search
   },
 ];
 
 export default function Home() {
-  // The carousel will now use the initialCarouselImages by default.
-  // If an image was "uploaded" in a previous session, that state is not persisted here.
-  // This setup ensures there's always at least one image displayed.
   const [carouselImages, setCarouselImages] = useState<CarouselImage[]>(initialCarouselImages);
 
   return (
@@ -29,11 +26,13 @@ export default function Home() {
         <div className="container px-0 md:px-0 max-w-full">
           <div className="relative">
             <Carousel
-              images={carouselImages} 
+              images={carouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-cover" 
-              autoPlay={carouselImages.length > 1}
+              imageClassName="object-contain p-8 md:p-16 lg:p-24 bg-white" // Added bg-white and object-contain with padding for logo
+              autoPlay={carouselImages.length > 1} // Will be false if only one logo
               interval={5000}
+              showDots={carouselImages.length > 1} // Hide dots if only one logo
+              showNavigation={carouselImages.length > 1} // Hide navigation if only one logo
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 bg-black/60 p-4 md:p-8">
               <div className="space-y-4">
@@ -48,9 +47,9 @@ export default function Home() {
                     Apply for Permit
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
+                  <Button
+                    size="lg"
+                    variant="outline"
                     className="text-white border-white hover:bg-primary hover:text-primary-foreground hover:border-primary"
                   >
                     Renew Permit
@@ -188,7 +187,7 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src="https://picsum.photos/seed/dg-avatar/400/400" 
+                src="https://placehold.co/400x400.png"
                 alt="Director General Dr. Abdrrahman Yahya - Male Avatar"
                 data-ai-hint="male avatar"
                 width={400}
@@ -217,4 +216,3 @@ export default function Home() {
     </div>
   );
 }
-
