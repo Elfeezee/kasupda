@@ -38,7 +38,7 @@ export default function Home() {
             <Carousel
               images={carouselImages}
               className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-cover" // Changed from "object-contain p-2 bg-white"
+              imageClassName="object-cover" 
               autoPlay={carouselImages.length > 1}
               interval={5000}
               showDots={carouselImages.length > 1}
@@ -77,7 +77,7 @@ export default function Home() {
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">
-                Our Services
+                What we do
               </div>
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
                 Core Functions of KASUPDA
