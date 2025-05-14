@@ -21,11 +21,23 @@ import {
 } from "@/components/ui/accordion";
 
 export default function Header() {
+  const planningSubLinks = [
+    { href: "#", label: "Master plan" },
+    { href: "#", label: "Approved layout" },
+    { href: "#", label: "Zoning" },
+  ];
+
+  const constructionSubLinks = [
+    { href: "#", label: "Building Permit" },
+    { href: "#", label: "Inspection and Completion" },
+  ];
+
+  const eServiceSubLinks = [
+    { href: "#", label: "Apply for permit" },
+    { href: "#", label: "Renew permit" },
+  ];
+
   const mainNavLinks = [
-    {
-      href: "#",
-      label: "e-service",
-    },
     {
       href: "#",
       label: "About Us",
@@ -38,17 +50,6 @@ export default function Header() {
       href: "#",
       label: "Contact Us",
     },
-  ];
-
-  const planningSubLinks = [
-    { href: "#", label: "Master plan" },
-    { href: "#", label: "Approved layout" },
-    { href: "#", label: "Zoning" },
-  ];
-
-  const constructionSubLinks = [
-    { href: "#", label: "Building Permit" },
-    { href: "#", label: "Inspection and Completion" },
   ];
 
   return (
@@ -94,6 +95,25 @@ export default function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {constructionSubLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    <Link href={link.href}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60 px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0"
+                >
+                  e-service
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {eServiceSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
                     <Link href={link.href}>{link.label}</Link>
                   </DropdownMenuItem>
@@ -156,6 +176,22 @@ export default function Header() {
                     </AccordionTrigger>
                     <AccordionContent className="pl-4 pb-1">
                       {constructionSubLinks.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className="block py-1.5 transition-colors hover:text-foreground/80 text-foreground/60"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="e-service" className="border-b-0">
+                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline">
+                      e-service
+                    </AccordionTrigger>
+                    <AccordionContent className="pl-4 pb-1">
+                      {eServiceSubLinks.map((link) => (
                         <Link
                           key={link.label}
                           href={link.href}
