@@ -3,12 +3,53 @@
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import KASUPDALogo from '@/image/logo.png'; // Import the local logo
+import KASUPDALogo from '@/image/logo.png';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function Header() {
+  const navLinks = [
+    {
+      href: "#",
+      label: "Construction",
+    },
+    {
+      href: "#",
+      label: "e-service",
+    },
+    {
+      href: "#",
+      label: "About Us",
+    },
+    {
+      href: "#",
+      label: "News and Publications",
+    },
+    {
+      href: "#",
+      label: "Contact Us",
+    },
+  ];
+
+  const planningSubLinks = [
+    { href: "#", label: "Master plan" },
+    { href: "#", label: "Approved layout" },
+    { href: "#", label: "Zoning" },
+  ];
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -20,43 +61,35 @@ export default function Header() {
               KASUPDA
             </span>
           </Link>
-          <nav className="flex items-center gap-4 text-sm"> {/* Reduced gap from 6 to 4 for more items */}
-            <Link
-              href="#"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              Planning and Development
-            </Link>
-            <Link
-              href="#"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              Construction
-            </Link>
-            <Link
-              href="#"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              e-service
-            </Link>
-            <Link
-              href="#"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              About Us
-            </Link>
-            <Link
-              href="#"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              News and Publications
-            </Link>
-            <Link
-              href="#"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              Contact Us
-            </Link>
+          <nav className="flex items-center gap-4 text-sm">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="transition-colors hover:text-foreground/80 text-foreground/60 px-1 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0"
+                >
+                  Planning and Development
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {planningSubLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    <Link href={link.href}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {navLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
         </div>
 
@@ -79,43 +112,35 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="pr-0 pt-8">
-              <nav className="flex flex-col space-y-3 ml-4">
-                <Link
-                  href="#"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60"
-                >
-                  Planning and Development
-                </Link>
-                <Link
-                  href="#"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60"
-                >
-                  Construction
-                </Link>
-                <Link
-                  href="#"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60"
-                >
-                  e-service
-                </Link>
-                <Link
-                  href="#"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60"
-                >
-                  About Us
-                </Link>
-                <Link
-                  href="#"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60"
-                >
-                  News and Publications
-                </Link>
-                <Link
-                  href="#"
-                  className="transition-colors hover:text-foreground/80 text-foreground/60"
-                >
-                  Contact Us
-                </Link>
+              <nav className="flex flex-col space-y-1 ml-4">
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="planning-dev" className="border-b-0">
+                    <AccordionTrigger className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base font-normal hover:no-underline">
+                      Planning and Development
+                    </AccordionTrigger>
+                    <AccordionContent className="pl-4 pb-1">
+                      {planningSubLinks.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className="block py-1.5 transition-colors hover:text-foreground/80 text-foreground/60"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className="transition-colors hover:text-foreground/80 text-foreground/60 py-2 text-base"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </nav>
             </SheetContent>
           </Sheet>
