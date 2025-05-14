@@ -195,12 +195,12 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src="https://placehold.co/400x400.png"
-                alt="Director General Dr. Abdrrahman Yahya - Male Avatar"
-                data-ai-hint="male avatar"
+                src={KASUPDALogo}
+                alt="KASUPDA Logo in place of Director General Dr. Abdrrahman Yahya"
+                data-ai-hint="logo brand"
                 width={400}
                 height={400}
-                className="rounded-full object-cover aspect-square shadow-2xl border-4 border-primary"
+                className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-4"
               />
             </div>
             <div className="flex flex-col justify-center space-y-4 text-left">
