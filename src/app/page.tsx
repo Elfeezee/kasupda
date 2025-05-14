@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, MapPin, FileText, ShieldCheck, Building, Users, RefreshCcw } from "lucide-react";
+import { ArrowRight, MapPin, FileText, ShieldCheck, Users, RefreshCcw } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
@@ -87,7 +87,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:max-w-none mt-12">
+          <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-2 md:gap-12 lg:grid-cols-2 lg:max-w-none mt-12">
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader>
                 <FileText className="h-8 w-8 text-primary mb-2" />
