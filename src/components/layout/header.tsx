@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -22,9 +22,11 @@ import {
 } from "@/components/ui/accordion";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/context/theme-provider";
 
 export default function Header() {
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
   const [planningOpen, setPlanningOpen] = useState(false);
   const planningHideTimer = useRef<number | null>(null);
@@ -35,8 +37,9 @@ export default function Header() {
   const [eServiceOpen, setEServiceOpen] = useState(false);
   const eServiceHideTimer = useRef<number | null>(null);
 
-  const [dataCenterOpen, setDataCenterOpen] = useState(false);
-  const dataCenterHideTimer = useRef<number | null>(null);
+  const [dataCenterOpen, setDataCenterOpen] = useState(false); // Added for Data Center
+  const dataCenterHideTimer = useRef<number | null>(null); // Added for Data Center
+
 
   const HOVER_DELAY = 150; // ms
 
@@ -45,7 +48,7 @@ export default function Header() {
       if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
       if (constructionHideTimer.current) clearTimeout(constructionHideTimer.current);
       if (eServiceHideTimer.current) clearTimeout(eServiceHideTimer.current);
-      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
+      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current); // Added for Data Center
     };
   }, []);
 
@@ -92,11 +95,13 @@ export default function Header() {
     { href: "#", label: "Renew permit" },
   ];
 
+  // Added Data Center sub-links
   const dataCenterSubLinks = [
     { href: "#", label: "Lab" },
     { href: "#", label: "Soil Test" },
     { href: "#", label: "Integrity Test" },
   ];
+
 
   const mainNavLinks = [
     {
@@ -113,14 +118,33 @@ export default function Header() {
     },
   ];
 
-  const getLinkClassName = (href: string) => {
+  const getLinkClassName = (href: string, isDropdownTrigger: boolean = false) => {
+    let isActive = pathname === href;
+    if (href === "/planning" && (planningSubLinks.some(link => pathname === link.href) || planningOpen)) isActive = true;
+    if (href === "/construction" && (constructionSubLinks.some(link => pathname === link.href) || constructionOpen)) isActive = true;
+    if (href === "/eservice" && (eServiceSubLinks.some(link => pathname === link.href) || eServiceOpen)) isActive = true;
+    if (href === "/data-center" && (dataCenterSubLinks.some(link => pathname === link.href) || dataCenterOpen)) isActive = true;
+
+
     return cn(
       "transition-colors px-3 py-2 text-sm",
-      pathname === href
+      isActive
         ? "text-primary font-semibold"
+        : "text-primary/70 hover:text-primary",
+      isDropdownTrigger && "font-normal focus-visible:ring-0 focus-visible:ring-offset-0 h-auto" // specific to dropdown triggers
+    );
+  };
+
+  const getDropdownTriggerClassName = (currentPathSegment: string, subLinks: {href: string}[], isOpen: boolean) => {
+    const isActivePath = pathname.startsWith(currentPathSegment) || subLinks.some(link => pathname === link.href);
+    return cn(
+      "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
+      (isActivePath || isOpen)
+        ? "text-primary font-semibold" 
         : "text-primary/70 hover:text-primary"
     );
   };
+
 
   const getMobileLinkClassName = (href: string) => {
     return cn(
@@ -139,6 +163,16 @@ export default function Header() {
         : "text-primary/70 hover:text-primary" 
     );
   };
+
+  const getMobileAccordionTriggerClassName = (currentPathSegment: string, subLinks: {href: string}[]) => {
+    const isActivePath = pathname.startsWith(currentPathSegment) || subLinks.some(link => pathname === link.href);
+    return cn(
+        "transition-colors py-2 text-base font-normal hover:no-underline px-3",
+        isActivePath
+          ? "text-primary font-semibold"
+          : "text-primary/70 hover:text-primary"
+      )
+  }
 
 
   return (
@@ -169,12 +203,7 @@ export default function Header() {
               >
                 <Button
                   variant="ghost"
-                  className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
-                    pathname.startsWith("/planning") || planningSubLinks.some(link => pathname === link.href) || planningOpen
-                      ? "text-primary font-semibold" 
-                      : "text-primary/70 hover:text-primary"
-                  )}
+                  className={getDropdownTriggerClassName("/planning", planningSubLinks, planningOpen)}
                 >
                   Planning and Development
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -201,12 +230,7 @@ export default function Header() {
               >
                 <Button
                   variant="ghost"
-                  className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
-                     (pathname.startsWith("/construction") || constructionSubLinks.some(link => pathname === link.href) || constructionOpen)
-                      ? "text-primary font-semibold"
-                      : "text-primary/70 hover:text-primary"
-                  )}
+                  className={getDropdownTriggerClassName("/construction", constructionSubLinks, constructionOpen)}
                 >
                   Construction
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -233,12 +257,7 @@ export default function Header() {
               >
                 <Button
                   variant="ghost"
-                  className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
-                    (pathname.startsWith("/eservice") || eServiceSubLinks.some(link => pathname === link.href) || eServiceOpen)
-                      ? "text-primary font-semibold"
-                      : "text-primary/70 hover:text-primary"
-                  )}
+                  className={getDropdownTriggerClassName("/eservice", eServiceSubLinks, eServiceOpen)}
                 >
                   e-service
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -265,12 +284,7 @@ export default function Header() {
               >
                 <Button
                   variant="ghost"
-                  className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
-                    (pathname.startsWith("/data-center") || dataCenterSubLinks.some(link => pathname === link.href) || dataCenterOpen)
-                      ? "text-primary font-semibold"
-                      : "text-primary/70 hover:text-primary"
-                  )}
+                   className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
                 >
                   Data Center
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -298,6 +312,15 @@ export default function Header() {
               </Link>
             ))}
           </nav>
+           <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="ml-auto text-primary/70 hover:text-primary"
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </Button>
         </div>
 
         {/* Mobile Navigation Header Bar */}
@@ -308,123 +331,115 @@ export default function Header() {
               KASUPDA
             </span>
           </Link>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
+          <div className="flex items-center">
+            <Button
                 variant="ghost"
                 size="icon"
-                aria-label="Toggle Menu"
+                onClick={toggleTheme}
+                className="text-primary/70 hover:text-primary mr-1"
+                aria-label="Toggle theme"
               >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="pr-0 pt-8">
-              <nav className="flex flex-col space-y-1">
-                <Link
-                  href="/"
-                  className={getMobileLinkClassName("/")}
+                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Toggle Menu"
+                  className="text-primary/70 hover:text-primary"
                 >
-                  Home
-                </Link>
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="planning-dev" className="border-b-0">
-                    <AccordionTrigger className={cn(
-                      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
-                      pathname.startsWith("/planning") || planningSubLinks.some(link => pathname === link.href)
-                        ? "text-primary font-semibold"
-                        : "text-primary/70 hover:text-primary"
-                    )}>
-                      Planning and Development
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-4 pb-1">
-                      {planningSubLinks.map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          className={getMobileSubLinkClassName(link.href)}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="construction" className="border-b-0">
-                    <AccordionTrigger className={cn(
-                      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
-                      pathname.startsWith("/construction") || constructionSubLinks.some(link => pathname === link.href)
-                        ? "text-primary font-semibold"
-                        : "text-primary/70 hover:text-primary"
-                    )}>
-                      Construction
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-4 pb-1">
-                      {constructionSubLinks.map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          className={getMobileSubLinkClassName(link.href)}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="e-service" className="border-b-0">
-                    <AccordionTrigger className={cn(
-                      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
-                       pathname.startsWith("/eservice") || eServiceSubLinks.some(link => pathname === link.href)
-                        ? "text-primary font-semibold"
-                        : "text-primary/70 hover:text-primary"
-                    )}>
-                      e-service
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-4 pb-1">
-                      {eServiceSubLinks.map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          className={getMobileSubLinkClassName(link.href)}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="data-center" className="border-b-0">
-                    <AccordionTrigger className={cn(
-                      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
-                      pathname.startsWith("/data-center") || dataCenterSubLinks.some(link => pathname === link.href)
-                        ? "text-primary font-semibold"
-                        : "text-primary/70 hover:text-primary"
-                    )}>
-                      Data Center
-                    </AccordionTrigger>
-                    <AccordionContent className="pl-4 pb-1">
-                      {dataCenterSubLinks.map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          className={getMobileSubLinkClassName(link.href)}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-
-                {mainNavLinks.map((link) => (
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="pr-0 pt-8">
+                <nav className="flex flex-col space-y-1">
                   <Link
-                    key={link.href}
-                    href={link.href}
-                    className={getMobileLinkClassName(link.href)}
+                    href="/"
+                    className={getMobileLinkClassName("/")}
                   >
-                    {link.label}
+                    Home
                   </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="planning-dev" className="border-b-0">
+                      <AccordionTrigger className={getMobileAccordionTriggerClassName("/planning", planningSubLinks)}>
+                        Planning and Development
+                      </AccordionTrigger>
+                      <AccordionContent className="pl-4 pb-1">
+                        {planningSubLinks.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            className={getMobileSubLinkClassName(link.href)}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="construction" className="border-b-0">
+                      <AccordionTrigger className={getMobileAccordionTriggerClassName("/construction", constructionSubLinks)}>
+                        Construction
+                      </AccordionTrigger>
+                      <AccordionContent className="pl-4 pb-1">
+                        {constructionSubLinks.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            className={getMobileSubLinkClassName(link.href)}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="e-service" className="border-b-0">
+                      <AccordionTrigger className={getMobileAccordionTriggerClassName("/eservice", eServiceSubLinks)}>
+                        e-service
+                      </AccordionTrigger>
+                      <AccordionContent className="pl-4 pb-1">
+                        {eServiceSubLinks.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            className={getMobileSubLinkClassName(link.href)}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="data-center" className="border-b-0">
+                      <AccordionTrigger className={getMobileAccordionTriggerClassName("/data-center", dataCenterSubLinks)}>
+                        Data Center
+                      </AccordionTrigger>
+                      <AccordionContent className="pl-4 pb-1">
+                        {dataCenterSubLinks.map((link) => (
+                          <Link
+                            key={link.label}
+                            href={link.href}
+                            className={getMobileSubLinkClassName(link.href)}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+
+                  {mainNavLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={getMobileLinkClassName(link.href)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>
