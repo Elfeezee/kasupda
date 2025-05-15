@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, Search, XIcon, MapPin } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, Search, XIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -121,14 +121,10 @@ export default function Header() {
     { href: "#", label: "Integrity Test" },
   ];
 
-  const kasupdaAddress = "No. 1 KASUPDA Road, Off Independence Way, Kaduna, Nigeria";
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(kasupdaAddress)}`;
-
   const mainNavLinks = [
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
     { href: "/contact", label: "Contact Us" },
-    { href: googleMapsUrl, label: "Map", target: "_blank", rel: "noopener noreferrer", icon: <MapPin className="mr-1 h-4 w-4 inline-block" /> },
   ];
 
 

@@ -2,9 +2,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
-import { Facebook, Twitter, Instagram } from 'lucide-react';
+import { Facebook, Twitter, Instagram, MapPin } from 'lucide-react';
 
 export default function Footer() {
+  const kasupdaAddress = "No. 1 KASUPDA Road, Off Independence Way, Kaduna, Nigeria";
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(kasupdaAddress)}`;
+
   return (
     <footer className="border-t border-border/40 bg-background/95 py-6">
       <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
@@ -28,7 +31,7 @@ export default function Footer() {
         </div>
 
         {/* Original nav links */}
-        <nav className="flex gap-4 sm:gap-6">
+        <nav className="flex flex-wrap justify-center gap-4 sm:gap-6">
           <Link
             href="#"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -56,6 +59,15 @@ export default function Footer() {
             prefetch={false}
           >
             Contact
+          </Link>
+          <Link
+            href={googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center"
+            prefetch={false}
+          >
+            <MapPin className="mr-1 h-4 w-4" /> Map
           </Link>
         </nav>
       </div>
