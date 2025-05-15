@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { FcGoogle } from "react-icons/fc";
+import Link from 'next/link'; // Import Link
 
 export default function ApplyForPermitPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -18,7 +19,6 @@ export default function ApplyForPermitPage() {
     
     if (name) {
       // Navigate to dashboard, or handle submission
-      // For now, we'll simulate going to a dashboard page
       window.location.href = `/dashboard?name=${encodeURIComponent(name)}`;
     } else {
       // Handle case where name is not entered, perhaps show an error
@@ -36,7 +36,7 @@ export default function ApplyForPermitPage() {
         </CardHeader>
         <CardContent>
           <div className="text-center mb-6">
-            <p className="text-gray-600">Create your profile to apply for permits and access your dashboard.</p>
+            <p className="text-muted-foreground">Create your profile to apply for permits and access your dashboard.</p>
           </div>
           <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
@@ -57,17 +57,25 @@ export default function ApplyForPermitPage() {
             </div>
 
             <Button type="submit" className="w-full whitespace-normal">Create Profile</Button>
-            <div className="flex items-center justify-center space-x-4 my-6">
-              <Separator className="flex-grow w-1/3" />
-              <span className="text-xs text-gray-500 uppercase shrink-0">OR</span>
-              <Separator className="flex-grow w-1/3" />
-            </div>
           </form>
-          {/* Google Sign-up button is placed below the form */}
+          
+          <div className="text-center mt-4 text-sm">
+            <span>Already have an account? </span>
+            <Link href="/dashboard" className="text-primary hover:underline font-medium">
+              Login
+            </Link>
+          </div>
+
+          <div className="flex items-center justify-center space-x-4 my-6">
+            <Separator className="flex-grow w-1/3" />
+            <span className="text-xs text-muted-foreground uppercase shrink-0">OR</span>
+            <Separator className="flex-grow w-1/3" />
+          </div>
+          
           <Button 
-            className="w-full flex items-center justify-center space-x-2 mt-4" 
+            className="w-full flex items-center justify-center space-x-2" 
             variant="outline" 
-            type="button" // Ensure it doesn't submit the form
+            type="button" 
             onClick={() => { /* Handle Google Sign-up logic here */ console.log("Google Sign-up clicked");}}
           >
             <FcGoogle className="text-xl" />
