@@ -37,11 +37,17 @@ export default function Header() {
   ];
 
   const eServiceSubLinks = [
-    { href: "#", label: "Apply for permit" },
+    { href: "/apply-for-permit", label: "Apply for permit" },
     { href: "#", label: "Renew permit" },
   ];
 
-  const mainNavLinks = [
+  const dataCenterSubLinks = [
+    { href: "#", label: "Lab" },
+    { href: "#", label: "Soil Test" },
+    { href: "#", label: "Integrity Test" },
+  ];
+
+  const mainNavLinks = [ // This is the line that needs to be changed
     {
       href: "/about",
       label: "About Us",
@@ -52,7 +58,7 @@ export default function Header() {
     },
     {
       href: "/contact",
-      label: "Contact Us",
+      label: "Contact Us", // This is the line that needs to be changed
     },
   ];
 
@@ -174,6 +180,55 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            {/* Data Center Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className={cn(
+                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
+                    pathname.startsWith("/data-center") || dataCenterSubLinks.some(link => pathname === link.href)
+                      ? "text-primary font-semibold"
+                      : "text-primary/70 hover:text-primary"
+                  )}
+                >
+                  Data Center
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {dataCenterSubLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {/* Data Center Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className={cn(
+                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
+                    pathname.startsWith("/data-center") || dataCenterSubLinks.some(link => pathname === link.href)
+                      ? "text-primary font-semibold"
+                      : "text-primary/70 hover:text-primary"
+                  )}
+                >
+                  Data Center
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                {dataCenterSubLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {mainNavLinks.map((link) => (
               <Link
                 key={link.label}
@@ -212,7 +267,7 @@ export default function Header() {
                 >
                   Home
                 </Link>
-                <Accordion type="multiple" collapsible className="w-full">
+                <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="planning-dev" className="border-b-0">
                     <AccordionTrigger className={cn(
                       "transition-colors py-2 text-base font-normal hover:no-underline px-3",
@@ -276,11 +331,34 @@ export default function Header() {
                       ))}
                     </AccordionContent>
                   </AccordionItem>
+
+                  {/* Data Center Accordion Item */}
+                  <AccordionItem value="data-center" className="border-b-0">
+                    <AccordionTrigger className={cn(
+                      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
+                      pathname.startsWith("/data-center") || dataCenterSubLinks.some(link => pathname === link.href)
+                        ? "text-primary font-semibold"
+                        : "text-primary/70 hover:text-primary"
+                    )}>
+                      Data Center
+                    </AccordionTrigger>
+                    <AccordionContent className="pl-4 pb-1">
+                      {dataCenterSubLinks.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className={getMobileSubLinkClassName(link.href)}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
                 </Accordion>
 
                 {mainNavLinks.map((link) => (
                   <Link
-                    key={link.label}
+                    key={link.href}
                     href={link.href}
                     className={getMobileLinkClassName(link.href)}
                   >

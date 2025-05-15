@@ -8,13 +8,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 import React from "react";
-import KASUPDALogo from '@/image/logo.png'; 
+import KASUPDALogo from '@/image/logo.png';
 
 const initialCarouselImages: CarouselImage[] = [
   {
     src: KASUPDALogo,
     alt: 'KASUPDA Logo 1',
-    hint: 'logo brand', 
+    hint: 'logo brand',
     customClassName: "object-cover",
   },
   {
@@ -55,13 +55,13 @@ export default function Home() {
                   Welcome to the official digital portal of KASUPDA. Discover services, apply for permits, and stay updated on urban planning initiatives in Kaduna.
                 </p>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row sm:justify-center pt-4">
-                  <Button size="lg">
-                    Apply for Permit
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                  <Button size="lg" asChild>
+                    <Link href="/apply-for-permit">
+                      Apply for Permit
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
                   </Button>
-                  <Button
-                    size="lg"
-                  >
+                  <Button size="lg">
                     Renew Permit
                     <RefreshCcw className="ml-2 h-5 w-5" />
                   </Button>
@@ -147,7 +147,9 @@ export default function Home() {
                 <p>KASUPDA monitors construction activities and enforces regulations to maintain urban standards, ensure public safety, and promote orderly development in Kaduna State.</p>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="p-0">Report a Violation</Button>
+                <Button variant="link" className="p-0" asChild>
+                  <Link href="/contact">Report a Violation</Link>
+                </Button>
               </CardFooter>
             </Card>
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
@@ -162,7 +164,9 @@ export default function Home() {
                 <p>KASUPDA is committed to sensitizing the public about urban planning laws, development procedures, and the importance of orderly settlement for a sustainable Kaduna State.</p>
               </CardContent>
               <CardFooter>
-                <Button variant="link" className="p-0">Get Informed</Button>
+                <Button variant="link" className="p-0" asChild>
+                  <Link href="/news">Get Informed</Link>
+                </Button>
               </CardFooter>
             </Card>
           </div>
@@ -213,4 +217,3 @@ export default function Home() {
     </div>
   );
 }
-
