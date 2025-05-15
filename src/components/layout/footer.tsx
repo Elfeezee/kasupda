@@ -43,8 +43,15 @@ export default function Footer() {
           >
             Privacy Policy
           </Link>
+           <Link
+            href="/faq"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            prefetch={false}
+          >
+            FAQ
+          </Link>
           <Link
-            href="#"
+            href="/contact"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             prefetch={false}
           >
