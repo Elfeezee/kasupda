@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, Search } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, Search, XIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -50,7 +50,9 @@ export default function Header() {
   const dataCenterHideTimer = useRef<number | null>(null);
 
   const [desktopSearchTerm, setDesktopSearchTerm] = useState("");
-  const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
+  const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false);
+  const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
+  const desktopSearchInputRef = useRef<HTMLInputElement>(null);
 
 
   const HOVER_DELAY = 150; // ms
@@ -63,6 +65,12 @@ export default function Header() {
       if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (isDesktopSearchInputVisible && desktopSearchInputRef.current) {
+      desktopSearchInputRef.current.focus();
+    }
+  }, [isDesktopSearchInputVisible]);
 
   const createMenuHandlers = (
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -98,13 +106,13 @@ export default function Header() {
   ];
 
   const constructionSubLinks = [
-    { href: "/#", label: "Building Permit" },
-    { href: "/#", label: "Inspection and Completion" },
+    { href: "#", label: "Building Permit" },
+    { href: "#", label: "Inspection and Completion" },
   ];
 
   const eServiceSubLinks = [
     { href: "/apply-for-permit", label: "Apply for permit" },
-    { href: "/#", label: "Renew permit" },
+    { href: "#", label: "Renew permit" },
   ];
 
   const dataCenterSubLinks = [
@@ -167,26 +175,33 @@ export default function Header() {
     );
   };
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  const handleDesktopSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Search submitted:", desktopSearchTerm);
+    console.log("Desktop search submitted:", desktopSearchTerm);
     // Add actual search logic or navigation here
-    setIsSearchDialogOpen(false); // Close dialog on submit
+    // Optionally close the input: setIsDesktopSearchInputVisible(false);
+  };
+  
+  const handleMobileSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Mobile Search submitted:", desktopSearchTerm); // Using same state for simplicity, can be separated
+    setIsMobileSearchDialogOpen(false); 
   };
 
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <Dialog open={isSearchDialogOpen} onOpenChange={setIsSearchDialogOpen}>
-        <div className="container flex h-14 max-w-screen-2xl items-center">
-          {/* Desktop Navigation */}
-          <div className="mr-4 hidden md:flex md:flex-1 items-center">
-            <Link href="/" className="mr-6 flex items-center space-x-2">
-              <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
-              <span className="hidden font-bold sm:inline-block text-primary">
-                KASUPDA
-              </span>
-            </Link>
+      <div className="container flex h-14 max-w-screen-2xl items-center">
+        {/* Desktop Navigation */}
+        <div className="mr-4 hidden md:flex md:flex-1 items-center">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
+            <span className="hidden font-bold sm:inline-block text-primary">
+              KASUPDA
+            </span>
+          </Link>
+
+          {!isDesktopSearchInputVisible && (
             <nav className="flex items-center gap-1 text-sm">
               <Link
                 href="/"
@@ -309,30 +324,60 @@ export default function Header() {
                 </Link>
               ))}
             </nav>
-            <div className="ml-auto flex items-center gap-2">
-                <DialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-primary/70 hover:text-primary"
-                    aria-label="Open search dialog"
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
-                </DialogTrigger>
+          )}
+
+          {isDesktopSearchInputVisible && (
+            <form onSubmit={handleDesktopSearchSubmit} className="flex-1 ml-4 mr-2 flex items-center">
+              <Input
+                ref={desktopSearchInputRef}
+                id="desktopInlineSearch"
+                placeholder="Search KASUPDA Portal..."
+                value={desktopSearchTerm}
+                onChange={(e) => setDesktopSearchTerm(e.target.value)}
+                className="h-9 flex-1"
+              />
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={toggleTheme}
-                className="text-primary/70 hover:text-primary"
-                aria-label="Toggle theme"
+                type="button"
+                className="text-primary/70 hover:text-primary ml-2"
+                onClick={() => {
+                  setIsDesktopSearchInputVisible(false);
+                  setDesktopSearchTerm(""); // Clear search term on close
+                }}
+                aria-label="Close search"
               >
-                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                <XIcon className="h-5 w-5" />
               </Button>
-            </div>
-          </div>
+            </form>
+          )}
 
-          {/* Mobile Navigation Header Bar */}
+          <div className="ml-auto flex items-center gap-2">
+            {!isDesktopSearchInputVisible && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-primary/70 hover:text-primary"
+                aria-label="Open search input"
+                onClick={() => setIsDesktopSearchInputVisible(true)}
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="text-primary/70 hover:text-primary"
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Header Bar */}
+        <Dialog open={isMobileSearchDialogOpen} onOpenChange={setIsMobileSearchDialogOpen}>
           <div className="flex w-full items-center justify-between md:hidden">
             <Link href="/" className="flex items-center space-x-2">
               <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
@@ -372,8 +417,7 @@ export default function Header() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="pr-0 pt-8 flex flex-col">
-                  
-                  <nav className="flex-grow overflow-y-auto"> {/* Allow nav to scroll if content is long */}
+                  <nav className="flex-grow overflow-y-auto">
                     <Link
                       href="/"
                       className={getMobileLinkClassName("/")}
@@ -382,7 +426,7 @@ export default function Header() {
                     </Link>
                     <Accordion type="single" collapsible className="w-full">
                       <AccordionItem value="planning-dev" className="border-b-0">
-                        <AccordionTrigger className={getMobileAccordionTriggerClassName(planningSubLinks)}>
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(planningSubLinks), "px-3")}>
                           Planning and Development
                         </AccordionTrigger>
                         <AccordionContent className="pl-4 pb-1">
@@ -398,7 +442,7 @@ export default function Header() {
                         </AccordionContent>
                       </AccordionItem>
                       <AccordionItem value="construction" className="border-b-0">
-                        <AccordionTrigger className={getMobileAccordionTriggerClassName(constructionSubLinks)}>
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(constructionSubLinks), "px-3")}>
                           Construction
                         </AccordionTrigger>
                         <AccordionContent className="pl-4 pb-1">
@@ -414,7 +458,7 @@ export default function Header() {
                         </AccordionContent>
                       </AccordionItem>
                       <AccordionItem value="e-service" className="border-b-0">
-                        <AccordionTrigger className={getMobileAccordionTriggerClassName(eServiceSubLinks)}>
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(eServiceSubLinks), "px-3")}>
                           e-service
                         </AccordionTrigger>
                         <AccordionContent className="pl-4 pb-1">
@@ -430,7 +474,7 @@ export default function Header() {
                         </AccordionContent>
                       </AccordionItem>
                       <AccordionItem value="data-center" className="border-b-0">
-                        <AccordionTrigger className={getMobileAccordionTriggerClassName(dataCenterSubLinks)}>
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(dataCenterSubLinks), "px-3")}>
                           Data Center
                         </AccordionTrigger>
                         <AccordionContent className="pl-4 pb-1">
@@ -461,26 +505,28 @@ export default function Header() {
               </Sheet>
             </div>
           </div>
-        </div>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Search KASUPDA Portal</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleSearchSubmit}>
-            <div className="grid gap-4 py-4">
-              <Input
-                id="desktopSearch"
-                placeholder="Enter search term..."
-                value={desktopSearchTerm}
-                onChange={(e) => setDesktopSearchTerm(e.target.value)}
-              />
-            </div>
-            <DialogFooter>
-              <Button type="submit">Search</Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Search KASUPDA Portal</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleMobileSearchSubmit}>
+              <div className="grid gap-4 py-4">
+                <Input
+                  id="mobileSearch"
+                  placeholder="Enter search term..."
+                  value={desktopSearchTerm} // Consider using a separate state for mobile if needed
+                  onChange={(e) => setDesktopSearchTerm(e.target.value)}
+                />
+              </div>
+              <DialogFooter>
+                <Button type="submit">Search</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
     </header>
   );
 }
+
+    
