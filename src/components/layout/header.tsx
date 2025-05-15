@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, Search, XIcon } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, Search, XIcon, MapPin, UserCircle, LogIn, UserPlus } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -29,6 +29,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/theme-provider";
@@ -46,9 +47,6 @@ export default function Header() {
   const [eServiceOpen, setEServiceOpen] = useState(false);
   const eServiceHideTimer = useRef<number | null>(null);
 
-  const [dataCenterOpen, setDataCenterOpen] = useState(false); // Assuming you might want to keep this structure
-  const dataCenterHideTimer = useRef<number | null>(null);
-
   const [desktopSearchTerm, setDesktopSearchTerm] = useState("");
   const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false);
   const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
@@ -62,7 +60,6 @@ export default function Header() {
       if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
       if (constructionHideTimer.current) clearTimeout(constructionHideTimer.current);
       if (eServiceHideTimer.current) clearTimeout(eServiceHideTimer.current);
-      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
 
@@ -93,10 +90,9 @@ export default function Header() {
     return { handleOpen, handleCloseWithDelay, cancelHide };
   };
 
-  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setConstructionOpen, setEServiceOpen, setDataCenterOpen]);
-  const constructionHandlers = createMenuHandlers(setConstructionOpen, constructionHideTimer, [setPlanningOpen, setEServiceOpen, setDataCenterOpen]);
-  const eServiceHandlers = createMenuHandlers(setEServiceOpen, eServiceHideTimer, [setPlanningOpen, setConstructionOpen, setDataCenterOpen]);
-  const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setConstructionOpen, setEServiceOpen]);
+  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setConstructionOpen, setEServiceOpen]);
+  const constructionHandlers = createMenuHandlers(setConstructionOpen, constructionHideTimer, [setPlanningOpen, setEServiceOpen]);
+  const eServiceHandlers = createMenuHandlers(setEServiceOpen, eServiceHideTimer, [setPlanningOpen, setConstructionOpen]);
 
 
   const planningSubLinks = [
@@ -115,12 +111,6 @@ export default function Header() {
     { href: "#", label: "Renew permit" },
   ];
   
-  const dataCenterSubLinks = [ // Example, if you decide to use Data Center
-    { href: "#", label: "Lab" },
-    { href: "#", label: "Soil Test" },
-    { href: "#", label: "Integrity Test" },
-  ];
-
   const mainNavLinks = [
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
@@ -145,6 +135,13 @@ export default function Header() {
       (isActivePath || isOpen)
         ? "text-primary font-semibold"
         : "text-primary/70 hover:text-primary"
+    );
+  };
+  
+  const getDropdownLinkClassName = (href: string) => {
+    return cn(
+      "text-sm",
+      pathname === href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary"
     );
   };
 
@@ -231,7 +228,7 @@ export default function Header() {
                 >
                   {planningSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -257,7 +254,7 @@ export default function Header() {
                 >
                   {constructionSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -283,56 +280,26 @@ export default function Header() {
                 >
                   {eServiceSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-
-              {/* Example: Data Center Dropdown - uncomment and adjust if needed
-              <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
-                <DropdownMenuTrigger
-                  asChild
-                  onPointerEnter={dataCenterHandlers.handleOpen}
-                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
-                >
-                  <Button
-                    variant="ghost"
-                    className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
-                  >
-                    Data Center
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onPointerEnter={dataCenterHandlers.cancelHide}
-                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
-                >
-                  {dataCenterSubLinks.map((link) => (
-                    <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              */}
 
               {mainNavLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
-                  target={link.target}
-                  rel={link.rel}
                   className={getLinkClassName(link.href)}
                 >
-                  {link.icon}{link.label}
+                  {link.label}
                 </Link>
               ))}
             </nav>
           )}
 
           {isDesktopSearchInputVisible && (
-            <form onSubmit={handleDesktopSearchSubmit} className="ml-4 mr-2 flex items-center">
+            <form onSubmit={handleDesktopSearchSubmit} className="flex items-center">
               <Input
                 ref={desktopSearchInputRef}
                 id="desktopInlineSearch"
@@ -348,7 +315,7 @@ export default function Header() {
                 className="text-primary/70 hover:text-primary ml-2"
                 onClick={() => {
                   setIsDesktopSearchInputVisible(false);
-                  setDesktopSearchTerm(""); // Clear search term on close
+                  setDesktopSearchTerm(""); 
                 }}
                 aria-label="Close search"
               >
@@ -359,6 +326,21 @@ export default function Header() {
 
           <div className="ml-auto flex items-center gap-2">
             {!isDesktopSearchInputVisible && (
+               <>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/login">
+                    <LogIn className="mr-2 h-4 w-4" /> Login
+                  </Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/apply-for-permit">
+                    <UserPlus className="mr-2 h-4 w-4" /> Sign up
+                  </Link>
+                </Button>
+                <Separator orientation="vertical" className="h-6 mx-1" />
+              </>
+            )}
+             {!isDesktopSearchInputVisible && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -478,37 +460,30 @@ export default function Header() {
                           ))}
                         </AccordionContent>
                       </AccordionItem>
-                      {/* Example: Data Center Accordion - uncomment if needed
-                      <AccordionItem value="data-center" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(dataCenterSubLinks), "px-3")}>
-                          Data Center
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-4 pb-1">
-                          {dataCenterSubLinks.map((link) => (
-                            <Link
-                              key={link.label}
-                              href={link.href}
-                              className={getMobileSubLinkClassName(link.href)}
-                            >
-                              {link.label}
-                            </Link>
-                          ))}
-                        </AccordionContent>
-                      </AccordionItem>
-                       */}
                     </Accordion>
 
                     {mainNavLinks.map((link) => (
                       <Link
                         key={link.label}
                         href={link.href}
-                        target={link.target}
-                        rel={link.rel}
                         className={getMobileLinkClassName(link.href)}
                       >
-                         {link.icon}{link.label}
+                         {link.label}
                       </Link>
                     ))}
+                    <Separator className="my-4" />
+                     <div className="px-3 space-y-2">
+                        <Button variant="outline" className="w-full justify-start" asChild>
+                          <Link href="/login">
+                            <LogIn className="mr-2 h-4 w-4" /> Login
+                          </Link>
+                        </Button>
+                        <Button className="w-full justify-start" asChild>
+                          <Link href="/apply-for-permit">
+                            <UserPlus className="mr-2 h-4 w-4" /> Sign up
+                          </Link>
+                        </Button>
+                      </div>
                   </nav>
                 </SheetContent>
               </Sheet>
@@ -523,7 +498,7 @@ export default function Header() {
                 <Input
                   id="mobileSearch"
                   placeholder="Enter search term..."
-                  value={desktopSearchTerm} // Consider using a separate state for mobile if needed
+                  value={desktopSearchTerm} 
                   onChange={(e) => setDesktopSearchTerm(e.target.value)}
                 />
               </div>
@@ -537,3 +512,4 @@ export default function Header() {
     </header>
   );
 }
+
