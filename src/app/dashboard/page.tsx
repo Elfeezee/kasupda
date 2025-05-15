@@ -1,7 +1,8 @@
+
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const DashboardPage: React.FC = () => {
   const searchParams = useSearchParams();
@@ -9,7 +10,16 @@ const DashboardPage: React.FC = () => {
 
   // Placeholder user information
   const permitStatus = 'Pending Review';
-  const applicationDate = '2023-10-27';
+  const [applicationDate, setApplicationDate] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Set the date only on the client-side after hydration
+    setApplicationDate(new Date().toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }));
+  }, []); // Empty dependency array ensures this runs once on mount
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -20,7 +30,12 @@ const DashboardPage: React.FC = () => {
           Status: <span className="font-medium text-foreground">{permitStatus}</span>
         </p>
         <p className="text-muted-foreground">
-          Application Date: <span className="font-medium text-foreground">{applicationDate}</span>
+          Application Date: {' '}
+          {applicationDate ? (
+            <span className="font-medium text-foreground">{applicationDate}</span>
+          ) : (
+            <span className="font-medium text-foreground">Loading date...</span>
+          )}
         </p>
       </div>
     </div>
