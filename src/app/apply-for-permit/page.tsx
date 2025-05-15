@@ -1,14 +1,33 @@
+
 "use client";
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { FcGoogle } from "react-icons/fc";
 
 export default function ApplyForPermitPage() {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const nameInput = form.elements.namedItem('applicantName') as HTMLInputElement | null;
+    const name = nameInput ? nameInput.value.trim() : '';
+    
+    if (name) {
+      // Navigate to dashboard, or handle submission
+      // For now, we'll simulate going to a dashboard page
+      window.location.href = `/dashboard?name=${encodeURIComponent(name)}`;
+    } else {
+      // Handle case where name is not entered, perhaps show an error
+      console.warn("Applicant name not entered.");
+      // You might want to show a toast or an inline error message here.
+      // Example: alert("Please enter your name.");
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <Card>
@@ -16,61 +35,44 @@ export default function ApplyForPermitPage() {
           <CardTitle className="text-2xl font-bold text-center">Apply for Permit</CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="grid grid-cols-1 gap-6">
+          <div className="text-center mb-6">
+            <p className="text-gray-600">Create your profile to apply for permits and access your dashboard.</p>
+          </div>
+          <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <Label htmlFor="applicantName">Applicant Name</Label>
-              <Input id="applicantName" placeholder="Enter your full name" />
+              <Input id="applicantName" name="applicantName" placeholder="Enter your full name" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="contactEmail">Email</Label>
-              <Input id="contactEmail" type="email" placeholder="Enter your email address" />
+              <Label htmlFor="contactEmail">Email Address</Label>
+              <Input id="contactEmail" name="contactEmail" type="email" placeholder="Enter your email address" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="contactPhone">Phone Number</Label>
-              <Input id="contactPhone" type="tel" placeholder="Enter your phone number" />
+              <Input id="contactPhone" name="contactPhone" type="tel" placeholder="Enter your phone number" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="propertyAddress">Property Address</Label>
-              <Input id="propertyAddress" placeholder="Enter the property address" />
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" name="password" type="password" placeholder="Create a password" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="permitType">Type of Permit Requested</Label>
-              <Select>
-                <SelectTrigger id="permitType">
-                  <SelectValue placeholder="Select permit type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="temporary">Temporary building permit application</SelectItem>
-                  <SelectItem value="building">Building permit application</SelectItem>
-                  <SelectItem value="outdoor">Outdoor advertisement licensing</SelectItem>
-                </SelectContent>
-              </Select>
+
+            <Button type="submit" className="w-full whitespace-normal">Create Profile</Button>
+            <div className="flex items-center justify-center space-x-4 my-6">
+              <Separator className="flex-grow w-1/3" />
+              <span className="text-xs text-gray-500 uppercase shrink-0">OR</span>
+              <Separator className="flex-grow w-1/3" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="projectDescription">Project Description</Label>
-              <Textarea id="projectDescription" placeholder="Provide a brief description of the project" rows={4} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="dimensions">Dimensions / Specifications</Label>
-              <Textarea id="dimensions" placeholder="Include relevant dimensions, area, or specifications" rows={4} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="images">Upload Images</Label>
-              <Input id="images" type="file" accept="image/*" multiple />
-            </div>
-            {/* Add other necessary fields as needed */}
-            {/*
-            <div className="space-y-2">
-              <Label htmlFor="propertyOwner">Property Owner Name</Label>
-              <Input id="propertyOwner" placeholder="Enter property owner's name" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="parcelNumber">Parcel Number</Label>
-              <Input id="parcelNumber" placeholder="Enter parcel number (if applicable)" />
-            </div>
-            */}
-            <Button type="submit" className="w-full whitespace-normal">Submit Application</Button>
           </form>
+          {/* Google Sign-up button is placed below the form */}
+          <Button 
+            className="w-full flex items-center justify-center space-x-2 mt-4" 
+            variant="outline" 
+            type="button" // Ensure it doesn't submit the form
+            onClick={() => { /* Handle Google Sign-up logic here */ console.log("Google Sign-up clicked");}}
+          >
+            <FcGoogle className="text-xl" />
+            <span>Sign Up with Google</span>
+          </Button>
         </CardContent>
       </Card>
     </div>

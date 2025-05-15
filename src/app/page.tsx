@@ -148,7 +148,7 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <Button variant="link" className="p-0" asChild>
-                  <Link href="/contact">Report a Violation</Link>
+                  <Link href="#">More...</Link>
                 </Button>
               </CardFooter>
             </Card>
