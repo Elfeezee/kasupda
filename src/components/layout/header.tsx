@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, Search, XIcon } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, Search, XIcon, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -46,7 +46,7 @@ export default function Header() {
   const [eServiceOpen, setEServiceOpen] = useState(false);
   const eServiceHideTimer = useRef<number | null>(null);
 
-  const [dataCenterOpen, setDataCenterOpen] = useState(false);
+  const [dataCenterOpen, setDataCenterOpen] = useState(false); // Assuming you might want to keep this structure
   const dataCenterHideTimer = useRef<number | null>(null);
 
   const [desktopSearchTerm, setDesktopSearchTerm] = useState("");
@@ -114,23 +114,28 @@ export default function Header() {
     { href: "/apply-for-permit", label: "Apply for permit" },
     { href: "#", label: "Renew permit" },
   ];
-
-  const dataCenterSubLinks = [
+  
+  const dataCenterSubLinks = [ // Example, if you decide to use Data Center
     { href: "#", label: "Lab" },
     { href: "#", label: "Soil Test" },
     { href: "#", label: "Integrity Test" },
   ];
 
+  const kasupdaAddress = "No. 1 KASUPDA Road, Off Independence Way, Kaduna, Nigeria";
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(kasupdaAddress)}`;
+
   const mainNavLinks = [
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
     { href: "/contact", label: "Contact Us" },
+    { href: googleMapsUrl, label: "Map", target: "_blank", rel: "noopener noreferrer", icon: <MapPin className="mr-1 h-4 w-4 inline-block" /> },
   ];
+
 
   const getLinkClassName = (href: string) => {
     const isActive = pathname === href;
     return cn(
-      "transition-colors px-3 py-2 text-sm",
+      "transition-colors px-3 py-2 text-sm flex items-center",
       isActive
         ? "text-primary font-semibold"
         : "text-primary/70 hover:text-primary"
@@ -288,6 +293,7 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
+              {/* Example: Data Center Dropdown - uncomment and adjust if needed
               <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
                 <DropdownMenuTrigger
                   asChild
@@ -313,14 +319,17 @@ export default function Header() {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+              */}
 
               {mainNavLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
+                  target={link.target}
+                  rel={link.rel}
                   className={getLinkClassName(link.href)}
                 >
-                  {link.label}
+                  {link.icon}{link.label}
                 </Link>
               ))}
             </nav>
@@ -473,6 +482,7 @@ export default function Header() {
                           ))}
                         </AccordionContent>
                       </AccordionItem>
+                      {/* Example: Data Center Accordion - uncomment if needed
                       <AccordionItem value="data-center" className="border-b-0">
                         <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(dataCenterSubLinks), "px-3")}>
                           Data Center
@@ -489,15 +499,18 @@ export default function Header() {
                           ))}
                         </AccordionContent>
                       </AccordionItem>
+                       */}
                     </Accordion>
 
                     {mainNavLinks.map((link) => (
                       <Link
-                        key={link.href}
+                        key={link.label}
                         href={link.href}
+                        target={link.target}
+                        rel={link.rel}
                         className={getMobileLinkClassName(link.href)}
                       >
-                        {link.label}
+                         {link.icon}{link.label}
                       </Link>
                     ))}
                   </nav>
