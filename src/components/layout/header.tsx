@@ -1,6 +1,7 @@
 
 "use client";
 
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, ChevronDown } from "lucide-react";
@@ -25,6 +26,56 @@ import { cn } from "@/lib/utils";
 export default function Header() {
   const pathname = usePathname();
 
+  const [planningOpen, setPlanningOpen] = useState(false);
+  const planningHideTimer = useRef<number | null>(null);
+
+  const [constructionOpen, setConstructionOpen] = useState(false);
+  const constructionHideTimer = useRef<number | null>(null);
+
+  const [eServiceOpen, setEServiceOpen] = useState(false);
+  const eServiceHideTimer = useRef<number | null>(null);
+
+  const [dataCenterOpen, setDataCenterOpen] = useState(false);
+  const dataCenterHideTimer = useRef<number | null>(null);
+
+  const HOVER_DELAY = 150; // ms
+
+  useEffect(() => {
+    return () => {
+      if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
+      if (constructionHideTimer.current) clearTimeout(constructionHideTimer.current);
+      if (eServiceHideTimer.current) clearTimeout(eServiceHideTimer.current);
+      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
+    };
+  }, []);
+
+  const createMenuHandlers = (
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    hideTimerRef: React.MutableRefObject<number | null>,
+    otherSetters: React.Dispatch<React.SetStateAction<boolean>>[]
+  ) => {
+    const handleOpen = () => {
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+      otherSetters.forEach(setter => setter(false)); // Close other menus
+      setOpen(true);
+    };
+    const handleCloseWithDelay = () => {
+      hideTimerRef.current = window.setTimeout(() => {
+        setOpen(false);
+      }, HOVER_DELAY);
+    };
+    const cancelHide = () => {
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    };
+    return { handleOpen, handleCloseWithDelay, cancelHide };
+  };
+
+  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setConstructionOpen, setEServiceOpen, setDataCenterOpen]);
+  const constructionHandlers = createMenuHandlers(setConstructionOpen, constructionHideTimer, [setPlanningOpen, setEServiceOpen, setDataCenterOpen]);
+  const eServiceHandlers = createMenuHandlers(setEServiceOpen, eServiceHideTimer, [setPlanningOpen, setConstructionOpen, setDataCenterOpen]);
+  const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setConstructionOpen, setEServiceOpen]);
+
+
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
     { href: "#", label: "Approved layout" },
@@ -47,7 +98,7 @@ export default function Header() {
     { href: "#", label: "Integrity Test" },
   ];
 
-  const mainNavLinks = [ // This is the line that needs to be changed
+  const mainNavLinks = [
     {
       href: "/about",
       label: "About Us",
@@ -58,13 +109,13 @@ export default function Header() {
     },
     {
       href: "/contact",
-      label: "Contact Us", // This is the line that needs to be changed
+      label: "Contact Us",
     },
   ];
 
   const getLinkClassName = (href: string) => {
     return cn(
-      "transition-colors px-3 py-2",
+      "transition-colors px-3 py-2 text-sm",
       pathname === href
         ? "text-primary font-semibold"
         : "text-primary/70 hover:text-primary"
@@ -82,7 +133,7 @@ export default function Header() {
   
   const getMobileSubLinkClassName = (href: string) => {
     return cn(
-      "block py-1.5 px-3", // Added px-3 for consistency
+      "block py-1.5 px-3",
       pathname === href
         ? "text-primary font-semibold"
         : "text-primary/70 hover:text-primary" 
@@ -108,13 +159,19 @@ export default function Header() {
             >
               Home
             </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+
+            {/* Planning and Development Dropdown */}
+            <DropdownMenu open={planningOpen} onOpenChange={setPlanningOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={planningHandlers.handleOpen}
+                onPointerLeave={planningHandlers.handleCloseWithDelay}
+              >
                 <Button
                   variant="ghost"
                   className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
-                    pathname.startsWith("/planning") || planningSubLinks.some(link => pathname === link.href) 
+                    "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
+                    pathname.startsWith("/planning") || planningSubLinks.some(link => pathname === link.href) || planningOpen
                       ? "text-primary font-semibold" 
                       : "text-primary/70 hover:text-primary"
                   )}
@@ -123,7 +180,10 @@ export default function Header() {
                   <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent
+                onPointerEnter={planningHandlers.cancelHide}
+                onPointerLeave={planningHandlers.handleCloseWithDelay}
+              >
                 {planningSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
@@ -132,13 +192,18 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            {/* Construction Dropdown */}
+            <DropdownMenu open={constructionOpen} onOpenChange={setConstructionOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={constructionHandlers.handleOpen}
+                onPointerLeave={constructionHandlers.handleCloseWithDelay}
+              >
                 <Button
                   variant="ghost"
                   className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
-                     pathname.startsWith("/construction") || constructionSubLinks.some(link => pathname === link.href)
+                    "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
+                     (pathname.startsWith("/construction") || constructionSubLinks.some(link => pathname === link.href) || constructionOpen)
                       ? "text-primary font-semibold"
                       : "text-primary/70 hover:text-primary"
                   )}
@@ -147,7 +212,10 @@ export default function Header() {
                   <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent
+                onPointerEnter={constructionHandlers.cancelHide}
+                onPointerLeave={constructionHandlers.handleCloseWithDelay}
+              >
                 {constructionSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
                      <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
@@ -156,13 +224,18 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            {/* e-service Dropdown */}
+            <DropdownMenu open={eServiceOpen} onOpenChange={setEServiceOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={eServiceHandlers.handleOpen}
+                onPointerLeave={eServiceHandlers.handleCloseWithDelay}
+              >
                 <Button
                   variant="ghost"
                   className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
-                    pathname.startsWith("/eservice") || eServiceSubLinks.some(link => pathname === link.href)
+                    "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
+                    (pathname.startsWith("/eservice") || eServiceSubLinks.some(link => pathname === link.href) || eServiceOpen)
                       ? "text-primary font-semibold"
                       : "text-primary/70 hover:text-primary"
                   )}
@@ -171,7 +244,10 @@ export default function Header() {
                   <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent
+                onPointerEnter={eServiceHandlers.cancelHide}
+                onPointerLeave={eServiceHandlers.handleCloseWithDelay}
+              >
                 {eServiceSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
                      <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
@@ -179,15 +255,19 @@ export default function Header() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-
+            
             {/* Data Center Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={dataCenterHandlers.handleOpen}
+                onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+              >
                 <Button
                   variant="ghost"
                   className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
-                    pathname.startsWith("/data-center") || dataCenterSubLinks.some(link => pathname === link.href)
+                    "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
+                    (pathname.startsWith("/data-center") || dataCenterSubLinks.some(link => pathname === link.href) || dataCenterOpen)
                       ? "text-primary font-semibold"
                       : "text-primary/70 hover:text-primary"
                   )}
@@ -196,31 +276,10 @@ export default function Header() {
                   <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {dataCenterSubLinks.map((link) => (
-                  <DropdownMenuItem key={link.label} asChild>
-                    <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            {/* Data Center Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={cn(
-                    "transition-colors px-3 py-2 h-auto font-normal focus-visible:ring-0 focus-visible:ring-offset-0",
-                    pathname.startsWith("/data-center") || dataCenterSubLinks.some(link => pathname === link.href)
-                      ? "text-primary font-semibold"
-                      : "text-primary/70 hover:text-primary"
-                  )}
-                >
-                  Data Center
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent
+                onPointerEnter={dataCenterHandlers.cancelHide}
+                onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+              >
                 {dataCenterSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
@@ -260,7 +319,7 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="pr-0 pt-8">
-              <nav className="flex flex-col space-y-1"> {/* Removed ml-4 */}
+              <nav className="flex flex-col space-y-1">
                 <Link
                   href="/"
                   className={getMobileLinkClassName("/")}
@@ -331,8 +390,6 @@ export default function Header() {
                       ))}
                     </AccordionContent>
                   </AccordionItem>
-
-                  {/* Data Center Accordion Item */}
                   <AccordionItem value="data-center" className="border-b-0">
                     <AccordionTrigger className={cn(
                       "transition-colors py-2 text-base font-normal hover:no-underline px-3",

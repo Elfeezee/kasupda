@@ -91,7 +91,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <FileText className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Construction</CardTitle>
+                <CardTitle>Development Control</CardTitle>
                 <CardDescription>
                   Streamlined online application and processing for all your construction permits.
                 </CardDescription>
@@ -101,11 +101,9 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <div className="flex flex-col space-y-1 items-start">
+              
                   <Link href="#" className="text-sm text-primary hover:underline p-0">
-                    - Building Permit
-                  </Link>
-                  <Link href="#" className="text-sm text-primary hover:underline p-0">
-                    - Inspection and Completion
+                    - Inspection 
                   </Link>
                 </div>
               </CardFooter>
@@ -138,7 +136,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <ShieldCheck className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Compliance &amp; Enforcement</CardTitle>
+                <CardTitle>Building Control</CardTitle>
                 <CardDescription>
                   Ensuring adherence to building codes and urban planning regulations across the state.
                 </CardDescription>
@@ -148,7 +146,7 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <Button variant="link" className="p-0" asChild>
-                  <Link href="#">More...</Link>
+                  <Link href="#">Completion</Link>
                 </Button>
               </CardFooter>
             </Card>
