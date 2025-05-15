@@ -327,14 +327,14 @@ export default function Header() {
           )}
 
           {isDesktopSearchInputVisible && (
-            <form onSubmit={handleDesktopSearchSubmit} className="flex-1 ml-4 mr-2 flex items-center">
+            <form onSubmit={handleDesktopSearchSubmit} className="ml-4 mr-2 flex items-center">
               <Input
                 ref={desktopSearchInputRef}
                 id="desktopInlineSearch"
                 placeholder="Search KASUPDA Portal..."
                 value={desktopSearchTerm}
                 onChange={(e) => setDesktopSearchTerm(e.target.value)}
-                className="h-9 flex-1"
+                className="h-9 w-60"
               />
               <Button
                 variant="ghost"
@@ -528,5 +528,3 @@ export default function Header() {
     </header>
   );
 }
-
-    
