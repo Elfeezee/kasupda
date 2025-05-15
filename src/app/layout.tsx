@@ -7,6 +7,7 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/context/theme-provider';
+import ScrollToTopButton from '@/components/ui/scroll-to-top-button'; // Import the new component
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -44,6 +45,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <Toaster />
+          <ScrollToTopButton /> {/* Add the button here */}
         </ThemeProvider>
       </body>
     </html>
