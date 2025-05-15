@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -14,6 +14,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Accordion,
   AccordionContent,
@@ -37,8 +46,12 @@ export default function Header() {
   const [eServiceOpen, setEServiceOpen] = useState(false);
   const eServiceHideTimer = useRef<number | null>(null);
 
-  const [dataCenterOpen, setDataCenterOpen] = useState(false); // Added for Data Center
-  const dataCenterHideTimer = useRef<number | null>(null); // Added for Data Center
+  const [dataCenterOpen, setDataCenterOpen] = useState(false);
+  const dataCenterHideTimer = useRef<number | null>(null);
+
+  const [desktopSearchTerm, setDesktopSearchTerm] = useState("");
+  const [mobileSearchTerm, setMobileSearchTerm] = useState("");
+  const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
 
 
   const HOVER_DELAY = 150; // ms
@@ -48,7 +61,7 @@ export default function Header() {
       if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
       if (constructionHideTimer.current) clearTimeout(constructionHideTimer.current);
       if (eServiceHideTimer.current) clearTimeout(eServiceHideTimer.current);
-      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current); // Added for Data Center
+      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
 
@@ -95,84 +108,78 @@ export default function Header() {
     { href: "#", label: "Renew permit" },
   ];
 
-  // Added Data Center sub-links
   const dataCenterSubLinks = [
     { href: "#", label: "Lab" },
     { href: "#", label: "Soil Test" },
     { href: "#", label: "Integrity Test" },
   ];
 
-
   const mainNavLinks = [
-    {
-      href: "/about",
-      label: "About Us",
-    },
-    {
-      href: "/news",
-      label: "News and Publications",
-    },
-    {
-      href: "/contact",
-      label: "Contact Us",
-    },
+    { href: "/about", label: "About Us" },
+    { href: "/news", label: "News and Publications" },
+    { href: "/contact", label: "Contact Us" },
   ];
 
-  const getLinkClassName = (href: string, isDropdownTrigger: boolean = false) => {
-    let isActive = pathname === href;
-    if (href === "/planning" && (planningSubLinks.some(link => pathname === link.href) || planningOpen)) isActive = true;
-    if (href === "/construction" && (constructionSubLinks.some(link => pathname === link.href) || constructionOpen)) isActive = true;
-    if (href === "/eservice" && (eServiceSubLinks.some(link => pathname === link.href) || eServiceOpen)) isActive = true;
-    if (href === "/data-center" && (dataCenterSubLinks.some(link => pathname === link.href) || dataCenterOpen)) isActive = true;
-
-
+  const getLinkClassName = (href: string) => {
+    const isActive = pathname === href;
     return cn(
       "transition-colors px-3 py-2 text-sm",
       isActive
         ? "text-primary font-semibold"
-        : "text-primary/70 hover:text-primary",
-      isDropdownTrigger && "font-normal focus-visible:ring-0 focus-visible:ring-offset-0 h-auto" // specific to dropdown triggers
-    );
-  };
-
-  const getDropdownTriggerClassName = (currentPathSegment: string, subLinks: {href: string}[], isOpen: boolean) => {
-    const isActivePath = pathname.startsWith(currentPathSegment) || subLinks.some(link => pathname === link.href);
-    return cn(
-      "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
-      (isActivePath || isOpen)
-        ? "text-primary font-semibold" 
         : "text-primary/70 hover:text-primary"
     );
   };
 
+  const getDropdownTriggerClassName = (currentPathSegment: string, subLinks: { href: string }[], isOpen: boolean) => {
+    const isActivePath = subLinks.some(link => pathname === link.href);
+    return cn(
+      "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0",
+      (isActivePath || isOpen)
+        ? "text-primary font-semibold"
+        : "text-primary/70 hover:text-primary"
+    );
+  };
 
   const getMobileLinkClassName = (href: string) => {
     return cn(
-      "py-2 text-base px-3",
+      "block py-2 text-base px-3",
       pathname === href
         ? "text-primary font-semibold"
         : "text-primary/70 hover:text-primary"
     );
   };
-  
+
   const getMobileSubLinkClassName = (href: string) => {
     return cn(
       "block py-1.5 px-3",
       pathname === href
         ? "text-primary font-semibold"
-        : "text-primary/70 hover:text-primary" 
+        : "text-primary/70 hover:text-primary"
     );
   };
 
-  const getMobileAccordionTriggerClassName = (currentPathSegment: string, subLinks: {href: string}[]) => {
-    const isActivePath = pathname.startsWith(currentPathSegment) || subLinks.some(link => pathname === link.href);
+  const getMobileAccordionTriggerClassName = (subLinks: { href: string }[]) => {
+    const isActivePath = subLinks.some(link => pathname === link.href);
     return cn(
-        "transition-colors py-2 text-base font-normal hover:no-underline px-3",
-        isActivePath
-          ? "text-primary font-semibold"
-          : "text-primary/70 hover:text-primary"
-      )
-  }
+      "transition-colors py-2 text-base font-normal hover:no-underline px-3",
+      isActivePath
+        ? "text-primary font-semibold"
+        : "text-primary/70 hover:text-primary"
+    );
+  };
+
+  const handleDesktopSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Desktop search submitted:", desktopSearchTerm);
+    // Add actual search logic or navigation here
+    setIsSearchDialogOpen(false); // Close dialog on submit
+  };
+
+  const handleMobileSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Mobile search submitted:", mobileSearchTerm);
+    // Add actual search logic or navigation here
+  };
 
 
   return (
@@ -194,7 +201,6 @@ export default function Header() {
               Home
             </Link>
 
-            {/* Planning and Development Dropdown */}
             <DropdownMenu open={planningOpen} onOpenChange={setPlanningOpen}>
               <DropdownMenuTrigger
                 asChild
@@ -221,7 +227,6 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Construction Dropdown */}
             <DropdownMenu open={constructionOpen} onOpenChange={setConstructionOpen}>
               <DropdownMenuTrigger
                 asChild
@@ -242,13 +247,12 @@ export default function Header() {
               >
                 {constructionSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
-                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
+                    <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* e-service Dropdown */}
             <DropdownMenu open={eServiceOpen} onOpenChange={setEServiceOpen}>
               <DropdownMenuTrigger
                 asChild
@@ -269,13 +273,12 @@ export default function Header() {
               >
                 {eServiceSubLinks.map((link) => (
                   <DropdownMenuItem key={link.label} asChild>
-                     <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
+                    <Link href={link.href} className={cn(pathname === link.href ? "text-primary font-semibold" : "text-primary/90 hover:text-primary")}>{link.label}</Link>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            
-            {/* Data Center Dropdown */}
+
             <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
               <DropdownMenuTrigger
                 asChild
@@ -284,7 +287,7 @@ export default function Header() {
               >
                 <Button
                   variant="ghost"
-                   className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
+                  className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
                 >
                   Data Center
                   <ChevronDown className="ml-1 h-4 w-4" />
@@ -312,34 +315,67 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-           <Button
+          <div className="ml-auto flex items-center gap-2">
+            <Dialog open={isSearchDialogOpen} onOpenChange={setIsSearchDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary/70 hover:text-primary"
+                  aria-label="Open search dialog"
+                >
+                  <Search className="h-5 w-5" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Search KASUPDA Portal</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleDesktopSearchSubmit}>
+                  <div className="grid gap-4 py-4">
+                    <Input
+                      id="desktopSearch"
+                      placeholder="Enter search term..."
+                      value={desktopSearchTerm}
+                      onChange={(e) => setDesktopSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Search</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="ml-auto text-primary/70 hover:text-primary"
+              className="text-primary/70 hover:text-primary"
               aria-label="Toggle theme"
             >
               {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation Header Bar */}
         <div className="flex w-full items-center justify-between md:hidden">
           <Link href="/" className="flex items-center space-x-2">
-             <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
+            <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
             <span className="font-bold text-primary">
               KASUPDA
             </span>
           </Link>
           <div className="flex items-center">
             <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                className="text-primary/70 hover:text-primary mr-1"
-                aria-label="Toggle theme"
-              >
-                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="text-primary/70 hover:text-primary mr-1"
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </Button>
             <Sheet>
               <SheetTrigger asChild>
@@ -352,8 +388,21 @@ export default function Header() {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="pr-0 pt-8">
-                <nav className="flex flex-col space-y-1">
+              <SheetContent side="left" className="pr-0 pt-8 flex flex-col">
+                <form onSubmit={handleMobileSearch} className="px-4 pb-4 border-b">
+                   <div className="relative">
+                    <Input
+                      placeholder="Search..."
+                      value={mobileSearchTerm}
+                      onChange={(e) => setMobileSearchTerm(e.target.value)}
+                      className="pr-10" // Add padding for the icon
+                    />
+                    <Button type="submit" variant="ghost" size="icon" className="absolute right-0 top-0 h-full px-3 text-primary/70 hover:text-primary">
+                       <Search className="h-4 w-4" />
+                    </Button>
+                   </div>
+                </form>
+                <nav className="flex-grow overflow-y-auto"> {/* Allow nav to scroll if content is long */}
                   <Link
                     href="/"
                     className={getMobileLinkClassName("/")}
@@ -362,7 +411,7 @@ export default function Header() {
                   </Link>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="planning-dev" className="border-b-0">
-                      <AccordionTrigger className={getMobileAccordionTriggerClassName("/planning", planningSubLinks)}>
+                      <AccordionTrigger className={getMobileAccordionTriggerClassName(planningSubLinks)}>
                         Planning and Development
                       </AccordionTrigger>
                       <AccordionContent className="pl-4 pb-1">
@@ -378,7 +427,7 @@ export default function Header() {
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="construction" className="border-b-0">
-                      <AccordionTrigger className={getMobileAccordionTriggerClassName("/construction", constructionSubLinks)}>
+                      <AccordionTrigger className={getMobileAccordionTriggerClassName(constructionSubLinks)}>
                         Construction
                       </AccordionTrigger>
                       <AccordionContent className="pl-4 pb-1">
@@ -394,7 +443,7 @@ export default function Header() {
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="e-service" className="border-b-0">
-                      <AccordionTrigger className={getMobileAccordionTriggerClassName("/eservice", eServiceSubLinks)}>
+                      <AccordionTrigger className={getMobileAccordionTriggerClassName(eServiceSubLinks)}>
                         e-service
                       </AccordionTrigger>
                       <AccordionContent className="pl-4 pb-1">
@@ -410,7 +459,7 @@ export default function Header() {
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="data-center" className="border-b-0">
-                      <AccordionTrigger className={getMobileAccordionTriggerClassName("/data-center", dataCenterSubLinks)}>
+                      <AccordionTrigger className={getMobileAccordionTriggerClassName(dataCenterSubLinks)}>
                         Data Center
                       </AccordionTrigger>
                       <AccordionContent className="pl-4 pb-1">
