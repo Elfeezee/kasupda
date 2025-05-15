@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, Search, XIcon, MapPin, UserCircle, LogIn, UserPlus } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, Search, XIcon, LogIn, UserPlus, Globe } from "lucide-react"; // Added Globe
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -13,6 +13,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog,
@@ -51,7 +52,6 @@ export default function Header() {
   const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false);
   const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
-
 
   const HOVER_DELAY = 150; // ms
 
@@ -94,7 +94,6 @@ export default function Header() {
   const constructionHandlers = createMenuHandlers(setConstructionOpen, constructionHideTimer, [setPlanningOpen, setEServiceOpen]);
   const eServiceHandlers = createMenuHandlers(setEServiceOpen, eServiceHideTimer, [setPlanningOpen, setConstructionOpen]);
 
-
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
     { href: "#", label: "Approved layout" },
@@ -116,7 +115,6 @@ export default function Header() {
     { href: "/news", label: "News and Publications" },
     { href: "/contact", label: "Contact Us" },
   ];
-
 
   const getLinkClassName = (href: string) => {
     const isActive = pathname === href;
@@ -186,6 +184,10 @@ export default function Header() {
     setIsMobileSearchDialogOpen(false); 
   };
 
+  const handleLanguageSelect = (language: string) => {
+    console.log(`Language selected: ${language}. Actual translation not implemented.`);
+    // In a real app, you would set the language state here and trigger translation.
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -360,6 +362,22 @@ export default function Header() {
             >
               {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </Button>
+            {/* Language Switcher Dropdown - Desktop */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-primary/70 hover:text-primary" aria-label="Select language">
+                  <Globe className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={() => handleLanguageSelect("English")}>
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleLanguageSelect("Hausa")}>
+                  Hausa
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
@@ -392,6 +410,22 @@ export default function Header() {
               >
                 {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </Button>
+              {/* Language Switcher Dropdown - Mobile Trigger (inside main sheet) */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-primary/70 hover:text-primary mr-1" aria-label="Select language">
+                    <Globe className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => handleLanguageSelect("English")}>
+                    English
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleLanguageSelect("Hausa")}>
+                    Hausa
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Sheet>
                 <SheetTrigger asChild>
                   <Button
@@ -513,3 +547,4 @@ export default function Header() {
   );
 }
 
+    
