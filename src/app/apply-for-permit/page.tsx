@@ -2,7 +2,8 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react'; // Changed from 'react-dom' and renamed
+import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,7 +29,8 @@ export default function ApplyForPermitPage() {
   const { toast } = useToast();
 
   const initialState: SignUpState = { message: null, errors: null, success: false };
-  const [state, formAction] = useFormState(signUpWithEmail, initialState);
+  // Updated to useActionState
+  const [state, formAction] = useActionState(signUpWithEmail, initialState);
 
   useEffect(() => {
     if (state?.message) {
