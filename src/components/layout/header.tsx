@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, Search, XIcon, LogIn, UserPlus, Globe } from "lucide-react"; // Added Globe
+import { Menu, ChevronDown, Sun, Moon, Search, XIcon, LogIn, UserPlus, Globe, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -107,7 +107,7 @@ export default function Header() {
 
   const eServiceSubLinks = [
     { href: "/apply-for-permit", label: "Apply for permit" },
-    { href: "#", label: "Renew permit" },
+    { href: "https://kasupdapermit.com", label: "Renew permit", external: true },
   ];
   
   const mainNavLinks = [
@@ -282,7 +282,11 @@ export default function Header() {
                 >
                   {eServiceSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                      {link.external ? (
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" className={getDropdownLinkClassName(link.href)}>{link.label}</a>
+                      ) : (
+                        <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                      )}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -484,13 +488,11 @@ export default function Header() {
                         </AccordionTrigger>
                         <AccordionContent className="pl-4 pb-1">
                           {eServiceSubLinks.map((link) => (
-                            <Link
-                              key={link.label}
-                              href={link.href}
-                              className={getMobileSubLinkClassName(link.href)}
-                            >
-                              {link.label}
-                            </Link>
+                             link.external ? (
+                                <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={getMobileSubLinkClassName(link.href)}>{link.label}</a>
+                              ) : (
+                                <Link key={link.label} href={link.href} className={getMobileSubLinkClassName(link.href)}>{link.label}</Link>
+                              )
                           ))}
                         </AccordionContent>
                       </AccordionItem>
@@ -546,5 +548,3 @@ export default function Header() {
     </header>
   );
 }
-
-    

@@ -61,9 +61,11 @@ export default function Home() {
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button size="lg">
-                    Renew Permit
-                    <RefreshCcw className="ml-2 h-5 w-5" />
+                  <Button size="lg" asChild>
+                    <Link href="https://kasupdapermit.com" target="_blank" rel="noopener noreferrer">
+                      Renew Permit
+                      <RefreshCcw className="ml-2 h-5 w-5" />
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -87,11 +89,11 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="mx-auto grid max-w-5xl items-stretch gap-8 sm:grid-cols-2 md:grid-cols-2 md:gap-12 lg:grid-cols-2 lg:max-w-none mt-12">
+          <div className="mx-auto grid max-w-5xl items-stretch gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:max-w-none mt-12">
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <FileText className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Development Control</CardTitle>
+                <CardTitle>Construction</CardTitle>
                 <CardDescription>
                   Streamlined online application and processing for all your construction permits.
                 </CardDescription>
@@ -100,10 +102,12 @@ export default function Home() {
                 <p>Easily apply for building permits, track your application status, and receive approvals digitally. We ensure compliance with state building codes for safe and legal constructions.</p>
               </CardContent>
               <CardFooter>
-                <div className="flex flex-col space-y-1 items-start">
-              
+                 <div className="flex flex-col space-y-1 items-start">
                   <Link href="#" className="text-sm text-primary hover:underline p-0">
-                    - Inspection 
+                    - Building Permit
+                  </Link>
+                  <Link href="#" className="text-sm text-primary hover:underline p-0">
+                    - Inspection and Completion
                   </Link>
                 </div>
               </CardFooter>
@@ -136,7 +140,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <ShieldCheck className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Building Control</CardTitle>
+                <CardTitle>Compliance & Enforcement</CardTitle>
                 <CardDescription>
                   Ensuring adherence to building codes and urban planning regulations across the state.
                 </CardDescription>
@@ -146,7 +150,7 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <Button variant="link" className="p-0" asChild>
-                  <Link href="#">Completion</Link>
+                  <Link href="/contact">Report a Violation</Link>
                 </Button>
               </CardFooter>
             </Card>
