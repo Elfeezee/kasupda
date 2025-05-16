@@ -4,67 +4,77 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { LogOut, FileText, Building, HomeIcon, ChevronsRight } from 'lucide-react'; // Added more icons
+import { LogOut, FileText, Building, HomeIcon, ChevronsRight } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { useToast } from "@/hooks/use-toast";
+import { format } from 'date-fns';
 
-// Placeholder permit types
 const permitTypes = [
   { 
-    id: 'residential', 
+    id: 'residential-building-permit', 
     name: 'Residential Building Permit', 
     description: 'Apply for permits related to new residential constructions, extensions, or major renovations.',
-    icon: <HomeIcon className="h-8 w-8 text-primary mb-2" /> 
+    icon: <HomeIcon className="h-8 w-8 text-primary mb-2" />,
+    href: '/dashboard/apply/residential-building-permit'
   },
   { 
     id: 'commercial', 
     name: 'Commercial/Industrial Permit', 
     description: 'Permits for commercial buildings, industrial facilities, warehouses, and mixed-use developments.',
-    icon: <Building className="h-8 w-8 text-primary mb-2" />
+    icon: <Building className="h-8 w-8 text-primary mb-2" />,
+    href: '#' // Placeholder for now
   },
   { 
     id: 'land_division', 
     name: 'Land Division/Subdivision Permit', 
     description: 'Applications for dividing or subdividing plots of land as per zoning regulations.',
-    icon: <FileText className="h-8 w-8 text-primary mb-2" /> 
+    icon: <FileText className="h-8 w-8 text-primary mb-2" />,
+    href: '#' // Placeholder for now
   },
   { 
     id: 'fence_permit', 
     name: 'Fence/Wall Permit', 
     description: 'Permits required for constructing or modifying boundary fences or walls.',
-    icon: <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary mb-2"><path d="M14 11H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V12a1 1 0 0 0-1-1Z"></path><path d="M22 11V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2"></path><path d="M14 11V3"></path><path d="M10 11V3"></path><path d="M6 11V3"></path><path d="M18 9V3"></path></svg>
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary mb-2"><path d="M14 11H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V12a1 1 0 0 0-1-1Z"></path><path d="M22 11V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2"></path><path d="M14 11V3"></path><path d="M10 11V3"></path><path d="M6 11V3"></path><path d="M18 9V3"></path></svg>,
+    href: '#' // Placeholder for now
   },
-  // Add more permit types here as needed
 ];
 
 const DashboardPage: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
-  const userName = searchParams.get('name') || 'User'; // 'User' as a fallback
+  const userName = searchParams.get('name') || 'User';
 
+  const [currentDate, setCurrentDate] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCurrentDate(format(new Date(), "MMMM d, yyyy"));
+  }, []);
 
   const handleLogout = () => {
-    // In a real app, you'd clear auth tokens from Supabase, etc.
-    // For now, just redirect to homepage.
     router.push('/');
     toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
   };
 
-  const handleSelectPermitType = (permitTypeId: string, permitName: string) => {
-    // For now, just show a toast. Later, this will navigate to the specific form.
-    toast({
-      title: 'Permit Selected',
-      description: `You selected: ${permitName}. Form display is pending implementation.`,
-    });
-    // Example: router.push(`/apply-for-permit/${permitTypeId}`);
-    console.log(`Selected permit type ID: ${permitTypeId}`);
+  const handleSelectPermitType = (href: string, permitName: string) => {
+    if (href === '#') {
+      toast({
+        title: 'Permit Selected',
+        description: `Form for ${permitName} is pending implementation.`,
+      });
+    } else {
+      router.push(href);
+    }
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <h1 className="text-3xl font-bold text-primary">Welcome, {userName}!</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-primary">Welcome, {userName}!</h1>
+          {currentDate && <p className="text-muted-foreground">Today is {currentDate}.</p>}
+        </div>
         <Button variant="outline" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           Logout
@@ -89,7 +99,7 @@ const DashboardPage: React.FC = () => {
               </CardContent>
               <CardFooter>
                 <Button 
-                  onClick={() => handleSelectPermitType(permit.id, permit.name)} 
+                  onClick={() => handleSelectPermitType(permit.href, permit.name)} 
                   className="w-full"
                 >
                   Select & Proceed
@@ -100,20 +110,6 @@ const DashboardPage: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* You can add other dashboard sections here later, e.g., "My Applications" */}
-      {/* 
-      <div className="mt-12">
-        <h2 className="text-2xl font-semibold text-foreground mb-6">My Applications</h2>
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-muted-foreground">You have no active applications.</p>
-            // Or list applications if available
-          </CardContent>
-        </Card>
-      </div>
-      */}
-
     </div>
   );
 };
