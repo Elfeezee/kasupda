@@ -4,6 +4,29 @@ import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
 import { Facebook, Twitter, Instagram, MapPin, Phone } from 'lucide-react'; // Added Phone icon
 
+// SVG for TikTok icon
+const TikTokIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="h-5 w-5"
+  >
+    <path d="M21 8H3" />
+    <path d="M12 2v10" />
+    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
+    <path d="M19 12a7 7 0 1 0-7 7v-7" />
+    <path d="M20.3 14.7a2.5 2.5 0 0 1-2.8 2.8H17V12h.5a2.5 2.5 0 0 1 2.5 2.5v.2Z" />
+  </svg>
+);
+
+
 export default function Footer() {
   const kasupdaAddress = "No. 1 KASUPDA Road, Off Independence Way, Kaduna, Nigeria";
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(kasupdaAddress)}`;
@@ -40,6 +63,9 @@ export default function Footer() {
           </Link>
           <Link href="#" aria-label="Instagram" className="text-pink-600 hover:text-pink-700 transition-colors">
             <Instagram className="h-5 w-5" />
+          </Link>
+          <Link href="#" aria-label="TikTok" className="text-black hover:text-gray-800 transition-colors">
+            <TikTokIcon />
           </Link>
         </div>
 
