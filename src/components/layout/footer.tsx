@@ -44,20 +44,6 @@ export default function Footer() {
         </div>
 
         <nav className="flex flex-wrap justify-center gap-4 sm:gap-6">
-          <Link
-            href="#"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            prefetch={false}
-          >
-            Terms of Service
-          </Link>
-          <Link
-            href="#"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            prefetch={false}
-          >
-            Privacy Policy
-          </Link>
            <Link
             href="/faq"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
