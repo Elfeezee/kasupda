@@ -137,9 +137,6 @@ export default function ResidentialBuildingPermitPage() {
           <p className="text-center text-sm mb-4">
             An application processing fee of N5,000 must be paid before or at the point of submission of the Permission Application.
           </p>
-          <p className="text-center text-xs mb-4">
-            (Fill in CAPITAL LETTERS and tick the appropriate items. DO NOT FOLD this form)
-          </p>
         </CardContent>
       </Card>
 
