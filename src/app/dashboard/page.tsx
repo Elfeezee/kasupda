@@ -4,39 +4,39 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { LogOut, FileText, Building, HomeIcon, ChevronsRight } from 'lucide-react';
+import { LogOut, HomeIcon, ChevronsRight, Construction, Megaphone, MessageSquareWarning } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { useToast } from "@/hooks/use-toast";
 import { format } from 'date-fns';
 
 const permitTypes = [
-  { 
-    id: 'residential-building-permit', 
-    name: 'Residential Building Permit', 
-    description: 'Apply for permits related to new residential constructions, extensions, or major renovations.',
+  {
+    id: 'grant-building-permission',
+    name: 'Grant of Building Permission Application',
+    description: 'For new constructions, extensions, or major building alterations.',
     icon: <HomeIcon className="h-8 w-8 text-primary mb-2" />,
     href: '/dashboard/apply/residential-building-permit'
   },
-  { 
-    id: 'commercial', 
-    name: 'Commercial/Industrial Permit', 
-    description: 'Permits for commercial buildings, industrial facilities, warehouses, and mixed-use developments.',
-    icon: <Building className="h-8 w-8 text-primary mb-2" />,
-    href: '#' // Placeholder for now
+  {
+    id: 'temporary-building-permit',
+    name: 'Temporary Building Permit Application',
+    description: 'Permits for structures intended for short-term use or specific events.',
+    icon: <Construction className="h-8 w-8 text-primary mb-2" />,
+    href: '#'
   },
-  { 
-    id: 'land_division', 
-    name: 'Land Division/Subdivision Permit', 
-    description: 'Applications for dividing or subdividing plots of land as per zoning regulations.',
-    icon: <FileText className="h-8 w-8 text-primary mb-2" />,
-    href: '#' // Placeholder for now
+  {
+    id: 'outdoor-advertisement-licensing',
+    name: 'Outdoor Advertisement Licensing',
+    description: 'Apply for licenses for billboards, signage, and other outdoor advertisements.',
+    icon: <Megaphone className="h-8 w-8 text-primary mb-2" />,
+    href: '#'
   },
-  { 
-    id: 'fence_permit', 
-    name: 'Fence/Wall Permit', 
-    description: 'Permits required for constructing or modifying boundary fences or walls.',
-    icon: <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary mb-2"><path d="M14 11H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V12a1 1 0 0 0-1-1Z"></path><path d="M22 11V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2"></path><path d="M14 11V3"></path><path d="M10 11V3"></path><path d="M6 11V3"></path><path d="M18 9V3"></path></svg>,
-    href: '#' // Placeholder for now
+  {
+    id: 'complaint-application',
+    name: 'Complaint Application',
+    description: 'Submit a formal complaint regarding building code violations or planning issues.',
+    icon: <MessageSquareWarning className="h-8 w-8 text-primary mb-2" />,
+    href: '#'
   },
 ];
 
