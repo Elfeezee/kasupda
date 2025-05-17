@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils'; // Added import for cn
 
 const permitTypes = [
   {
