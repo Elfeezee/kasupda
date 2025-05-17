@@ -143,19 +143,6 @@ export default function ResidentialBuildingPermitPage() {
         </CardContent>
       </Card>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">FOR OFFICIAL USE ONLY</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div><span className="font-medium">KBP Number:</span> _______________</div>
-          <div><span className="font-medium">KDL:</span> _______________</div>
-          <div><span className="font-medium">KADGIS File Number:</span> _______________</div>
-          <div><span className="font-medium">Application Date:</span> Day ___ Month ___ Year ____</div>
-          <div><span className="font-medium">Application Fees:</span> <Checkbox disabled/> Application Processing Fee</div>
-        </CardContent>
-      </Card>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         
         {/* Box 1: Applicant */}
