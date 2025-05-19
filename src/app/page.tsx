@@ -92,9 +92,9 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <FileText className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Construction</CardTitle>
+                <CardTitle>Development Control</CardTitle>
                 <CardDescription>
-                  Streamlined online application and processing for all your construction permits.
+                  Overseeing and managing construction activities, ensuring compliance with state building codes, urban planning regulations, and safety standards.
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
@@ -139,7 +139,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <ShieldCheck className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Building Control</CardTitle>
+                <CardTitle>Compliance & Enforcement</CardTitle>
                 <CardDescription>
                   Ensuring adherence to building codes and urban planning regulations across the state.
                 </CardDescription>
@@ -149,7 +149,7 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <Button variant="link" className="p-0" asChild>
-                  <Link href="/contact">Completion</Link>
+                  <Link href="/contact">Report a Violation</Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -194,7 +194,7 @@ export default function Home() {
                 data-ai-hint="logo brand"
                 width={400}
                 height={400}
-                className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-4"
+                className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-1"
               />
             </div>
             <div className="flex flex-col justify-center space-y-4 text-left">
@@ -218,3 +218,4 @@ export default function Home() {
     </div>
   );
 }
+

@@ -46,8 +46,8 @@ export default function Header() {
   const [planningOpen, setPlanningOpen] = useState(false);
   const planningHideTimer = useRef<number | null>(null);
 
-  const [constructionOpen, setConstructionOpen] = useState(false);
-  const constructionHideTimer = useRef<number | null>(null);
+  const [developmentControlOpen, setDevelopmentControlOpen] = useState(false);
+  const developmentControlHideTimer = useRef<number | null>(null);
 
   const [eServiceOpen, setEServiceOpen] = useState(false);
   const eServiceHideTimer = useRef<number | null>(null);
@@ -65,7 +65,7 @@ export default function Header() {
   useEffect(() => {
     return () => {
       if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
-      if (constructionHideTimer.current) clearTimeout(constructionHideTimer.current);
+      if (developmentControlHideTimer.current) clearTimeout(developmentControlHideTimer.current);
       if (eServiceHideTimer.current) clearTimeout(eServiceHideTimer.current);
       if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
@@ -98,10 +98,10 @@ export default function Header() {
     return { handleOpen, handleCloseWithDelay, cancelHide };
   };
 
-  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setConstructionOpen, setEServiceOpen, setDataCenterOpen]);
-  const constructionHandlers = createMenuHandlers(setConstructionOpen, constructionHideTimer, [setPlanningOpen, setEServiceOpen, setDataCenterOpen]);
-  const eServiceHandlers = createMenuHandlers(setEServiceOpen, eServiceHideTimer, [setPlanningOpen, setConstructionOpen, setDataCenterOpen]);
-  const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setConstructionOpen, setEServiceOpen]);
+  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen, setDataCenterOpen]);
+  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setDataCenterOpen]);
+  const eServiceHandlers = createMenuHandlers(setEServiceOpen, eServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setDataCenterOpen]);
+  const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen]);
 
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
@@ -109,7 +109,7 @@ export default function Header() {
     { href: "#", label: "Zoning" },
   ];
 
-  const constructionSubLinks = [
+  const developmentControlSubLinks = [
     { href: "#", label: "Building Permit" },
     { href: "#", label: "Inspection and Completion" },
   ];
@@ -250,25 +250,25 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <DropdownMenu open={constructionOpen} onOpenChange={setConstructionOpen}>
+              <DropdownMenu open={developmentControlOpen} onOpenChange={setDevelopmentControlOpen}>
                 <DropdownMenuTrigger
                   asChild
-                  onPointerEnter={constructionHandlers.handleOpen}
-                  onPointerLeave={constructionHandlers.handleCloseWithDelay}
+                  onPointerEnter={developmentControlHandlers.handleOpen}
+                  onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
                 >
                   <Button
                     variant="ghost"
-                    className={getDropdownTriggerClassName("/construction", constructionSubLinks, constructionOpen)}
+                    className={getDropdownTriggerClassName("/development-control", developmentControlSubLinks, developmentControlOpen)}
                   >
-                    Construction
+                    Development Control
                     <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  onPointerEnter={constructionHandlers.cancelHide}
-                  onPointerLeave={constructionHandlers.handleCloseWithDelay}
+                  onPointerEnter={developmentControlHandlers.cancelHide}
+                  onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
                 >
-                  {constructionSubLinks.map((link) => (
+                  {developmentControlSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
                       <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
                     </DropdownMenuItem>
@@ -514,12 +514,12 @@ export default function Header() {
                           ))}
                         </AccordionContent>
                       </AccordionItem>
-                      <AccordionItem value="construction" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(constructionSubLinks), "px-3")}>
-                          Construction
+                      <AccordionItem value="development-control" className="border-b-0">
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(developmentControlSubLinks), "px-3")}>
+                          Development Control
                         </AccordionTrigger>
                         <AccordionContent className="pl-4 pb-1">
-                          {constructionSubLinks.map((link) => (
+                          {developmentControlSubLinks.map((link) => (
                             <Link
                               key={link.label}
                               href={link.href}
@@ -621,5 +621,4 @@ export default function Header() {
     </header>
   );
 }
-
     
