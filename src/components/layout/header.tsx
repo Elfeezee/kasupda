@@ -17,7 +17,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuPortal, // Ensure this is imported
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog,
@@ -110,8 +110,7 @@ export default function Header() {
   ];
 
   const developmentControlSubLinks = [
-    { href: "#", label: "Building Permit" },
-    { href: "#", label: "Inspection and Completion" },
+    { href: "#", label: "Inspection" },
   ];
 
   const eServiceSubLinks = [

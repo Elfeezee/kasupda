@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -102,10 +103,7 @@ export default function Home() {
               <CardFooter>
                 <div className="flex flex-col space-y-1 items-start">
                   <Link href="#" className="text-sm text-primary hover:underline p-0">
-                    - Building Permit
-                  </Link>
-                  <Link href="#" className="text-sm text-primary hover:underline p-0">
-                    - Inspection and Completion
+                    - Inspection
                   </Link>
                 </div>
               </CardFooter>
@@ -216,3 +214,4 @@ export default function Home() {
       </section>
     </div>
   );
+}
