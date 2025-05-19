@@ -146,7 +146,7 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <Button variant="link" className="p-0" asChild>
-                  <Link href="/contact">Report a Violation</Link>
+                  <Link href="#">Completion</Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -191,7 +191,7 @@ export default function Home() {
                 data-ai-hint="logo brand"
                 width={400}
                 height={400}
-                className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-4"
+                className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-2"
               />
             </div>
             <div className="flex flex-col justify-center space-y-4 text-left">
