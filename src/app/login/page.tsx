@@ -9,10 +9,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from "@/components/ui/separator";
 import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter } from 'next/navigation';
+import { useToast } from "@/hooks/use-toast"; // Import useToast
 
 export default function LoginPage() {
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
+  const { toast } = useToast(); // Initialize toast
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,13 +22,19 @@ export default function LoginPage() {
     const emailInput = form.elements.namedItem('email') as HTMLInputElement | null;
     const email = emailInput ? emailInput.value.trim() : '';
     
-    // For now, just navigate to dashboard if email is entered
-    // In a real app, you'd perform authentication here
     if (email) {
+      toast({ // Add toast message
+        title: 'Login Successful (Simulated)',
+        description: 'Redirecting to your dashboard...',
+      });
       router.push(`/dashboard?name=${encodeURIComponent(email.split('@')[0] || 'User')}`);
     } else {
+      toast({ // Add toast for missing email
+        title: 'Login Error',
+        description: 'Please enter your email address.',
+        variant: 'destructive',
+      });
       console.warn("Email not entered for login.");
-      // You might want to show a toast or an inline error message here.
     }
   };
 
@@ -68,7 +76,12 @@ export default function LoginPage() {
             className="w-full flex items-center justify-center space-x-2 py-3 text-base" 
             variant="outline" 
             type="button" 
-            onClick={() => { /* Handle Google Sign-in logic here */ console.log("Google Sign-in clicked");}}
+            onClick={() => { 
+                toast({
+                    title: 'Google Sign-In',
+                    description: 'Google Sign-In is not implemented in this prototype.',
+                });
+             }}
           >
             <FcGoogle className="text-2xl" />
             <span>Login with Google</span>
