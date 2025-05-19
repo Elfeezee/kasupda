@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -139,7 +138,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <ShieldCheck className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Compliance & Enforcement</CardTitle>
+                <CardTitle>Building Control</CardTitle>
                 <CardDescription>
                   Ensuring adherence to building codes and urban planning regulations across the state.
                 </CardDescription>
@@ -194,7 +193,7 @@ export default function Home() {
                 data-ai-hint="logo brand"
                 width={400}
                 height={400}
-                className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-1"
+                className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-4"
               />
             </div>
             <div className="flex flex-col justify-center space-y-4 text-left">
@@ -217,5 +216,3 @@ export default function Home() {
       </section>
     </div>
   );
-}
-
