@@ -7,7 +7,6 @@ import { ArrowRight, MapPin, FileText, ShieldCheck, Users, RefreshCcw } from "lu
 import Image from "next/image";
 import Link from "next/link";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
-import React from "react";
 import KASUPDALogo from '@/image/logo.png';
 
 const initialCarouselImages: CarouselImage[] = [
@@ -102,7 +101,7 @@ export default function Home() {
                 <p>Easily apply for building permits, track your application status, and receive approvals digitally. We ensure compliance with state building codes for safe and legal constructions.</p>
               </CardContent>
               <CardFooter>
-                 <div className="flex flex-col space-y-1 items-start">
+                <div className="flex flex-col space-y-1 items-start">
                   <Link href="#" className="text-sm text-primary hover:underline p-0">
                     - Building Permit
                   </Link>
@@ -140,7 +139,7 @@ export default function Home() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <ShieldCheck className="h-8 w-8 text-primary mb-2" />
-                <CardTitle>Compliance & Enforcement</CardTitle>
+                <CardTitle>Building Control</CardTitle>
                 <CardDescription>
                   Ensuring adherence to building codes and urban planning regulations across the state.
                 </CardDescription>
@@ -150,7 +149,7 @@ export default function Home() {
               </CardContent>
               <CardFooter>
                 <Button variant="link" className="p-0" asChild>
-                  <Link href="/contact">Report a Violation</Link>
+                  <Link href="/contact">Completion</Link>
                 </Button>
               </CardFooter>
             </Card>
