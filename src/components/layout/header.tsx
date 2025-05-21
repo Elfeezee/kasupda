@@ -3,7 +3,13 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader, // Added import
+  SheetTitle,  // Added import
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Menu, ChevronDown, Sun, Moon, Search, XIcon, LogIn, UserPlus, Globe, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,7 +29,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
+  DialogTitle as UIDialogTitle, // Renamed to avoid conflict with SheetTitle
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -51,7 +57,7 @@ export default function Header() {
 
   const [eServiceOpen, setEServiceOpen] = useState(false);
   const eServiceHideTimer = useRef<number | null>(null);
-
+  
   const [dataCenterOpen, setDataCenterOpen] = useState(false);
   const dataCenterHideTimer = useRef<number | null>(null);
 
@@ -102,6 +108,7 @@ export default function Header() {
   const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setDataCenterOpen]);
   const eServiceHandlers = createMenuHandlers(setEServiceOpen, eServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setDataCenterOpen]);
   const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen]);
+  
 
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
@@ -110,19 +117,19 @@ export default function Header() {
   ];
 
   const developmentControlSubLinks = [
-    { href: "#", label: "Inspection" },
+     { href: "#", label: "Inspection" },
   ];
 
   const eServiceSubLinks = [
     { href: "/apply-for-permit", label: "Apply for permit" },
     { href: "https://kasupdapermit.com", label: "Renew permit", external: true },
   ];
-
+  
   const modernIntegratedLabSubLinks = [
     { href: "#", label: "Soil Test" },
     { href: "#", label: "Integrity Test" },
   ];
-  
+
   const mainNavLinks = [
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
@@ -488,118 +495,124 @@ export default function Header() {
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="pr-0 pt-8 flex flex-col">
-                  <nav className="flex-grow overflow-y-auto">
-                    <Link
-                      href="/"
-                      className={getMobileLinkClassName("/")}
-                    >
-                      Home
-                    </Link>
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="planning-dev" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(planningSubLinks), "px-3")}>
-                          Planning and Development
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-4 pb-1">
-                          {planningSubLinks.map((link) => (
-                            <Link
-                              key={link.label}
-                              href={link.href}
-                              className={getMobileSubLinkClassName(link.href)}
-                            >
-                              {link.label}
-                            </Link>
-                          ))}
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="development-control" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(developmentControlSubLinks), "px-3")}>
-                          Development Control
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-4 pb-1">
-                          {developmentControlSubLinks.map((link) => (
-                            <Link
-                              key={link.label}
-                              href={link.href}
-                              className={getMobileSubLinkClassName(link.href)}
-                            >
-                              {link.label}
-                            </Link>
-                          ))}
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="e-service" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(eServiceSubLinks), "px-3")}>
-                          e-service
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-4 pb-1">
-                          {eServiceSubLinks.map((link) => (
-                             link.external ? (
-                                <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={getMobileSubLinkClassName(link.href)}>{link.label}</a>
-                              ) : (
-                                <Link key={link.label} href={link.href} className={getMobileSubLinkClassName(link.href)}>{link.label}</Link>
-                              )
-                          ))}
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="data-center" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName([], true), "px-3")}>
-                           Data Center
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-4 pb-1">
-                           <Accordion type="single" collapsible className="w-full">
-                             <AccordionItem value="modern-integrated-lab" className="border-b-0">
-                               <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(modernIntegratedLabSubLinks, true), "text-sm px-3 py-1.5")}>
-                                  Modern Integrated Lab
-                               </AccordionTrigger>
-                               <AccordionContent className="pl-4 pb-1">
-                                 {modernIntegratedLabSubLinks.map((link) => (
-                                   <Link
-                                     key={link.label}
-                                     href={link.href}
-                                     className={cn(getMobileSubLinkClassName(link.href), "text-sm")}
-                                   >
-                                     {link.label}
-                                   </Link>
-                                 ))}
-                               </AccordionContent>
-                             </AccordionItem>
-                           </Accordion>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-
-                    {mainNavLinks.map((link) => (
+                <SheetContent side="left" className="pr-0 pt-0 flex flex-col"> {/* Changed pt-8 to pt-0 */}
+                  <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10"> {/* Added sticky top styles */}
+                    <SheetTitle className="text-lg font-semibold text-primary">Menu</SheetTitle>
+                  </SheetHeader>
+                  <Separator className="mb-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/> {/* Added sticky top styles, adjust top as needed */}
+                  <div className="flex-grow overflow-y-auto pb-8"> {/* Added pb-8 for spacing at the bottom of scroll */}
+                    <nav> {/* Removed ml-4 */}
                       <Link
-                        key={link.label}
-                        href={link.href}
-                        className={getMobileLinkClassName(link.href)}
+                        href="/"
+                        className={getMobileLinkClassName("/")}
                       >
-                         {link.label}
+                        Home
                       </Link>
-                    ))}
-                    <Separator className="my-4" />
-                     <div className="px-3 space-y-2">
-                        <Button variant="outline" className="w-full justify-start" asChild>
-                          <Link href="/login">
-                            <LogIn className="mr-2 h-4 w-4" /> Login
-                          </Link>
-                        </Button>
-                        <Button className="w-full justify-start" asChild>
-                          <Link href="/apply-for-permit">
-                            <UserPlus className="mr-2 h-4 w-4" /> Sign up
-                          </Link>
-                        </Button>
-                      </div>
-                  </nav>
+                      <Accordion type="single" collapsible className="w-full">
+                        <AccordionItem value="planning-dev" className="border-b-0">
+                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(planningSubLinks), "px-3")}>
+                            Planning and Development
+                          </AccordionTrigger>
+                          <AccordionContent className="pl-4 pb-1">
+                            {planningSubLinks.map((link) => (
+                              <Link
+                                key={link.label}
+                                href={link.href}
+                                className={getMobileSubLinkClassName(link.href)}
+                              >
+                                {link.label}
+                              </Link>
+                            ))}
+                          </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="development-control" className="border-b-0">
+                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(developmentControlSubLinks), "px-3")}>
+                            Development Control
+                          </AccordionTrigger>
+                          <AccordionContent className="pl-4 pb-1">
+                            {developmentControlSubLinks.map((link) => (
+                              <Link
+                                key={link.label}
+                                href={link.href}
+                                className={getMobileSubLinkClassName(link.href)}
+                              >
+                                {link.label}
+                              </Link>
+                            ))}
+                          </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="e-service" className="border-b-0">
+                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(eServiceSubLinks), "px-3")}>
+                            e-service
+                          </AccordionTrigger>
+                          <AccordionContent className="pl-4 pb-1">
+                            {eServiceSubLinks.map((link) => (
+                              link.external ? (
+                                  <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={getMobileSubLinkClassName(link.href)}>{link.label}</a>
+                                ) : (
+                                  <Link key={link.label} href={link.href} className={getMobileSubLinkClassName(link.href)}>{link.label}</Link>
+                                )
+                            ))}
+                          </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="data-center" className="border-b-0">
+                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName([], true), "px-3")}>
+                            Data Center
+                          </AccordionTrigger>
+                          <AccordionContent className="pl-4 pb-1">
+                            <Accordion type="single" collapsible className="w-full">
+                              <AccordionItem value="modern-integrated-lab" className="border-b-0">
+                                <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(modernIntegratedLabSubLinks, true), "text-sm px-3 py-1.5")}>
+                                    Modern Integrated Lab
+                                </AccordionTrigger>
+                                <AccordionContent className="pl-4 pb-1">
+                                  {modernIntegratedLabSubLinks.map((link) => (
+                                    <Link
+                                      key={link.label}
+                                      href={link.href}
+                                      className={cn(getMobileSubLinkClassName(link.href), "text-sm")}
+                                    >
+                                      {link.label}
+                                    </Link>
+                                  ))}
+                                </AccordionContent>
+                              </AccordionItem>
+                            </Accordion>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+
+                      {mainNavLinks.map((link) => (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className={getMobileLinkClassName(link.href)}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                      <Separator className="my-4" />
+                      <div className="px-3 space-y-2">
+                          <Button variant="outline" className="w-full justify-start" asChild>
+                            <Link href="/login">
+                              <LogIn className="mr-2 h-4 w-4" /> Login
+                            </Link>
+                          </Button>
+                          <Button className="w-full justify-start" asChild>
+                            <Link href="/apply-for-permit">
+                              <UserPlus className="mr-2 h-4 w-4" /> Sign up
+                            </Link>
+                          </Button>
+                        </div>
+                    </nav>
+                  </div>
                 </SheetContent>
               </Sheet>
             </div>
           </div>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Search KASUPDA Portal</DialogTitle>
+              <UIDialogTitle>Search KASUPDA Portal</UIDialogTitle> {/* Changed DialogTitle to UIDialogTitle to avoid conflict */}
             </DialogHeader>
             <form onSubmit={handleMobileSearchSubmit}>
               <div className="grid gap-4 py-4">
@@ -620,4 +633,6 @@ export default function Header() {
     </header>
   );
 }
+    
+
     
