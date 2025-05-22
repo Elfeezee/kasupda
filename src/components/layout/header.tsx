@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetHeader, // Added import
-  SheetTitle,  // Added import
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Menu, ChevronDown, Sun, Moon, Search, XIcon, LogIn, UserPlus, Globe, MapPin } from "lucide-react";
@@ -29,7 +29,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle as UIDialogTitle, // Renamed to avoid conflict with SheetTitle
+  DialogTitle as UIDialogTitle, 
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -214,7 +214,7 @@ export default function Header() {
       <div className="container flex h-14 max-w-screen-2xl items-center">
         {/* Desktop Navigation */}
         <div className="mr-4 hidden md:flex md:flex-1 items-center">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Link href="/" className="mr-8 flex items-center space-x-2">
             <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
             <span className="hidden font-bold sm:inline-block text-primary">
               KASUPDA
@@ -495,12 +495,12 @@ export default function Header() {
                     <Menu className="h-5 w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="pr-0 pt-0 flex flex-col"> {/* Changed pt-8 to pt-0 */}
-                  <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10"> {/* Added sticky top styles */}
-                    {/* <SheetTitle className="text-lg font-semibold text-primary">Menu</SheetTitle> Removed Menu Title */}
+                <SheetContent side="left" className="pr-0 pt-0 flex flex-col">
+                  <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10">
+                    {/* <SheetTitle className="text-lg font-semibold text-primary">Menu</SheetTitle> */}
                   </SheetHeader>
-                  <Separator className="mb-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/> {/* Added sticky top styles, adjust top as needed */}
-                  <div className="flex-grow overflow-y-auto pb-8"> {/* Added pb-8 for spacing at the bottom of scroll */}
+                  <Separator className="mb-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/>
+                  <div className="flex-grow overflow-y-auto pb-8">
                     <nav> 
                       <Link
                         href="/"
@@ -612,7 +612,7 @@ export default function Header() {
           </div>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <UIDialogTitle>Search KASUPDA Portal</UIDialogTitle> {/* Changed DialogTitle to UIDialogTitle to avoid conflict */}
+              <UIDialogTitle>Search KASUPDA Portal</UIDialogTitle>
             </DialogHeader>
             <form onSubmit={handleMobileSearchSubmit}>
               <div className="grid gap-4 py-4">
