@@ -95,16 +95,16 @@ const permitApplicationSchema = z.object({
 type PermitApplicationFormValues = z.infer<typeof permitApplicationSchema>;
 
 const identificationOptions = [
-  { id: "internationalPassport", label: "International Passport" },
-  { id: "taxIdCard", label: "Tax Identification Card" },
-  { id: "nationalIdCard", label: "National ID Card" },
-  { id: "voterRegCard", label: "Voter Registration Card" },
-  { id: "driversLicense", label: "Driver's License" },
-] as const;
+  { id: "internationalPassport" as const, label: "International Passport" },
+  { id: "taxIdCard" as const, label: "Tax Identification Card" },
+  { id: "nationalIdCard" as const, label: "National ID Card" },
+  { id: "voterRegCard" as const, label: "Voter Registration Card" },
+  { id: "driversLicense" as const, label: "Driver's License" },
+];
 
 const steps = [
   { id: 1, name: "Applicant", fields: ['firstName', 'surname', 'gender', 'dateOfBirth', 'phone1', 'email'] as FieldName<PermitApplicationFormValues>[] },
-  { id: 2, name: "Applicant Address", fields: [] as FieldName<PermitApplicationFormValues>[] }, // Optional fields, or add specific ones if needed for validation
+  { id: 2, name: "Applicant Address", fields: [] as FieldName<PermitApplicationFormValues>[] }, 
   { id: 3, name: "Representative", fields: ['repEmail'] as FieldName<PermitApplicationFormValues>[] },
   { id: 4, name: "Representative Address", fields: [] as FieldName<PermitApplicationFormValues>[] },
   { id: 5, name: "Plot Details", fields: ['plotDescriptionAddress'] as FieldName<PermitApplicationFormValues>[] },
@@ -115,8 +115,8 @@ export default function ResidentialBuildingPermitPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<PermitApplicationFormValues>({
     resolver: zodResolver(permitApplicationSchema),
-    mode: "onChange", // Or "onBlur" for validation as user interacts
-    defaultValues: { // Set default values for optional fields that might be checkboxes or radios
+    mode: "onChange", 
+    defaultValues: { 
       title: "",
       middleName: "",
       occupation: "",
@@ -180,7 +180,6 @@ export default function ResidentialBuildingPermitPage() {
       description: "Your residential building permit application has been received for processing.",
       duration: 5000,
     });
-    // Here you would typically send data to your backend
   };
 
   const handleNextStep = async () => {
@@ -208,13 +207,13 @@ export default function ResidentialBuildingPermitPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 sm:px-4 py-8">
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center text-primary">
+          <CardTitle className="text-xl sm:text-2xl font-bold text-center text-primary">
             Application For Grant of Building Permission
           </CardTitle>
-          <CardDescription className="text-center">
+          <CardDescription className="text-center text-sm sm:text-base">
             Kaduna State Urban Planning and Development Authority
           </CardDescription>
         </CardHeader>
@@ -222,37 +221,37 @@ export default function ResidentialBuildingPermitPage() {
           <p className="text-center text-sm text-destructive font-semibold mb-2">
             This Form is FREE
           </p>
-          <p className="text-center text-sm mb-4">
+          <p className="text-center text-xs sm:text-sm mb-4">
             An application processing fee of N5,000 must be paid before or at the point of submission of the Permission Application.
           </p>
         </CardContent>
       </Card>
 
       {/* Stepper UI */}
-      <div className="mb-8 p-4 border rounded-lg shadow-sm">
-        <div className="flex items-center justify-between">
+      <div className="mb-8 p-2 sm:p-4 border rounded-lg shadow-sm overflow-x-auto">
+        <div className="flex items-start w-full min-w-[360px] sm:min-w-full">
           {steps.map((step, index) => (
             <React.Fragment key={step.id}>
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center text-center px-0.5 sm:px-1 py-1 flex-shrink-0 w-1/5">
                 <div
                   className={cn(
-                    "w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300",
+                    "w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300",
                     currentStep > step.id ? "bg-primary border-primary text-primary-foreground" :
                     currentStep === step.id ? "bg-primary/20 border-primary text-primary scale-110" :
                     "bg-muted border-border text-muted-foreground"
                   )}
                 >
-                  {currentStep > step.id ? <CheckIcon className="w-5 h-5" /> : step.id}
+                  {currentStep > step.id ? <CheckIcon className="w-3 h-3 sm:w-4 sm:h-4" /> : step.id}
                 </div>
                 <p className={cn(
-                  "mt-2 text-xs sm:text-sm font-medium transition-all duration-300",
+                  "mt-1 text-[10px] leading-tight sm:text-xs font-medium transition-all duration-300 break-words",
                    currentStep === step.id ? "text-primary font-semibold" : "text-muted-foreground"
                 )}>{step.name}</p>
               </div>
               {index < steps.length - 1 && (
                 <div className={cn(
-                    "flex-1 h-1 mx-2 sm:mx-4 transition-all duration-300",
-                    currentStep > step.id ? "bg-primary" : "bg-border"
+                    "flex-1 h-0.5 sm:h-1 mt-2.5 sm:mt-3.5 mx-0.5 sm:mx-1 transition-all duration-300", // Line styles
+                    currentStep > step.id ? "bg-primary" : "bg-border" 
                     )} />
               )}
             </React.Fragment>
@@ -265,8 +264,8 @@ export default function ResidentialBuildingPermitPage() {
         {currentStep === 1 && (
           <Card>
             <CardHeader>
-              <CardTitle>BOX 1: APPLICANT</CardTitle>
-              <CardDescription>The person whose name would be reflected on the Building Permission. Original identification document must be submitted.</CardDescription>
+              <CardTitle className="text-lg sm:text-xl">BOX 1: APPLICANT</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">The person whose name would be reflected on the Building Permission. Original identification document must be submitted.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -297,14 +296,14 @@ export default function ResidentialBuildingPermitPage() {
                     name="gender"
                     control={control}
                     render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex items-center space-x-4 mt-2">
-                        <div className="flex items-center space-x-2">
+                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex items-center space-x-2 sm:space-x-4 mt-2">
+                        <div className="flex items-center space-x-1 sm:space-x-2">
                           <RadioGroupItem value="Male" id="male" />
-                          <Label htmlFor="male" className="font-normal">Male</Label>
+                          <Label htmlFor="male" className="font-normal text-sm">Male</Label>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-1 sm:space-x-2">
                           <RadioGroupItem value="Female" id="female" />
-                          <Label htmlFor="female" className="font-normal">Female</Label>
+                          <Label htmlFor="female" className="font-normal text-sm">Female</Label>
                         </div>
                       </RadioGroup>
                     )}
@@ -319,7 +318,7 @@ export default function ResidentialBuildingPermitPage() {
                     render={({ field }) => (
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
+                          <Button variant={"outline"} className="w-full justify-start text-left font-normal mt-1 text-sm sm:text-base">
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
                           </Button>
@@ -378,8 +377,8 @@ export default function ResidentialBuildingPermitPage() {
               </div>
 
               <div>
-                <Label>Identification</Label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">
+                <Label className="text-sm sm:text-base">Identification</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 sm:gap-x-4 gap-y-2 mt-2">
                   {identificationOptions.map(opt => (
                     <div key={opt.id} className="flex items-center space-x-2">
                       <Controller
@@ -388,16 +387,15 @@ export default function ResidentialBuildingPermitPage() {
                           render={({ field }) => (
                               <Checkbox
                                   id={`applicant_${opt.id}`}
-                                  checked={!!field.value} // Ensure checked is boolean
+                                  checked={!!field.value} 
                                   onCheckedChange={field.onChange}
                               />
                           )}
                       />
-                      <Label htmlFor={`applicant_${opt.id}`} className="font-normal text-sm">{opt.label}</Label>
+                      <Label htmlFor={`applicant_${opt.id}`} className="font-normal text-xs sm:text-sm">{opt.label}</Label>
                     </div>
                   ))}
                 </div>
-                 {/* errors.identificationType && <p className="text-destructive text-xs mt-1">{errors.identificationType.message}</p> */}
               </div>
               <div>
                 <Label htmlFor="idNumber">ID Number</Label>
@@ -410,8 +408,8 @@ export default function ResidentialBuildingPermitPage() {
         {currentStep === 2 && (
           <Card>
             <CardHeader>
-              <CardTitle>BOX 2: APPLICANT'S ADDRESS</CardTitle>
-              <CardDescription>This should be your normal residential address.</CardDescription>
+              <CardTitle className="text-lg sm:text-xl">BOX 2: APPLICANT'S ADDRESS</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">This should be your normal residential address.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -463,8 +461,8 @@ export default function ResidentialBuildingPermitPage() {
         {currentStep === 3 && (
            <Card>
             <CardHeader>
-              <CardTitle>BOX 3: REPRESENTATIVE (Optional)</CardTitle>
-              <CardDescription>Applicants who wish to appoint a representative must complete this Box. Original identification document of representative is required.</CardDescription>
+              <CardTitle className="text-lg sm:text-xl">BOX 3: REPRESENTATIVE (Optional)</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Applicants who wish to appoint a representative must complete this Box. Original identification document of representative is required.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -499,8 +497,8 @@ export default function ResidentialBuildingPermitPage() {
                 </div>
               </div>
               <div>
-                <Label>Representative's Identification</Label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 mt-2">
+                <Label className="text-sm sm:text-base">Representative's Identification</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-2 sm:gap-x-4 gap-y-2 mt-2">
                   {identificationOptions.map(opt => (
                     <div key={opt.id} className="flex items-center space-x-2">
                       <Controller
@@ -514,7 +512,7 @@ export default function ResidentialBuildingPermitPage() {
                               />
                           )}
                       />
-                      <Label htmlFor={`rep_${opt.id}`} className="font-normal text-sm">{opt.label}</Label>
+                      <Label htmlFor={`rep_${opt.id}`} className="font-normal text-xs sm:text-sm">{opt.label}</Label>
                     </div>
                   ))}
                 </div>
@@ -530,8 +528,8 @@ export default function ResidentialBuildingPermitPage() {
         {currentStep === 4 && (
           <Card>
             <CardHeader>
-              <CardTitle>BOX 4: REPRESENTATIVE'S ADDRESS (If representative appointed)</CardTitle>
-              <CardDescription>This should be your representative's normal residential address.</CardDescription>
+              <CardTitle className="text-lg sm:text-xl">BOX 4: REPRESENTATIVE'S ADDRESS (If representative appointed)</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">This should be your representative's normal residential address.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -583,8 +581,8 @@ export default function ResidentialBuildingPermitPage() {
         {currentStep === 5 && (
           <Card>
             <CardHeader>
-              <CardTitle>BOX 5: PLOT</CardTitle>
-              <CardDescription>Please fill in the below information of the plot that has been or will be developed.</CardDescription>
+              <CardTitle className="text-lg sm:text-xl">BOX 5: PLOT</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Please fill in the below information of the plot that has been or will be developed.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -616,17 +614,30 @@ export default function ResidentialBuildingPermitPage() {
           </Card>
         )}
 
-        <CardFooter className="flex flex-col items-center space-y-4">
-            <div className="flex w-full justify-between">
-                <Button type="button" onClick={handlePreviousStep} disabled={currentStep === 1} variant="outline">
+        <CardFooter className="flex flex-col items-center space-y-4 pt-6">
+            <div className="flex w-full flex-col sm:flex-row sm:justify-between gap-2">
+                <Button 
+                  type="button" 
+                  onClick={handlePreviousStep} 
+                  disabled={currentStep === 1} 
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                >
                     <ChevronLeft className="mr-2 h-4 w-4" /> Previous
                 </Button>
                 {currentStep < steps.length ? (
-                    <Button type="button" onClick={handleNextStep}>
+                    <Button 
+                      type="button" 
+                      onClick={handleNextStep}
+                      className="w-full sm:w-auto"
+                    >
                         Next <ChevronRight className="ml-2 h-4 w-4" />
                     </Button>
                 ) : (
-                    <Button type="submit" className="py-3 text-lg">
+                    <Button 
+                      type="submit" 
+                      className="w-full sm:w-auto py-3 text-base sm:text-lg"
+                    >
                         Submit Application
                     </Button>
                 )}
@@ -661,3 +672,4 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+    
