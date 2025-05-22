@@ -7,7 +7,7 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle,
+  SheetTitle as UISheetTitle, // Aliased to avoid conflict
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Menu, ChevronDown, Sun, Moon, Search, XIcon, LogIn, UserPlus, Globe, MapPin } from "lucide-react";
@@ -58,8 +58,8 @@ export default function Header() {
   const [EServiceOpen, setEServiceOpen] = useState(false);
   const EServiceHideTimer = useRef<number | null>(null);
   
-  const [dataCenterOpen, setDataCenterOpen] = useState(false);
-  const dataCenterHideTimer = useRef<number | null>(null);
+  const [modernIntegratedLabOpen, setModernIntegratedLabOpen] = useState(false);
+  const modernIntegratedLabHideTimer = useRef<number | null>(null);
 
   const [desktopSearchTerm, setDesktopSearchTerm] = useState("");
   const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false);
@@ -73,7 +73,7 @@ export default function Header() {
       if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
       if (developmentControlHideTimer.current) clearTimeout(developmentControlHideTimer.current);
       if (EServiceHideTimer.current) clearTimeout(EServiceHideTimer.current);
-      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
+      if (modernIntegratedLabHideTimer.current) clearTimeout(modernIntegratedLabHideTimer.current);
     };
   }, []);
 
@@ -104,10 +104,10 @@ export default function Header() {
     return { handleOpen, handleCloseWithDelay, cancelHide };
   };
 
-  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen, setDataCenterOpen]);
-  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setDataCenterOpen]);
-  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setDataCenterOpen]);
-  const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen]);
+  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen, setModernIntegratedLabOpen]);
+  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setModernIntegratedLabOpen]);
+  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setModernIntegratedLabOpen]);
+  const modernIntegratedLabHandlers = createMenuHandlers(setModernIntegratedLabOpen, modernIntegratedLabHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen]);
   
 
   const planningSubLinks = [
@@ -125,7 +125,7 @@ export default function Header() {
     { href: "https://kasupdapermit.com", label: "Renew permit", external: true },
   ];
   
-  const modernIntegratedLabSubLinks = [
+  const modernIntegratedLabLinks = [
     { href: "#", label: "Soil Test" },
     { href: "#", label: "Integrity Test" },
   ];
@@ -312,36 +312,29 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
               
-              <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
+              <DropdownMenu open={modernIntegratedLabOpen} onOpenChange={setModernIntegratedLabOpen}>
                 <DropdownMenuTrigger
                   asChild
-                  onPointerEnter={dataCenterHandlers.handleOpen}
-                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+                  onPointerEnter={modernIntegratedLabHandlers.handleOpen}
+                  onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
                 >
                   <Button
                     variant="ghost"
-                    className={getDropdownTriggerClassName("/data-center", modernIntegratedLabSubLinks, dataCenterOpen)}
+                    className={getDropdownTriggerClassName("/modern-integrated-lab", modernIntegratedLabLinks, modernIntegratedLabOpen)}
                   >
-                    Data Center
+                    Modern Integrated Lab
                     <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  onPointerEnter={dataCenterHandlers.cancelHide}
-                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+                  onPointerEnter={modernIntegratedLabHandlers.cancelHide}
+                  onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
                 >
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className={getDropdownLinkClassName("#modern-integrated-lab")}>Modern Integrated Lab</DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        {modernIntegratedLabSubLinks.map((link) => (
-                          <DropdownMenuItem key={link.label} asChild>
-                            <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
+                  {modernIntegratedLabLinks.map((link) => (
+                    <DropdownMenuItem key={link.label} asChild>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -497,7 +490,7 @@ export default function Header() {
                 </SheetTrigger>
                 <SheetContent side="left" className="pr-0 pt-0 flex flex-col">
                   <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10">
-                    {/* <SheetTitle className="text-lg font-semibold text-primary">Menu</SheetTitle> */}
+                    {/* <UISheetTitle className="text-lg font-semibold text-primary">Menu</UISheetTitle> */}
                   </SheetHeader>
                   <Separator className="mb-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/>
                   <div className="flex-grow overflow-y-auto pb-8">
@@ -555,29 +548,20 @@ export default function Header() {
                             ))}
                           </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="data-center" className="border-b-0">
-                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName([], true), "px-3")}>
-                            Data Center
+                        <AccordionItem value="modern-integrated-lab" className="border-b-0">
+                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(modernIntegratedLabLinks), "px-3")}>
+                            Modern Integrated Lab
                           </AccordionTrigger>
                           <AccordionContent className="pl-4 pb-1">
-                            <Accordion type="single" collapsible className="w-full">
-                              <AccordionItem value="modern-integrated-lab" className="border-b-0">
-                                <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(modernIntegratedLabSubLinks, true), "text-sm px-3 py-1.5")}>
-                                    Modern Integrated Lab
-                                </AccordionTrigger>
-                                <AccordionContent className="pl-4 pb-1">
-                                  {modernIntegratedLabSubLinks.map((link) => (
-                                    <Link
-                                      key={link.label}
-                                      href={link.href}
-                                      className={cn(getMobileSubLinkClassName(link.href), "text-sm")}
-                                    >
-                                      {link.label}
-                                    </Link>
-                                  ))}
-                                </AccordionContent>
-                              </AccordionItem>
-                            </Accordion>
+                            {modernIntegratedLabLinks.map((link) => (
+                              <Link
+                                key={link.label}
+                                href={link.href}
+                                className={getMobileSubLinkClassName(link.href)}
+                              >
+                                {link.label}
+                              </Link>
+                            ))}
                           </AccordionContent>
                         </AccordionItem>
                       </Accordion>
@@ -633,4 +617,6 @@ export default function Header() {
     </header>
   );
 }
+    
+
     
