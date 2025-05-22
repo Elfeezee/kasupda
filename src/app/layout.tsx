@@ -2,12 +2,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
 import { cn } from '@/lib/utils';
-import { ThemeProvider } from '@/context/theme-provider';
-import ScrollToTopButton from '@/components/ui/scroll-to-top-button'; // Import the new component
+import AppClientLayoutWrapper from '@/components/layout/app-client-layout-wrapper';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,15 +34,7 @@ export default function RootLayout({
           'antialiased min-h-screen flex flex-col'
         )}
       >
-        <ThemeProvider>
-          <Header />
-          <main className="flex-grow container mx-auto px-4 py-8">
-            {children}
-          </main>
-          <Footer />
-          <Toaster />
-          <ScrollToTopButton /> {/* Add the button here */}
-        </ThemeProvider>
+        <AppClientLayoutWrapper>{children}</AppClientLayoutWrapper>
       </body>
     </html>
   );
