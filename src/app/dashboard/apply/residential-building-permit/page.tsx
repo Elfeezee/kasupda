@@ -644,7 +644,7 @@ export default function ResidentialBuildingPermitPage() {
             </div>
           <Separator className="my-2" />
            <p className="text-xs text-muted-foreground text-center">
-            KASUPDA Regulations, 2020 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.4 2020
+            KASUPDA Regulations, 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.5 2025
           </p>
         </CardFooter>
       </form>
@@ -671,5 +671,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+    
 
     
