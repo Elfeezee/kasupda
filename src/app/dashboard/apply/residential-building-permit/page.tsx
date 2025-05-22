@@ -34,8 +34,8 @@ const permitApplicationSchema = z.object({
   stateOfOrigin: z.string().optional(),
   localGov: z.string().optional(),
   phone1: z.string().min(1, "Phone 1 is required").regex(/^\+?[0-9\s-()]+$/, "Invalid phone number format"),
-  phone2: z.string().optional().regex(/^\+?[0-9\s-()]*$/, "Invalid phone number format"),
-  phone3: z.string().optional().regex(/^\+?[0-9\s-()]*$/, "Invalid phone number format"),
+  phone2: z.string().regex(/^\+?[0-9\s-()]*$/, "Invalid phone number format").optional().or(z.literal('')),
+  phone3: z.string().regex(/^\+?[0-9\s-()]*$/, "Invalid phone number format").optional().or(z.literal('')),
   email: z.string().email("Invalid email address").optional().or(z.literal('')),
   identificationType: z.object({
     internationalPassport: z.boolean().optional(),
@@ -61,8 +61,8 @@ const permitApplicationSchema = z.object({
   repFirstName: z.string().optional(),
   repMiddleName: z.string().optional(),
   repSurname: z.string().optional(),
-  repPhone1: z.string().optional().regex(/^\+?[0-9\s-()]*$/, "Invalid phone number format"),
-  repPhone2: z.string().optional().regex(/^\+?[0-9\s-()]*$/, "Invalid phone number format"),
+  repPhone1: z.string().regex(/^\+?[0-9\s-()]*$/, "Invalid phone number format").optional().or(z.literal('')),
+  repPhone2: z.string().regex(/^\+?[0-9\s-()]*$/, "Invalid phone number format").optional().or(z.literal('')),
   repEmail: z.string().email("Invalid email address").optional().or(z.literal('')),
   repIdentificationType: z.object({
     internationalPassport: z.boolean().optional(),
@@ -116,6 +116,61 @@ export default function ResidentialBuildingPermitPage() {
   const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<PermitApplicationFormValues>({
     resolver: zodResolver(permitApplicationSchema),
     mode: "onChange", // Or "onBlur" for validation as user interacts
+    defaultValues: { // Set default values for optional fields that might be checkboxes or radios
+      title: "",
+      middleName: "",
+      occupation: "",
+      nationality: "Nigerian",
+      stateOfOrigin: "",
+      localGov: "",
+      phone2: "",
+      phone3: "",
+      email: "",
+      identificationType: {
+        internationalPassport: false,
+        taxIdCard: false,
+        nationalIdCard: false,
+        voterRegCard: false,
+        driversLicense: false,
+      },
+      idNumber: "",
+      appHouseNo: "",
+      appStreetName: "",
+      appDistrict: "",
+      appCityTown: "",
+      appState: "Kaduna",
+      appCountry: "Nigeria",
+      appPOBox: "",
+      appCO: "",
+      appAdditionalAddressInfo: "",
+      repFirstName: "",
+      repMiddleName: "",
+      repSurname: "",
+      repPhone1: "",
+      repPhone2: "",
+      repEmail: "",
+      repIdentificationType: {
+        internationalPassport: false,
+        taxIdCard: false,
+        nationalIdCard: false,
+        voterRegCard: false,
+        driversLicense: false,
+      },
+      repIdNumber: "",
+      repHouseNo: "",
+      repStreetName: "",
+      repDistrict: "",
+      repCityTown: "",
+      repState: "Kaduna",
+      repCountry: "Nigeria",
+      repPOBox: "",
+      repCO: "",
+      repAdditionalAddressInfo: "",
+      landUse: "",
+      purpose: "",
+      plotDistrict: "",
+      plotLGA: "",
+    }
   });
 
   const onSubmit = (data: PermitApplicationFormValues) => {
@@ -286,7 +341,7 @@ export default function ResidentialBuildingPermitPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="nationality">Nationality</Label>
-                  <Input id="nationality" {...register("nationality")} defaultValue="Nigerian" />
+                  <Input id="nationality" {...register("nationality")} />
                 </div>
                 <div>
                   <Label htmlFor="stateOfOrigin">State of Origin</Label>
@@ -380,13 +435,13 @@ export default function ResidentialBuildingPermitPage() {
                 </div>
                 <div>
                   <Label htmlFor="appState">State</Label>
-                  <Input id="appState" {...register("appState")} defaultValue="Kaduna" />
+                  <Input id="appState" {...register("appState")} />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="appCountry">Country</Label>
-                  <Input id="appCountry" {...register("appCountry")} defaultValue="Nigeria" />
+                  <Input id="appCountry" {...register("appCountry")} />
                 </div>
                 <div>
                   <Label htmlFor="appPOBox">P.O./P.M.B.</Label>
@@ -500,13 +555,13 @@ export default function ResidentialBuildingPermitPage() {
                 </div>
                 <div>
                   <Label htmlFor="repState">State</Label>
-                  <Input id="repState" {...register("repState")} defaultValue="Kaduna" />
+                  <Input id="repState" {...register("repState")} />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="repCountry">Country</Label>
-                  <Input id="repCountry" {...register("repCountry")} defaultValue="Nigeria" />
+                  <Input id="repCountry" {...register("repCountry")} />
                 </div>
                 <div>
                   <Label htmlFor="repPOBox">P.O./P.M.B.</Label>
