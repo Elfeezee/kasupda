@@ -102,7 +102,7 @@ export default function DashboardSidebar() {
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton
                 onClick={() => handleNavigation(item.href, item.label, item.disabled)}
-                isActive={pathname === item.href.split('#')[0] || (item.href === '/dashboard' && pathname.startsWith('/dashboard/apply'))}
+                isActive={pathname === item.href.split('#')[0]}
                 tooltip={state === 'collapsed' ? item.label : undefined}
                 aria-disabled={item.disabled}
                 className={cn(item.disabled && "opacity-50 cursor-not-allowed")}
