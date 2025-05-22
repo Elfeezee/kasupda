@@ -12,10 +12,10 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarSeparator,
-  SidebarInput, // Example usage, can be removed if not needed
+  // SidebarInput, // Example usage, can be removed if not needed
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button'; // Not directly used for menu items
 import {
   LayoutDashboard,
   FilePlus2,
@@ -24,9 +24,9 @@ import {
   ReceiptText,
   FolderArchive,
   LogOut,
-  Search,
-  Settings,
-  LifeBuoy,
+  // Search, // Example usage, can be removed if not needed
+  // Settings, // Example usage, can be removed if not needed
+  // LifeBuoy, // Example usage, can be removed if not needed
 } from 'lucide-react';
 import Image from 'next/image';
 import KASUPDALogo from '@/image/logo.png';
@@ -35,7 +35,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/apply/residential-building-permit', label: 'Apply for Permit', icon: FilePlus2 }, // Example link
+  { href: '/dashboard/apply', label: 'Apply for Permit', icon: FilePlus2 }, // Updated link
   { href: '/dashboard/my-applications', label: 'My Applications', icon: ListChecks },
   { href: '/dashboard/profile', label: 'My Profile', icon: UserCircle2, disabled: true }, // Placeholder
   { href: '/dashboard/payments', label: 'Payment History', icon: ReceiptText, disabled: true }, // Placeholder
@@ -76,13 +76,6 @@ export default function DashboardSidebar() {
             KASUPDA
           </div>
         </div>
-        {/* Example Search, can be removed or enhanced */}
-        {/* <div className={cn("mt-4", state === 'collapsed' && "hidden")}>
-          <div className="relative">
-            <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <SidebarInput placeholder="Search..." className="pl-8" />
-          </div>
-        </div> */}
       </SidebarHeader>
 
       <SidebarContent className="flex-1 p-2">
@@ -107,28 +100,6 @@ export default function DashboardSidebar() {
       <SidebarSeparator className="my-1" />
 
       <SidebarFooter className="p-2">
-        {/* Example settings/help links - can be removed or adapted */}
-        {/* <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={() => { setOpenMobile(false); router.push('#'); toast({title: "Settings clicked"});}}
-              tooltip={state === 'collapsed' ? "Settings" : undefined}
-            >
-              <Settings className="h-5 w-5" />
-              <span className={cn(state === 'collapsed' && "hidden")}>Settings</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={() => { setOpenMobile(false); router.push('#'); toast({title: "Help clicked"});}}
-              tooltip={state === 'collapsed' ? "Help & Support" : undefined}
-            >
-              <LifeBuoy className="h-5 w-5" />
-              <span className={cn(state === 'collapsed' && "hidden")}>Help & Support</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <SidebarSeparator className="my-1" /> */}
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -145,4 +116,3 @@ export default function DashboardSidebar() {
     </>
   );
 }
-
