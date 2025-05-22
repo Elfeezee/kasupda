@@ -15,8 +15,11 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider defaultOpen>
-      <div className="flex min-h-[calc(100vh-var(--header-height,100px)-var(--footer-height,100px))]">
-        <Sidebar collapsible="icon" className="border-r">
+      <div className="flex min-h-[calc(100vh-var(--header-height,60px)-var(--footer-height,60px))]"> {/* Adjusted default heights slightly */}
+        <Sidebar 
+          collapsible="icon" 
+          className="border-r bg-red-500 dark:bg-red-700" // Added bright background for debugging
+        >
           <DashboardSidebar />
         </Sidebar>
         <SidebarInset className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
