@@ -497,11 +497,11 @@ export default function Header() {
                 </SheetTrigger>
                 <SheetContent side="left" className="pr-0 pt-0 flex flex-col"> {/* Changed pt-8 to pt-0 */}
                   <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10"> {/* Added sticky top styles */}
-                    <SheetTitle className="text-lg font-semibold text-primary">Menu</SheetTitle>
+                    {/* <SheetTitle className="text-lg font-semibold text-primary">Menu</SheetTitle> Removed Menu Title */}
                   </SheetHeader>
                   <Separator className="mb-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/> {/* Added sticky top styles, adjust top as needed */}
                   <div className="flex-grow overflow-y-auto pb-8"> {/* Added pb-8 for spacing at the bottom of scroll */}
-                    <nav> {/* Removed ml-4 */}
+                    <nav> 
                       <Link
                         href="/"
                         className={getMobileLinkClassName("/")}
@@ -633,6 +633,4 @@ export default function Header() {
     </header>
   );
 }
-    
-
     
