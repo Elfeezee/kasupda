@@ -61,6 +61,9 @@ export default function Header() {
   const [modernIntegratedLabOpen, setModernIntegratedLabOpen] = useState(false);
   const modernIntegratedLabHideTimer = useRef<number | null>(null);
 
+  const [dataCenterOpen, setDataCenterOpen] = useState(false);
+  const dataCenterHideTimer = useRef<number | null>(null);
+
   const [desktopSearchTerm, setDesktopSearchTerm] = useState("");
   const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false);
   const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
@@ -74,6 +77,7 @@ export default function Header() {
       if (developmentControlHideTimer.current) clearTimeout(developmentControlHideTimer.current);
       if (EServiceHideTimer.current) clearTimeout(EServiceHideTimer.current);
       if (modernIntegratedLabHideTimer.current) clearTimeout(modernIntegratedLabHideTimer.current);
+      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
 
@@ -104,10 +108,11 @@ export default function Header() {
     return { handleOpen, handleCloseWithDelay, cancelHide };
   };
 
-  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen, setModernIntegratedLabOpen]);
-  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setModernIntegratedLabOpen]);
-  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setModernIntegratedLabOpen]);
-  const modernIntegratedLabHandlers = createMenuHandlers(setModernIntegratedLabOpen, modernIntegratedLabHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen]);
+  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen, setModernIntegratedLabOpen, setDataCenterOpen]);
+  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setModernIntegratedLabOpen, setDataCenterOpen]);
+  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setModernIntegratedLabOpen, setDataCenterOpen]);
+  const modernIntegratedLabHandlers = createMenuHandlers(setModernIntegratedLabOpen, modernIntegratedLabHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen, setDataCenterOpen]);
+  const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen, setModernIntegratedLabOpen]);
   
 
   const planningSubLinks = [
@@ -128,6 +133,11 @@ export default function Header() {
   const modernIntegratedLabLinks = [
     { href: "#", label: "Soil Test" },
     { href: "#", label: "Integrity Test" },
+  ];
+
+  const dataCenterSubLinks = [
+    { href: "#", label: "Development Register" },
+    { href: "#", label: "Purchase of Data" },
   ];
 
   const mainNavLinks = [
@@ -331,6 +341,32 @@ export default function Header() {
                   onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
                 >
                   {modernIntegratedLabLinks.map((link) => (
+                    <DropdownMenuItem key={link.label} asChild>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
+                <DropdownMenuTrigger
+                  asChild
+                  onPointerEnter={dataCenterHandlers.handleOpen}
+                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+                >
+                  <Button
+                    variant="ghost"
+                    className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
+                  >
+                    Data Center
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  onPointerEnter={dataCenterHandlers.cancelHide}
+                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+                >
+                  {dataCenterSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
                       <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
                     </DropdownMenuItem>
@@ -554,6 +590,22 @@ export default function Header() {
                           </AccordionTrigger>
                           <AccordionContent className="pl-4 pb-1">
                             {modernIntegratedLabLinks.map((link) => (
+                              <Link
+                                key={link.label}
+                                href={link.href}
+                                className={getMobileSubLinkClassName(link.href)}
+                              >
+                                {link.label}
+                              </Link>
+                            ))}
+                          </AccordionContent>
+                        </AccordionItem>
+                         <AccordionItem value="data-center" className="border-b-0">
+                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(dataCenterSubLinks), "px-3")}>
+                            Data Center
+                          </AccordionTrigger>
+                          <AccordionContent className="pl-4 pb-1">
+                            {dataCenterSubLinks.map((link) => (
                               <Link
                                 key={link.label}
                                 href={link.href}
