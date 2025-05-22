@@ -55,8 +55,8 @@ export default function Header() {
   const [developmentControlOpen, setDevelopmentControlOpen] = useState(false);
   const developmentControlHideTimer = useRef<number | null>(null);
 
-  const [eServiceOpen, setEServiceOpen] = useState(false);
-  const eServiceHideTimer = useRef<number | null>(null);
+  const [EServiceOpen, setEServiceOpen] = useState(false);
+  const EServiceHideTimer = useRef<number | null>(null);
   
   const [dataCenterOpen, setDataCenterOpen] = useState(false);
   const dataCenterHideTimer = useRef<number | null>(null);
@@ -72,7 +72,7 @@ export default function Header() {
     return () => {
       if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
       if (developmentControlHideTimer.current) clearTimeout(developmentControlHideTimer.current);
-      if (eServiceHideTimer.current) clearTimeout(eServiceHideTimer.current);
+      if (EServiceHideTimer.current) clearTimeout(EServiceHideTimer.current);
       if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
@@ -106,7 +106,7 @@ export default function Header() {
 
   const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen, setDataCenterOpen]);
   const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setDataCenterOpen]);
-  const eServiceHandlers = createMenuHandlers(setEServiceOpen, eServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setDataCenterOpen]);
+  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setDataCenterOpen]);
   const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen]);
   
 
@@ -120,7 +120,7 @@ export default function Header() {
      { href: "#", label: "Inspection" },
   ];
 
-  const eServiceSubLinks = [
+  const EServiceSubLinks = [
     { href: "/apply-for-permit", label: "Apply for permit" },
     { href: "https://kasupdapermit.com", label: "Renew permit", external: true },
   ];
@@ -282,25 +282,25 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <DropdownMenu open={eServiceOpen} onOpenChange={setEServiceOpen}>
+              <DropdownMenu open={EServiceOpen} onOpenChange={setEServiceOpen}>
                 <DropdownMenuTrigger
                   asChild
-                  onPointerEnter={eServiceHandlers.handleOpen}
-                  onPointerLeave={eServiceHandlers.handleCloseWithDelay}
+                  onPointerEnter={EServiceHandlers.handleOpen}
+                  onPointerLeave={EServiceHandlers.handleCloseWithDelay}
                 >
                   <Button
                     variant="ghost"
-                    className={getDropdownTriggerClassName("/eservice", eServiceSubLinks, eServiceOpen)}
+                    className={getDropdownTriggerClassName("/eservice", EServiceSubLinks, EServiceOpen)}
                   >
-                    e-service
+                    E-service
                     <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  onPointerEnter={eServiceHandlers.cancelHide}
-                  onPointerLeave={eServiceHandlers.handleCloseWithDelay}
+                  onPointerEnter={EServiceHandlers.cancelHide}
+                  onPointerLeave={EServiceHandlers.handleCloseWithDelay}
                 >
-                  {eServiceSubLinks.map((link) => (
+                  {EServiceSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
                       {link.external ? (
                         <a href={link.href} target="_blank" rel="noopener noreferrer" className={getDropdownLinkClassName(link.href)}>{link.label}</a>
@@ -542,11 +542,11 @@ export default function Header() {
                           </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="e-service" className="border-b-0">
-                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(eServiceSubLinks), "px-3")}>
-                            e-service
+                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(EServiceSubLinks), "px-3")}>
+                            E-service
                           </AccordionTrigger>
                           <AccordionContent className="pl-4 pb-1">
-                            {eServiceSubLinks.map((link) => (
+                            {EServiceSubLinks.map((link) => (
                               link.external ? (
                                   <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={getMobileSubLinkClassName(link.href)}>{link.label}</a>
                                 ) : (
