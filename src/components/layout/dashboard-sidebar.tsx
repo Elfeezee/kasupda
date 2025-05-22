@@ -36,7 +36,7 @@ import { useToast } from '@/hooks/use-toast';
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/apply/residential-building-permit', label: 'Apply for Permit', icon: FilePlus2 }, // Example link
-  { href: '/dashboard#submitted-applications-section', label: 'My Applications', icon: ListChecks },
+  { href: '/dashboard/my-applications', label: 'My Applications', icon: ListChecks },
   { href: '/dashboard/profile', label: 'My Profile', icon: UserCircle2, disabled: true }, // Placeholder
   { href: '/dashboard/payments', label: 'Payment History', icon: ReceiptText, disabled: true }, // Placeholder
   { href: '/dashboard/documents', label: 'My Documents', icon: FolderArchive, disabled: true }, // Placeholder
@@ -63,18 +63,7 @@ export default function DashboardSidebar() {
       });
       return;
     }
-    if (href.includes('#')) {
-      // Handle in-page links smoothly
-      const elementId = href.split('#')[1];
-      if (pathname === href.split('#')[0]) { // If already on the page
-        const element = document.getElementById(elementId);
-        element?.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        router.push(href); // Navigate to page then scroll (may need effect on target page)
-      }
-    } else {
-      router.push(href);
-    }
+    router.push(href);
   };
 
 
@@ -102,7 +91,7 @@ export default function DashboardSidebar() {
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton
                 onClick={() => handleNavigation(item.href, item.label, item.disabled)}
-                isActive={pathname === item.href.split('#')[0]}
+                isActive={pathname === item.href}
                 tooltip={state === 'collapsed' ? item.label : undefined}
                 aria-disabled={item.disabled}
                 className={cn(item.disabled && "opacity-50 cursor-not-allowed")}
@@ -156,3 +145,4 @@ export default function DashboardSidebar() {
     </>
   );
 }
+
