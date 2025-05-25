@@ -40,7 +40,7 @@ export default function Footer() {
             </Link>
           </div>
 
-          <nav className="flex flex-col items-center text-center md:items-end gap-2">
+          <nav className="flex flex-col items-center text-center gap-2 md:flex-row md:gap-4">
             <Link
               href="/faq"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
