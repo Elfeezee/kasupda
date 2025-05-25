@@ -4,7 +4,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Tent, Presentation, MessageSquareWarning, ArrowRight } from 'lucide-react';
+import { FileText, Tent, UserCheck, MessageSquareWarning, ArrowRight, FilePlus2 } from 'lucide-react'; // Changed Presentation to UserCheck
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
@@ -25,9 +25,9 @@ const permitTypes = [
     disabled: true,
   },
   {
-    title: 'Outdoor Advertisement Licensing',
-    description: 'Apply for licenses for billboards, signs, and other outdoor advertisements.',
-    icon: Presentation,
+    title: 'Consultant Licensing', // Changed from Outdoor Advertisement Licensing
+    description: 'Apply for licenses for consultancy services related to urban planning and development.', // Updated description
+    icon: UserCheck, // Changed from Presentation
     href: '#', // Placeholder
     actionText: 'Start Application',
     disabled: true,
@@ -99,6 +99,3 @@ export default function SelectPermitTypePage() {
     </div>
   );
 }
-
-// Adding FilePlus2 icon for the page title, assuming it's relevant
-import { FilePlus2 } from 'lucide-react';
