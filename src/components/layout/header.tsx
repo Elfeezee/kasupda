@@ -10,7 +10,7 @@ import {
   SheetTitle as UISheetTitle, 
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, LogIn, UserPlus, Globe, MapPin, Home as HomeIcon, Building, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon, Search, XIcon } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, LogIn, Globe, MapPin, Home as HomeIcon, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon, Search, XIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -365,11 +365,7 @@ export default function Header() {
                     <LogIn className="mr-2 h-4 w-4" /> Login
                   </Link>
                 </Button>
-                <Button size="sm" asChild>
-                  <Link href="/apply-for-permit">
-                    <UserPlus className="mr-2 h-4 w-4" /> Sign up
-                  </Link>
-                </Button>
+                {/* Sign up button removed */}
                 <Separator orientation="vertical" className="h-6 mx-1" />
               </>
             <Button
@@ -444,10 +440,10 @@ export default function Header() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="pr-0 pt-0 flex flex-col">
-                  <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10">
+                  {/* <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10"> */}
                     {/* <UISheetTitle className="text-lg font-semibold text-primary">Menu</UISheetTitle> */}
-                  </SheetHeader>
-                  <Separator className="mb-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/>
+                  {/* </SheetHeader> */}
+                  <Separator className="my-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/>
                   <div className="flex-grow overflow-y-auto pb-8">
                     <nav> 
                       <Link
@@ -554,11 +550,7 @@ export default function Header() {
                               <LogIn className="mr-2 h-4 w-4" /> Login
                             </Link>
                           </Button>
-                          <Button className="w-full justify-start" asChild>
-                            <Link href="/apply-for-permit">
-                              <UserPlus className="mr-2 h-4 w-4" /> Sign up
-                            </Link>
-                          </Button>
+                          {/* Sign up button removed */}
                         </div>
                     </nav>
                   </div>
@@ -573,4 +565,5 @@ export default function Header() {
     
 
     
+
 
