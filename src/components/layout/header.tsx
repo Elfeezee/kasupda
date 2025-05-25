@@ -10,7 +10,7 @@ import {
   SheetTitle as UISheetTitle, 
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, LogIn, UserPlus, Globe, MapPin, Home as HomeIcon, Building, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon, Search } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, LogIn, UserPlus, Globe, MapPin, Home as HomeIcon, Building, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon, Search, XIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -35,9 +35,6 @@ import { Separator } from "@/components/ui/separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/theme-provider";
-// Removed: import { Dialog, DialogContent, DialogHeader, DialogTitle as UIDialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
-// Removed: import { Input } from "@/components/ui/input";
-// Removed: import { XIcon } from "lucide-react"; // Not used after search moved to footer
 
 export default function Header() {
   const pathname = usePathname();
@@ -58,12 +55,6 @@ export default function Header() {
   const [dataCenterOpen, setDataCenterOpen] = useState(false);
   const dataCenterHideTimer = useRef<number | null>(null);
 
-  // const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false); // Search moved to footer
-  // const [desktopSearchTerm, setDesktopSearchTerm] = useState(""); // Search moved to footer
-  // const desktopSearchInputRef = useRef<HTMLInputElement>(null); // Search moved to footer
-  // const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false); // Search moved to footer
-
-
   const HOVER_DELAY = 150; // ms
 
   useEffect(() => {
@@ -75,12 +66,6 @@ export default function Header() {
       if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
-
-  // useEffect(() => { // Search moved to footer
-  //   if (isDesktopSearchInputVisible && desktopSearchInputRef.current) {
-  //     desktopSearchInputRef.current.focus();
-  //   }
-  // }, [isDesktopSearchInputVisible]);
 
   const createMenuHandlers = (
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -117,12 +102,12 @@ export default function Header() {
   ];
 
   const developmentControlSubLinks = [
-     { href: "#", label: "Approved Consultants" },
-     { href: "#", label: "Base Maps" },
-     { href: "#", label: "Check List" },
-     { href: "#", label: "Development Control Officers" },
-     { href: "#", label: "Inspection" },
-     { href: "#", label: "Permit Process" },
+    { href: "#", label: "Approved Consultants" },
+    { href: "#", label: "Base Maps" },
+    { href: "#", label: "Check List" },
+    { href: "#", label: "Development Control Officers" },
+    { href: "#", label: "Inspection" },
+    { href: "#", label: "Permit Process" },
   ];
 
   const EServiceSubLinks = [
@@ -144,13 +129,12 @@ export default function Header() {
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
     { href: "/contact", label: "Contact Us" },
-    // { href: "#map-link-placeholder", label: "Map", icon: MapPin }, // Map link moved to footer
   ];
 
   const getLinkClassName = (href: string) => {
     const isActive = pathname === href;
     return cn(
-      "transition-colors px-2 py-2 text-sm flex items-center", // px-3 changed to px-2
+      "transition-colors px-3 py-2 text-sm flex items-center",
       isActive
         ? "text-primary font-semibold"
         : "text-primary/70 hover:text-primary"
@@ -160,7 +144,7 @@ export default function Header() {
   const getDropdownTriggerClassName = (currentPathSegment: string, subLinks: { href: string }[], isOpen: boolean) => {
     const isActivePath = subLinks.some(link => pathname === link.href) || pathname.startsWith(currentPathSegment);
     return cn(
-      "transition-colors px-2 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0", // px-3 changed to px-2
+      "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0", 
       (isActivePath || isOpen)
         ? "text-primary font-semibold"
         : "text-primary/70 hover:text-primary"
@@ -202,17 +186,6 @@ export default function Header() {
     );
   };
 
-  // const handleDesktopSearchSubmit = (e: React.FormEvent) => { // Search moved to footer
-  //   e.preventDefault();
-  //   console.log("Desktop search submitted:", desktopSearchTerm);
-  // };
-  
-  // const handleMobileSearchSubmit = (e: React.FormEvent) => { // Search moved to footer
-  //   e.preventDefault();
-  //   console.log("Mobile Search submitted:", desktopSearchTerm); 
-  //   setIsMobileSearchDialogOpen(false); 
-  // };
-
   const handleLanguageSelect = (language: string) => {
     console.log(`Language selected: ${language}. Actual translation not implemented.`);
   };
@@ -222,15 +195,14 @@ export default function Header() {
       <div className="container flex h-14 max-w-screen-2xl items-center">
         {/* Desktop Navigation */}
         <div className="mr-4 hidden md:flex md:flex-1 items-center">
-          <Link href="/" className="mr-8 flex items-center space-x-2"> {/* mr-6 changed to mr-8 */}
+          <Link href="/" className="mr-8 flex items-center space-x-2">
             <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
             <span className="hidden font-bold sm:inline-block text-primary">
               KASUPDA
             </span>
           </Link>
 
-          {/* {!isDesktopSearchInputVisible && ( // Search moved to footer */}
-            <nav className="flex items-center gap-1 text-sm flex-wrap"> {/* Added flex-wrap */}
+            <nav className="flex items-center gap-1 text-sm">
               <Link
                 href="/"
                 className={getLinkClassName("/")}
@@ -360,16 +332,18 @@ export default function Header() {
                     <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onPointerEnter={dataCenterHandlers.cancelHide}
-                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
-                >
-                  {dataCenterSubLinks.map((link) => (
-                    <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
+                <DropdownMenuPortal>
+                  <DropdownMenuContent
+                    onPointerEnter={dataCenterHandlers.cancelHide}
+                    onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+                  >
+                    {dataCenterSubLinks.map((link) => (
+                      <DropdownMenuItem key={link.label} asChild>
+                        <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenuPortal>
               </DropdownMenu>
 
               {mainNavLinks.map((link) => (
@@ -383,36 +357,8 @@ export default function Header() {
                 </Link>
               ))}
             </nav>
-          {/* )} */}
-
-          {/* {isDesktopSearchInputVisible && ( // Search moved to footer
-            <form onSubmit={handleDesktopSearchSubmit} className="flex items-center ml-auto">
-              <Input
-                ref={desktopSearchInputRef}
-                id="desktopInlineSearch"
-                placeholder="Search KASUPDA Portal..."
-                value={desktopSearchTerm}
-                onChange={(e) => setDesktopSearchTerm(e.target.value)}
-                className="h-9 w-60"
-              />
-              <Button
-                variant="ghost"
-                size="icon"
-                type="button"
-                className="text-primary/70 hover:text-primary ml-2"
-                onClick={() => {
-                  setIsDesktopSearchInputVisible(false);
-                  setDesktopSearchTerm(""); 
-                }}
-                aria-label="Close search"
-              >
-                <XIcon className="h-5 w-5" />
-              </Button>
-            </form>
-          )} */}
 
           <div className="ml-auto flex items-center gap-2">
-            {/* {!isDesktopSearchInputVisible && ( // Search moved to footer */}
                <>
                 <Button variant="outline" size="sm" asChild>
                   <Link href="/login">
@@ -426,18 +372,6 @@ export default function Header() {
                 </Button>
                 <Separator orientation="vertical" className="h-6 mx-1" />
               </>
-            {/* )} */}
-            {/* {!isDesktopSearchInputVisible && ( // Search moved to footer
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-primary/70 hover:text-primary"
-                aria-label="Open search input"
-                onClick={() => setIsDesktopSearchInputVisible(true)}
-              >
-                <Search className="h-5 w-5" />
-              </Button>
-            )} */}
             <Button
               variant="ghost"
               size="icon"
@@ -466,7 +400,6 @@ export default function Header() {
         </div>
 
         {/* Mobile Navigation Header Bar */}
-        {/* <Dialog open={isMobileSearchDialogOpen} onOpenChange={setIsMobileSearchDialogOpen}> // Search moved to footer */}
           <div className="flex w-full items-center justify-between md:hidden">
             <Link href="/" className="flex items-center space-x-2">
               <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
@@ -475,16 +408,6 @@ export default function Header() {
               </span>
             </Link>
             <div className="flex items-center">
-              {/* <DialogTrigger asChild> // Search moved to footer
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-primary/70 hover:text-primary mr-1"
-                  aria-label="Open search dialog"
-                >
-                  <Search className="h-5 w-5" />
-                </Button>
-              </DialogTrigger> */}
               <Button
                 variant="ghost"
                 size="icon"
@@ -643,25 +566,6 @@ export default function Header() {
               </Sheet>
             </div>
           </div>
-          {/* <DialogContent className="sm:max-w-[425px]"> // Search moved to footer
-            <DialogHeader>
-              <UIDialogTitle>Search KASUPDA Portal</UIDialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleMobileSearchSubmit}>
-              <div className="grid gap-4 py-4">
-                <Input
-                  id="mobileSearch"
-                  placeholder="Enter search term..."
-                  value={desktopSearchTerm} 
-                  onChange={(e) => setDesktopSearchTerm(e.target.value)}
-                />
-              </div>
-              <DialogFooter>
-                <Button type="submit">Search</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent> */}
-        {/* </Dialog> // Search moved to footer */}
       </div>
     </header>
   );
@@ -669,3 +573,4 @@ export default function Header() {
     
 
     
+
