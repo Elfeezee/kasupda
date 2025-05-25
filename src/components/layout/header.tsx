@@ -7,10 +7,10 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle as UISheetTitle, 
+  SheetTitle as UISheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, LogIn, Globe, MapPin, Home as HomeIcon, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon, Search, XIcon } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, LogIn, MapPin, Home as HomeIcon, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon, Search, XIcon, UserPlus } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -25,6 +25,16 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle as UIDialogTitle, // Aliased to avoid conflict with SheetTitle
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Accordion,
   AccordionContent,
@@ -54,6 +64,10 @@ export default function Header() {
 
   const [dataCenterOpen, setDataCenterOpen] = useState(false);
   const dataCenterHideTimer = useRef<number | null>(null);
+  
+  const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
+  const desktopSearchInputRef = useRef<HTMLInputElement>(null);
+
 
   const HOVER_DELAY = 150; // ms
 
@@ -66,6 +80,12 @@ export default function Header() {
       if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (isDesktopSearchInputVisible && desktopSearchInputRef.current) {
+      desktopSearchInputRef.current.focus();
+    }
+  }, [isDesktopSearchInputVisible]);
 
   const createMenuHandlers = (
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -129,6 +149,7 @@ export default function Header() {
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
     { href: "/contact", label: "Contact Us" },
+    { href: "https://www.google.com/maps/search/?api=1&query=No.%201%20KASUPDA%20Road%2C%20Off%20Independence%20Way%2C%20Kaduna%2C%20Nigeria", label: "Map", icon: MapPin, external: true },
   ];
 
   const getLinkClassName = (href: string) => {
@@ -186,8 +207,14 @@ export default function Header() {
     );
   };
 
-  const handleLanguageSelect = (language: string) => {
-    console.log(`Language selected: ${language}. Actual translation not implemented.`);
+
+  const handleDesktopSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const searchTerm = formData.get("desktopSearch") as string;
+    console.log("Desktop search term:", searchTerm);
+    // Add your search logic here
+    setIsDesktopSearchInputVisible(false); // Optionally close search on submit
   };
 
   return (
@@ -202,6 +229,7 @@ export default function Header() {
             </span>
           </Link>
 
+          {!isDesktopSearchInputVisible && (
             <nav className="flex items-center gap-1 text-sm">
               <Link
                 href="/"
@@ -351,23 +379,50 @@ export default function Header() {
                   key={link.label}
                   href={link.href}
                   className={getLinkClassName(link.href)}
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noopener noreferrer" : undefined}
                 >
                   {link.icon && <link.icon className="mr-2 h-4 w-4" />}
                   {link.label}
                 </Link>
               ))}
             </nav>
+          )}
+          {isDesktopSearchInputVisible && (
+             <form onSubmit={handleDesktopSearchSubmit} className="flex items-center gap-2 ml-auto">
+              <Input
+                ref={desktopSearchInputRef}
+                type="search"
+                name="desktopSearch"
+                placeholder="Search..."
+                className="h-8 w-60 bg-background text-sm"
+              />
+              <Button type="submit" variant="ghost" size="icon" className="h-8 w-8 text-primary/70 hover:text-primary">
+                <Search className="h-4 w-4" />
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-primary/70 hover:text-primary"
+                onClick={() => setIsDesktopSearchInputVisible(false)}
+              >
+                <XIcon className="h-4 w-4" />
+              </Button>
+            </form>
+          )}
 
           <div className="ml-auto flex items-center gap-2">
-               <>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/login">
-                    <LogIn className="mr-2 h-4 w-4" /> Login
-                  </Link>
-                </Button>
-                {/* Sign up button removed */}
-                <Separator orientation="vertical" className="h-6 mx-1" />
-              </>
+               {!isDesktopSearchInputVisible && (
+                 <>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="/login">
+                      <LogIn className="mr-2 h-4 w-4" /> Login
+                    </Link>
+                  </Button>
+                  <Separator orientation="vertical" className="h-6 mx-1" />
+                </>
+               )}
             <Button
               variant="ghost"
               size="icon"
@@ -377,21 +432,17 @@ export default function Header() {
             >
               {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-primary/70 hover:text-primary" aria-label="Select language">
-                  <Globe className="h-5 w-5" />
+             {!isDesktopSearchInputVisible && (
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsDesktopSearchInputVisible(true)}
+                    className="text-primary/70 hover:text-primary"
+                    aria-label="Open search"
+                    >
+                    <Search className="h-5 w-5" />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onSelect={() => handleLanguageSelect("English")}>
-                  English
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => handleLanguageSelect("Hausa")}>
-                  Hausa
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+             )}
           </div>
         </div>
 
@@ -404,6 +455,39 @@ export default function Header() {
               </span>
             </Link>
             <div className="flex items-center">
+              <Dialog>
+                <DialogTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-primary/70 hover:text-primary mr-1"
+                        aria-label="Open search"
+                    >
+                        <Search className="h-5 w-5" />
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                    <UIDialogTitle>Search KASUPDA</UIDialogTitle>
+                    <DialogDescription>
+                        Enter your search terms below.
+                    </DialogDescription>
+                    </DialogHeader>
+                    <form 
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            const formData = new FormData(e.currentTarget);
+                            const searchTerm = formData.get("mobileSearch") as string;
+                            console.log("Mobile search term:", searchTerm);
+                            // Close dialog after search: document.querySelector('[data-radix-dialog-close]')?.click();
+                        }} 
+                        className="mt-2"
+                    >
+                        <Input name="mobileSearch" placeholder="e.g., building permits" className="mb-3" />
+                        <Button type="submit" className="w-full">Search</Button>
+                    </form>
+                </DialogContent>
+              </Dialog>
               <Button
                 variant="ghost"
                 size="icon"
@@ -413,21 +497,6 @@ export default function Header() {
               >
                 {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-primary/70 hover:text-primary mr-1" aria-label="Select language">
-                    <Globe className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onSelect={() => handleLanguageSelect("English")}>
-                    English
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => handleLanguageSelect("Hausa")}>
-                    Hausa
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
               <Sheet>
                 <SheetTrigger asChild>
                   <Button
@@ -440,9 +509,9 @@ export default function Header() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="pr-0 pt-0 flex flex-col">
-                  {/* <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10"> */}
+                  <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10">
                     {/* <UISheetTitle className="text-lg font-semibold text-primary">Menu</UISheetTitle> */}
-                  {/* </SheetHeader> */}
+                  </SheetHeader>
                   <Separator className="my-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/>
                   <div className="flex-grow overflow-y-auto pb-8">
                     <nav> 
@@ -538,6 +607,8 @@ export default function Header() {
                           key={link.label}
                           href={link.href}
                           className={getMobileLinkClassName(link.href)}
+                          target={link.external ? "_blank" : undefined}
+                          rel={link.external ? "noopener noreferrer" : undefined}
                         >
                           {link.icon && <link.icon className="inline-block mr-2 h-4 w-4" />}{/* Ensure icon rendering */}
                           {link.label}
@@ -550,7 +621,6 @@ export default function Header() {
                               <LogIn className="mr-2 h-4 w-4" /> Login
                             </Link>
                           </Button>
-                          {/* Sign up button removed */}
                         </div>
                     </nav>
                   </div>
@@ -563,7 +633,3 @@ export default function Header() {
   );
 }
     
-
-    
-
-
