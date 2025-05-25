@@ -13,7 +13,7 @@ const mockApplications = [
   {
     id: 'APP-2023-001',
     name: 'Residential Building Permit - Plot 123, GRA',
-    type: 'Grant of Building Permission',
+    type: 'Building Permit', // Changed here
     date: '2023-10-15',
     status: 'Pending' as const,
   },
@@ -27,7 +27,7 @@ const mockApplications = [
   {
     id: 'APP-2023-003',
     name: 'Billboard Installation - Ahmadu Bello Way',
-    type: 'Outdoor Advertisement Licensing',
+    type: 'Outdoor Advertisement Licensing', // This one remains as is, unless specified otherwise.
     date: '2023-10-05',
     status: 'Rejected' as const,
   },
