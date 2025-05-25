@@ -268,12 +268,12 @@ export default function ResidentialBuildingPermitPage() {
               <CardDescription className="text-xs sm:text-sm">The person whose name would be reflected on the Building Permission. Original identification document must be submitted.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="title">Title</Label>
                   <Input id="title" {...register("title")} />
                 </div>
-                <div className="md:col-span-1">
+                <div className="lg:col-span-1">
                   <Label htmlFor="firstName">First Name*</Label>
                   <Input id="firstName" {...register("firstName")} />
                   {errors.firstName && <p className="text-destructive text-xs mt-1">{errors.firstName.message}</p>}
@@ -289,7 +289,7 @@ export default function ResidentialBuildingPermitPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label>Gender*</Label>
                   <Controller
@@ -337,7 +337,7 @@ export default function ResidentialBuildingPermitPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="nationality">Nationality</Label>
                   <Input id="nationality" {...register("nationality")} />
@@ -352,7 +352,7 @@ export default function ResidentialBuildingPermitPage() {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="phone1">Phone 1*</Label>
                   <Input id="phone1" type="tel" {...register("phone1")} />
@@ -422,7 +422,7 @@ export default function ResidentialBuildingPermitPage() {
                   <Input id="appStreetName" {...register("appStreetName")} placeholder="Ahmadu Bello Road" />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="appDistrict">District</Label>
                   <Input id="appDistrict" {...register("appDistrict")} placeholder="Sabon Gari" />
@@ -436,7 +436,7 @@ export default function ResidentialBuildingPermitPage() {
                   <Input id="appState" {...register("appState")} />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="appCountry">Country</Label>
                   <Input id="appCountry" {...register("appCountry")} />
@@ -465,7 +465,7 @@ export default function ResidentialBuildingPermitPage() {
               <CardDescription className="text-xs sm:text-sm">Applicants who wish to appoint a representative must complete this Box. Original identification document of representative is required.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="repFirstName">First Name</Label>
                   <Input id="repFirstName" {...register("repFirstName")} />
@@ -479,7 +479,7 @@ export default function ResidentialBuildingPermitPage() {
                   <Input id="repSurname" {...register("repSurname")} />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="repPhone1">Phone 1</Label>
                   <Input id="repPhone1" type="tel" {...register("repPhone1")} />
@@ -542,7 +542,7 @@ export default function ResidentialBuildingPermitPage() {
                   <Input id="repStreetName" {...register("repStreetName")} placeholder="Ahmadu Bello Road" />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="repDistrict">District</Label>
                   <Input id="repDistrict" {...register("repDistrict")} placeholder="Sabon Gari" />
@@ -556,7 +556,7 @@ export default function ResidentialBuildingPermitPage() {
                   <Input id="repState" {...register("repState")} />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="repCountry">Country</Label>
                   <Input id="repCountry" {...register("repCountry")} />
@@ -671,3 +671,5 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+    
