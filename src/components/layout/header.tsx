@@ -122,12 +122,12 @@ export default function Header() {
   ];
 
   const developmentControlSubLinks = [
-     { href: "#", label: "Permit Process" },
-     { href: "#", label: "Check List" },
-     { href: "#", label: "Base Maps" },
-     { href: "#", label: "Development Control Officers" },
      { href: "#", label: "Approved Consultants" },
+     { href: "#", label: "Base Maps" },
+     { href: "#", label: "Check List" },
+     { href: "#", label: "Development Control Officers" },
      { href: "#", label: "Inspection" },
+     { href: "#", label: "Permit Process" },
   ];
 
   const EServiceSubLinks = [
@@ -677,3 +677,4 @@ export default function Header() {
     
 
     
+
