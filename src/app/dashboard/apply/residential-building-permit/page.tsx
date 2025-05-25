@@ -211,7 +211,7 @@ export default function ResidentialBuildingPermitPage() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="text-xl sm:text-2xl font-bold text-center text-primary">
-            Application For Grant of Building Permission
+            Building Permit Application 
           </CardTitle>
           <CardDescription className="text-center text-sm sm:text-base">
             Kaduna State Urban Planning and Development Authority
@@ -671,7 +671,3 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-    
-
-    

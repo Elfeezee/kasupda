@@ -4,31 +4,31 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Tent, UserCheck, MessageSquareWarning, ArrowRight, FilePlus2 } from 'lucide-react'; // Changed Presentation to UserCheck
+import { FileText, Tent, UserCheck, MessageSquareWarning, ArrowRight, FilePlus2 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
 const permitTypes = [
   {
-    title: 'Grant of Building Permission Application',
+    title: 'Building Permit Application', // Changed here
     description: 'Apply for permits for new residential, commercial, or industrial buildings.',
     icon: FileText,
-    href: '/dashboard/apply/residential-building-permit', // Links to the existing detailed form
+    href: '/dashboard/apply/residential-building-permit', 
     actionText: 'Start Application',
   },
   {
     title: 'Temporary Building Permit Application',
     description: 'Permits for temporary structures, events, or extensions.',
     icon: Tent,
-    href: '#', // Placeholder
+    href: '#', 
     actionText: 'Start Application',
     disabled: true,
   },
   {
-    title: 'Consultant Licensing', // Changed from Outdoor Advertisement Licensing
-    description: 'Apply for licenses for consultancy services related to urban planning and development.', // Updated description
-    icon: UserCheck, // Changed from Presentation
-    href: '#', // Placeholder
+    title: 'Consultant Licensing', 
+    description: 'Apply for licenses for consultancy services related to urban planning and development.', 
+    icon: UserCheck, 
+    href: '#', 
     actionText: 'Start Application',
     disabled: true,
   },
@@ -36,7 +36,7 @@ const permitTypes = [
     title: 'Complaint Application',
     description: 'Submit complaints related to building violations or urban planning issues.',
     icon: MessageSquareWarning,
-    href: '#', // Placeholder
+    href: '#', 
     actionText: 'Submit Complaint',
     disabled: true,
   },
