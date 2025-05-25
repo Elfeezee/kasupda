@@ -7,10 +7,10 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
-  SheetTitle as UISheetTitle,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, LogIn, MapPin, Home as HomeIcon, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon, Search, XIcon, UserPlus } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, LogIn, Home as HomeIcon, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -25,16 +25,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle as UIDialogTitle, // Aliased to avoid conflict with SheetTitle
-  DialogDescription,
-  DialogFooter,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import {
   Accordion,
   AccordionContent,
@@ -65,9 +55,6 @@ export default function Header() {
   const [dataCenterOpen, setDataCenterOpen] = useState(false);
   const dataCenterHideTimer = useRef<number | null>(null);
   
-  const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
-  const desktopSearchInputRef = useRef<HTMLInputElement>(null);
-
 
   const HOVER_DELAY = 150; // ms
 
@@ -80,12 +67,6 @@ export default function Header() {
       if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
-
-  useEffect(() => {
-    if (isDesktopSearchInputVisible && desktopSearchInputRef.current) {
-      desktopSearchInputRef.current.focus();
-    }
-  }, [isDesktopSearchInputVisible]);
 
   const createMenuHandlers = (
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -149,7 +130,6 @@ export default function Header() {
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
     { href: "/contact", label: "Contact Us" },
-    { href: "https://www.google.com/maps/search/?api=1&query=No.%201%20KASUPDA%20Road%2C%20Off%20Independence%20Way%2C%20Kaduna%2C%20Nigeria", label: "Map", icon: MapPin, external: true },
   ];
 
   const getLinkClassName = (href: string) => {
@@ -207,16 +187,6 @@ export default function Header() {
     );
   };
 
-
-  const handleDesktopSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const searchTerm = formData.get("desktopSearch") as string;
-    console.log("Desktop search term:", searchTerm);
-    // Add your search logic here
-    setIsDesktopSearchInputVisible(false); // Optionally close search on submit
-  };
-
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -229,200 +199,171 @@ export default function Header() {
             </span>
           </Link>
 
-          {!isDesktopSearchInputVisible && (
-            <nav className="flex items-center gap-1 text-sm">
-              <Link
-                href="/"
-                className={getLinkClassName("/")}
+          <nav className="flex items-center gap-1 text-sm">
+            <Link
+              href="/"
+              className={getLinkClassName("/")}
+            >
+              Home
+            </Link>
+
+            <DropdownMenu open={planningOpen} onOpenChange={setPlanningOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={planningHandlers.handleOpen}
+                onPointerLeave={planningHandlers.handleCloseWithDelay}
               >
-                Home
-              </Link>
+                <Button
+                  variant="ghost"
+                  className={getDropdownTriggerClassName("/planning", planningSubLinks, planningOpen)}
+                >
+                  Planning and Development
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                onPointerEnter={planningHandlers.cancelHide}
+                onPointerLeave={planningHandlers.handleCloseWithDelay}
+              >
+                {planningSubLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-              <DropdownMenu open={planningOpen} onOpenChange={setPlanningOpen}>
-                <DropdownMenuTrigger
-                  asChild
-                  onPointerEnter={planningHandlers.handleOpen}
-                  onPointerLeave={planningHandlers.handleCloseWithDelay}
+            <DropdownMenu open={developmentControlOpen} onOpenChange={setDevelopmentControlOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={developmentControlHandlers.handleOpen}
+                onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
+              >
+                <Button
+                  variant="ghost"
+                  className={getDropdownTriggerClassName("/development-control", developmentControlSubLinks, developmentControlOpen)}
                 >
-                  <Button
-                    variant="ghost"
-                    className={getDropdownTriggerClassName("/planning", planningSubLinks, planningOpen)}
-                  >
-                    Planning and Development
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onPointerEnter={planningHandlers.cancelHide}
-                  onPointerLeave={planningHandlers.handleCloseWithDelay}
+                  Development Control
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                onPointerEnter={developmentControlHandlers.cancelHide}
+                onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
+              >
+                {developmentControlSubLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu open={EServiceOpen} onOpenChange={setEServiceOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={EServiceHandlers.handleOpen}
+                onPointerLeave={EServiceHandlers.handleCloseWithDelay}
+              >
+                <Button
+                  variant="ghost"
+                  className={getDropdownTriggerClassName("/eservice", EServiceSubLinks, EServiceOpen)}
                 >
-                  {planningSubLinks.map((link) => (
-                    <DropdownMenuItem key={link.label} asChild>
+                  E-service
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                onPointerEnter={EServiceHandlers.cancelHide}
+                onPointerLeave={EServiceHandlers.handleCloseWithDelay}
+              >
+                {EServiceSubLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    {link.external ? (
+                      <a href={link.href} target="_blank" rel="noopener noreferrer" className={getDropdownLinkClassName(link.href)}>{link.label}</a>
+                    ) : (
                       <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            <DropdownMenu open={modernIntegratedLabOpen} onOpenChange={setModernIntegratedLabOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={modernIntegratedLabHandlers.handleOpen}
+                onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
+              >
+                <Button
+                  variant="ghost"
+                  className={getDropdownTriggerClassName("/modern-integrated-lab", modernIntegratedLabLinks, modernIntegratedLabOpen)}
+                >
+                  Modern Integrated Lab
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                onPointerEnter={modernIntegratedLabHandlers.cancelHide}
+                onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
+              >
+                {modernIntegratedLabLinks.map((link) => (
+                  <DropdownMenuItem key={link.label} asChild>
+                    <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-              <DropdownMenu open={developmentControlOpen} onOpenChange={setDevelopmentControlOpen}>
-                <DropdownMenuTrigger
-                  asChild
-                  onPointerEnter={developmentControlHandlers.handleOpen}
-                  onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
+            <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
+              <DropdownMenuTrigger
+                asChild
+                onPointerEnter={dataCenterHandlers.handleOpen}
+                onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+              >
+                <Button
+                  variant="ghost"
+                  className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
                 >
-                  <Button
-                    variant="ghost"
-                    className={getDropdownTriggerClassName("/development-control", developmentControlSubLinks, developmentControlOpen)}
-                  >
-                    Development Control
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
+                  Data Center
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuPortal>
                 <DropdownMenuContent
-                  onPointerEnter={developmentControlHandlers.cancelHide}
-                  onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
-                >
-                  {developmentControlSubLinks.map((link) => (
-                    <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu open={EServiceOpen} onOpenChange={setEServiceOpen}>
-                <DropdownMenuTrigger
-                  asChild
-                  onPointerEnter={EServiceHandlers.handleOpen}
-                  onPointerLeave={EServiceHandlers.handleCloseWithDelay}
-                >
-                  <Button
-                    variant="ghost"
-                    className={getDropdownTriggerClassName("/eservice", EServiceSubLinks, EServiceOpen)}
-                  >
-                    E-service
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onPointerEnter={EServiceHandlers.cancelHide}
-                  onPointerLeave={EServiceHandlers.handleCloseWithDelay}
-                >
-                  {EServiceSubLinks.map((link) => (
-                    <DropdownMenuItem key={link.label} asChild>
-                      {link.external ? (
-                        <a href={link.href} target="_blank" rel="noopener noreferrer" className={getDropdownLinkClassName(link.href)}>{link.label}</a>
-                      ) : (
-                        <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                      )}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              
-              <DropdownMenu open={modernIntegratedLabOpen} onOpenChange={setModernIntegratedLabOpen}>
-                <DropdownMenuTrigger
-                  asChild
-                  onPointerEnter={modernIntegratedLabHandlers.handleOpen}
-                  onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
-                >
-                  <Button
-                    variant="ghost"
-                    className={getDropdownTriggerClassName("/modern-integrated-lab", modernIntegratedLabLinks, modernIntegratedLabOpen)}
-                  >
-                    Modern Integrated Lab
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onPointerEnter={modernIntegratedLabHandlers.cancelHide}
-                  onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
-                >
-                  {modernIntegratedLabLinks.map((link) => (
-                    <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
-                <DropdownMenuTrigger
-                  asChild
-                  onPointerEnter={dataCenterHandlers.handleOpen}
+                  onPointerEnter={dataCenterHandlers.cancelHide}
                   onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
                 >
-                  <Button
-                    variant="ghost"
-                    className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
-                  >
-                    Data Center
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuContent
-                    onPointerEnter={dataCenterHandlers.cancelHide}
-                    onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
-                  >
-                    {dataCenterSubLinks.map((link) => (
-                      <DropdownMenuItem key={link.label} asChild>
-                        <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenuPortal>
-              </DropdownMenu>
+                  {dataCenterSubLinks.map((link) => (
+                    <DropdownMenuItem key={link.label} asChild>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenuPortal>
+            </DropdownMenu>
 
-              {mainNavLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className={getLinkClassName(link.href)}
-                  target={link.external ? "_blank" : undefined}
-                  rel={link.external ? "noopener noreferrer" : undefined}
-                >
-                  {link.icon && <link.icon className="mr-2 h-4 w-4" />}
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          )}
-          {isDesktopSearchInputVisible && (
-             <form onSubmit={handleDesktopSearchSubmit} className="flex items-center gap-2 ml-auto">
-              <Input
-                ref={desktopSearchInputRef}
-                type="search"
-                name="desktopSearch"
-                placeholder="Search..."
-                className="h-8 w-60 bg-background text-sm"
-              />
-              <Button type="submit" variant="ghost" size="icon" className="h-8 w-8 text-primary/70 hover:text-primary">
-                <Search className="h-4 w-4" />
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-primary/70 hover:text-primary"
-                onClick={() => setIsDesktopSearchInputVisible(false)}
+            {mainNavLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className={getLinkClassName(link.href)}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
               >
-                <XIcon className="h-4 w-4" />
-              </Button>
-            </form>
-          )}
-
+                {link.icon && <link.icon className="mr-2 h-4 w-4" />}
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          
           <div className="ml-auto flex items-center gap-2">
-               {!isDesktopSearchInputVisible && (
-                 <>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href="/login">
-                      <LogIn className="mr-2 h-4 w-4" /> Login
-                    </Link>
-                  </Button>
-                  <Separator orientation="vertical" className="h-6 mx-1" />
-                </>
-               )}
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/login">
+                <LogIn className="mr-2 h-4 w-4" /> Login
+              </Link>
+            </Button>
+            <Separator orientation="vertical" className="h-6 mx-1" />
             <Button
               variant="ghost"
               size="icon"
@@ -432,204 +373,162 @@ export default function Header() {
             >
               {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </Button>
-             {!isDesktopSearchInputVisible && (
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setIsDesktopSearchInputVisible(true)}
-                    className="text-primary/70 hover:text-primary"
-                    aria-label="Open search"
-                    >
-                    <Search className="h-5 w-5" />
-                </Button>
-             )}
           </div>
         </div>
 
         {/* Mobile Navigation Header Bar */}
-          <div className="flex w-full items-center justify-between md:hidden">
-            <Link href="/" className="flex items-center space-x-2">
-              <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
-              <span className="font-bold text-primary">
-                KASUPDA
-              </span>
-            </Link>
-            <div className="flex items-center">
-              <Dialog>
-                <DialogTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-primary/70 hover:text-primary mr-1"
-                        aria-label="Open search"
+        <div className="flex w-full items-center justify-between md:hidden">
+          <Link href="/" className="flex items-center space-x-2">
+            <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8" />
+            <span className="font-bold text-primary">
+              KASUPDA
+            </span>
+          </Link>
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="text-primary/70 hover:text-primary mr-1"
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Toggle Menu"
+                  className="text-primary/70 hover:text-primary"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="pr-0 pt-0 flex flex-col">
+                <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10">
+                  {/* <SheetTitle className="text-lg font-semibold text-primary">Menu</SheetTitle> */}
+                </SheetHeader>
+                <Separator className="my-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/>
+                <div className="flex-grow overflow-y-auto pb-8">
+                  <nav> 
+                    <Link
+                      href="/"
+                      className={getMobileLinkClassName("/")}
                     >
-                        <Search className="h-5 w-5" />
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                    <UIDialogTitle>Search KASUPDA</UIDialogTitle>
-                    <DialogDescription>
-                        Enter your search terms below.
-                    </DialogDescription>
-                    </DialogHeader>
-                    <form 
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            const formData = new FormData(e.currentTarget);
-                            const searchTerm = formData.get("mobileSearch") as string;
-                            console.log("Mobile search term:", searchTerm);
-                            // Close dialog after search: document.querySelector('[data-radix-dialog-close]')?.click();
-                        }} 
-                        className="mt-2"
-                    >
-                        <Input name="mobileSearch" placeholder="e.g., building permits" className="mb-3" />
-                        <Button type="submit" className="w-full">Search</Button>
-                    </form>
-                </DialogContent>
-              </Dialog>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                className="text-primary/70 hover:text-primary mr-1"
-                aria-label="Toggle theme"
-              >
-                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-              </Button>
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label="Toggle Menu"
-                    className="text-primary/70 hover:text-primary"
-                  >
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="pr-0 pt-0 flex flex-col">
-                  <SheetHeader className="px-3 pt-6 pb-2 text-left sticky top-0 bg-background z-10">
-                    {/* <UISheetTitle className="text-lg font-semibold text-primary">Menu</UISheetTitle> */}
-                  </SheetHeader>
-                  <Separator className="my-2 sticky top-[calc(2.5rem+1.5rem)] bg-background z-10"/>
-                  <div className="flex-grow overflow-y-auto pb-8">
-                    <nav> 
-                      <Link
-                        href="/"
-                        className={getMobileLinkClassName("/")}
-                      >
-                        Home
-                      </Link>
-                      <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="planning-dev" className="border-b-0">
-                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(planningSubLinks), "px-3")}>
-                            Planning and Development
-                          </AccordionTrigger>
-                          <AccordionContent className="pl-4 pb-1">
-                            {planningSubLinks.map((link) => (
-                              <Link
-                                key={link.label}
-                                href={link.href}
-                                className={getMobileSubLinkClassName(link.href)}
-                              >
-                                {link.label}
-                              </Link>
-                            ))}
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="development-control" className="border-b-0">
-                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(developmentControlSubLinks), "px-3")}>
-                            Development Control
-                          </AccordionTrigger>
-                          <AccordionContent className="pl-4 pb-1">
-                            {developmentControlSubLinks.map((link) => (
-                              <Link
-                                key={link.label}
-                                href={link.href}
-                                className={getMobileSubLinkClassName(link.href)}
-                              >
-                                {link.label}
-                              </Link>
-                            ))}
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="e-service" className="border-b-0">
-                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(EServiceSubLinks), "px-3")}>
-                            E-service
-                          </AccordionTrigger>
-                          <AccordionContent className="pl-4 pb-1">
-                            {EServiceSubLinks.map((link) => (
-                              link.external ? (
-                                  <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={getMobileSubLinkClassName(link.href)}>{link.label}</a>
-                                ) : (
-                                  <Link key={link.label} href={link.href} className={getMobileSubLinkClassName(link.href)}>{link.label}</Link>
-                                )
-                            ))}
-                          </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="modern-integrated-lab" className="border-b-0">
-                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(modernIntegratedLabLinks), "px-3")}>
-                            Modern Integrated Lab
-                          </AccordionTrigger>
-                          <AccordionContent className="pl-4 pb-1">
-                            {modernIntegratedLabLinks.map((link) => (
-                              <Link
-                                key={link.label}
-                                href={link.href}
-                                className={getMobileSubLinkClassName(link.href)}
-                              >
-                                {link.label}
-                              </Link>
-                            ))}
-                          </AccordionContent>
-                        </AccordionItem>
-                         <AccordionItem value="data-center" className="border-b-0">
-                          <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(dataCenterSubLinks), "px-3")}>
-                            Data Center
-                          </AccordionTrigger>
-                          <AccordionContent className="pl-4 pb-1">
-                            {dataCenterSubLinks.map((link) => (
-                              <Link
-                                key={link.label}
-                                href={link.href}
-                                className={getMobileSubLinkClassName(link.href)}
-                              >
-                                {link.label}
-                              </Link>
-                            ))}
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
-
-                      {mainNavLinks.map((link) => (
-                         <Link
-                          key={link.label}
-                          href={link.href}
-                          className={getMobileLinkClassName(link.href)}
-                          target={link.external ? "_blank" : undefined}
-                          rel={link.external ? "noopener noreferrer" : undefined}
-                        >
-                          {link.icon && <link.icon className="inline-block mr-2 h-4 w-4" />}{/* Ensure icon rendering */}
-                          {link.label}
-                        </Link>
-                      ))}
-                      <Separator className="my-4" />
-                      <div className="px-3 space-y-2">
-                          <Button variant="outline" className="w-full justify-start" asChild>
-                            <Link href="/login">
-                              <LogIn className="mr-2 h-4 w-4" /> Login
+                      Home
+                    </Link>
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="planning-dev" className="border-b-0">
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(planningSubLinks), "px-3")}>
+                          Planning and Development
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-4 pb-1">
+                          {planningSubLinks.map((link) => (
+                            <Link
+                              key={link.label}
+                              href={link.href}
+                              className={getMobileSubLinkClassName(link.href)}
+                            >
+                              {link.label}
                             </Link>
-                          </Button>
-                        </div>
-                    </nav>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="development-control" className="border-b-0">
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(developmentControlSubLinks), "px-3")}>
+                          Development Control
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-4 pb-1">
+                          {developmentControlSubLinks.map((link) => (
+                            <Link
+                              key={link.label}
+                              href={link.href}
+                              className={getMobileSubLinkClassName(link.href)}
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="e-service" className="border-b-0">
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(EServiceSubLinks), "px-3")}>
+                          E-service
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-4 pb-1">
+                          {EServiceSubLinks.map((link) => (
+                            link.external ? (
+                                <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={getMobileSubLinkClassName(link.href)}>{link.label}</a>
+                              ) : (
+                                <Link key={link.label} href={link.href} className={getMobileSubLinkClassName(link.href)}>{link.label}</Link>
+                              )
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="modern-integrated-lab" className="border-b-0">
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(modernIntegratedLabLinks), "px-3")}>
+                           Modern Integrated Lab
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-4 pb-1">
+                          {modernIntegratedLabLinks.map((link) => (
+                            <Link
+                              key={link.label}
+                              href={link.href}
+                              className={getMobileSubLinkClassName(link.href)}
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                       <AccordionItem value="data-center" className="border-b-0">
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(dataCenterSubLinks), "px-3")}>
+                          Data Center
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-4 pb-1">
+                          {dataCenterSubLinks.map((link) => (
+                            <Link
+                              key={link.label}
+                              href={link.href}
+                              className={getMobileSubLinkClassName(link.href)}
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+
+                    {mainNavLinks.map((link) => (
+                       <Link
+                        key={link.label}
+                        href={link.href}
+                        className={getMobileLinkClassName(link.href)}
+                        target={link.external ? "_blank" : undefined}
+                        rel={link.external ? "noopener noreferrer" : undefined}
+                      >
+                        {link.icon && <link.icon className="inline-block mr-2 h-4 w-4" />}{/* Ensure icon rendering */}
+                        {link.label}
+                      </Link>
+                    ))}
+                    <Separator className="my-4" />
+                    <div className="px-3 space-y-2">
+                        <Button variant="outline" className="w-full justify-start" asChild>
+                          <Link href="/login">
+                            <LogIn className="mr-2 h-4 w-4" /> Login
+                          </Link>
+                        </Button>
+                      </div>
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
+        </div>
       </div>
     </header>
   );
 }
+    
+
     
