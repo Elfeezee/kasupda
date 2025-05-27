@@ -118,11 +118,16 @@ export default function ResidentialBuildingPermitPage() {
     mode: "onChange", 
     defaultValues: { 
       title: "",
+      firstName: "",
       middleName: "",
+      surname: "",
+      // gender: undefined, // Let zod handle default or required error
+      // dateOfBirth: undefined,
       occupation: "",
       nationality: "Nigerian",
       stateOfOrigin: "",
       localGov: "",
+      phone1: "",
       phone2: "",
       phone3: "",
       email: "",
@@ -170,6 +175,7 @@ export default function ResidentialBuildingPermitPage() {
       purpose: "",
       plotDistrict: "",
       plotLGA: "",
+      plotDescriptionAddress: "",
     }
   });
 
@@ -222,7 +228,7 @@ export default function ResidentialBuildingPermitPage() {
             This Form is FREE
           </p>
           <p className="text-center text-xs sm:text-sm mb-4">
-            An application processing fee of N10,000 must be paid before or at the point of submission of the Permission Application.
+            An application processing fee of N10,000 must be paid before or at the point of submission of the Permit Application.
           </p>
         </CardContent>
       </Card>
@@ -265,7 +271,7 @@ export default function ResidentialBuildingPermitPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl">BOX 1: APPLICANT</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">The person whose name would be reflected on the Building Permission. Original identification document must be submitted.</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">The person whose name would be reflected on the Building Permit. Original identification document must be submitted.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -671,5 +677,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+    
 
     

@@ -108,7 +108,9 @@ export default function CommercialIndustrialOtherPermitPage() {
       orgTaxIdNumber: "",
       orgEmail: "",
       ceoTitle: "",
+      ceoFirstName: "",
       ceoMiddleName: "",
+      ceoSurname: "",
       ceoDesignation: "",
       ceoPhone: "",
       ceoEmail: "",
@@ -176,7 +178,7 @@ export default function CommercialIndustrialOtherPermitPage() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="text-xl sm:text-2xl font-bold text-center text-primary">
-            Application For Grant of Building Permission (For Organisation)
+            Application For Grant of Building Permit (For Organisation)
           </CardTitle>
           <CardDescription className="text-center text-sm sm:text-base">
             Kaduna State Urban Planning and Development Authority
@@ -188,7 +190,7 @@ export default function CommercialIndustrialOtherPermitPage() {
             Fill in CAPITAL LETTERS and tick the appropriate items. DO NOT FOLD this form.
           </p>
           <p className="text-center text-xs sm:text-sm mb-4">
-            An application processing fee of N10,000 must be paid before or at the point of submission of the Permission Application.
+            An application processing fee of N10,000 must be paid before or at the point of submission of the Permit Application.
           </p>
           <Card className="bg-muted/50 p-4">
             <CardTitle className="text-base font-semibold text-center mb-2">FOR OFFICIAL USE ONLY</CardTitle>
@@ -551,3 +553,6 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+
+    
