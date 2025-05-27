@@ -75,6 +75,32 @@ const bpoPermitApplicationSchema = z.object({
     driversLicense: z.boolean().optional(),
   }).optional().default({}),
   repIdNumber: z.string().optional(),
+
+  // Box 4: PLOT
+  plotLandUse: z.string().optional(),
+  plotPurpose: z.string().optional(),
+  plotDistrict: z.string().optional(),
+  plotLGA: z.string().optional(),
+  plotDescriptionAddress: z.string().min(1, "Plot Description/Address is required"),
+
+  // Box 5: REQUIRED DOCUMENTS
+  docDigitalCertOfOccupancy: z.boolean().optional().default(false),
+  docKadgisAcknowledgement: z.boolean().optional().default(false),
+  docStructuralCalculations: z.boolean().optional().default(false),
+  docArchitecturalDrawings: z.boolean().optional().default(false),
+  docMechanicalElectricalDrawings: z.boolean().optional().default(false),
+  docStructuralDrawings: z.boolean().optional().default(false),
+  docSiteAnalysisReport: z.boolean().optional().default(false),
+  docKepasEnvImpactAssessment: z.boolean().optional().default(false),
+  docKadgisDlaSketchPlan: z.boolean().optional().default(false),
+  docSoilInvestigationReport: z.boolean().optional().default(false),
+  docServiceApprovals: z.boolean().optional().default(false),
+  docTaxClearanceCert: z.boolean().optional().default(false),
+  
+  // Box 6: SIGNATURE (as Declaration)
+  declaration: z.boolean().refine(val => val === true, {
+    message: "You must agree to the declaration to submit the application."
+  })
 });
 
 type BpoPermitApplicationFormValues = z.infer<typeof bpoPermitApplicationSchema>;
@@ -87,11 +113,29 @@ const identificationOptions = [
   { id: "driversLicense" as const, label: "Driver's License" },
 ];
 
+const requiredDocumentsList = [
+    { id: "docDigitalCertOfOccupancy" as const, label: "Copy of the Digital Certificate of Occupancy (KADGIS)" },
+    { id: "docKadgisAcknowledgement" as const, label: "Copy of KADGIS Acknowledgement Letter (in case you applied for digital CofO)" },
+    { id: "docStructuralCalculations" as const, label: "Copy of Structural Calculations" },
+    { id: "docArchitecturalDrawings" as const, label: "Copy of Architectural Drawings and Details" },
+    { id: "docMechanicalElectricalDrawings" as const, label: "Copy of Mechanical/Electrical Drawings and Details" },
+    { id: "docStructuralDrawings" as const, label: "Copy of Structural Drawings" },
+    { id: "docSiteAnalysisReport" as const, label: "Site Analysis Report" },
+    { id: "docKepasEnvImpactAssessment" as const, label: "Copy of KEPA's Environment Impact Assessment" },
+    { id: "docKadgisDlaSketchPlan" as const, label: "Copy of KADGIS DLA Sketch Plan" },
+    { id: "docSoilInvestigationReport" as const, label: "Soil Investigation Report" },
+    { id: "docServiceApprovals" as const, label: "Copy Of Service Approvals (Fire and Police Reports)" },
+    { id: "docTaxClearanceCert" as const, label: "Copy of Tax Clearance Certificate" },
+];
+
+
 const steps = [
   { id: 1, name: "Organisation Details", fields: ['orgName', 'orgPhone', 'ceoFirstName', 'ceoSurname'] as FieldName<BpoPermitApplicationFormValues>[] },
   { id: 2, name: "Organisation Address", fields: [] as FieldName<BpoPermitApplicationFormValues>[] }, 
   { id: 3, name: "Representative", fields: ['repEmail'] as FieldName<BpoPermitApplicationFormValues>[] },
-  // Add more steps as you upload more sections of the form
+  { id: 4, name: "Plot Details", fields: ['plotDescriptionAddress'] as FieldName<BpoPermitApplicationFormValues>[] },
+  { id: 5, name: "Required Documents", fields: [] as FieldName<BpoPermitApplicationFormValues>[] },
+  { id: 6, name: "Declaration", fields: ['declaration'] as FieldName<BpoPermitApplicationFormValues>[] },
 ];
 
 export default function CommercialIndustrialOtherPermitPage() {
@@ -105,6 +149,7 @@ export default function CommercialIndustrialOtherPermitPage() {
       kdlNumber: "",
       orgName: "",
       cacNumber: "",
+      // dateOfRegistration: undefined, // Will be handled by Controller
       orgTaxIdNumber: "",
       orgEmail: "",
       ceoTitle: "",
@@ -133,6 +178,24 @@ export default function CommercialIndustrialOtherPermitPage() {
       repEmail: "",
       repIdentificationType: {},
       repIdNumber: "",
+      plotLandUse: "",
+      plotPurpose: "",
+      plotDistrict: "",
+      plotLGA: "",
+      plotDescriptionAddress: "",
+      docDigitalCertOfOccupancy: false,
+      docKadgisAcknowledgement: false,
+      docStructuralCalculations: false,
+      docArchitecturalDrawings: false,
+      docMechanicalElectricalDrawings: false,
+      docStructuralDrawings: false,
+      docSiteAnalysisReport: false,
+      docKepasEnvImpactAssessment: false,
+      docKadgisDlaSketchPlan: false,
+      docSoilInvestigationReport: false,
+      docServiceApprovals: false,
+      docTaxClearanceCert: false,
+      declaration: false,
     }
   });
 
@@ -161,9 +224,6 @@ export default function CommercialIndustrialOtherPermitPage() {
     }
     if (currentStep < steps.length) {
       setCurrentStep(prev => prev + 1);
-    } else {
-      // If on last step, consider submitting or final validation
-      handleSubmit(onSubmit)();
     }
   };
 
@@ -207,7 +267,7 @@ export default function CommercialIndustrialOtherPermitPage() {
         <div className="flex items-start w-full min-w-[360px] sm:min-w-full">
           {steps.map((step, index) => (
             <React.Fragment key={step.id}>
-              <div className="flex flex-col items-center text-center px-0.5 sm:px-1 py-1 flex-shrink-0 w-1/3"> {/* Adjusted width for 3 steps */}
+              <div className="flex flex-col items-center text-center px-0.5 sm:px-1 py-1 flex-shrink-0" style={{width: `${100 / steps.length}%`}}>
                 <div
                   className={cn(
                     "w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300",
@@ -494,7 +554,116 @@ export default function CommercialIndustrialOtherPermitPage() {
           </Card>
         )}
 
-        {/* Add more steps here as you upload more form sections */}
+        {currentStep === 4 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg sm:text-xl">BOX 4: PLOT</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Please fill in the below information of the plot that has been or will be developed.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="plotLandUse">Land Use</Label>
+                  <Input id="plotLandUse" {...register("plotLandUse")} />
+                </div>
+                <div>
+                  <Label htmlFor="plotPurpose">Purpose</Label>
+                  <Input id="plotPurpose" {...register("plotPurpose")} />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="plotDistrict">District</Label>
+                  <Input id="plotDistrict" {...register("plotDistrict")} />
+                </div>
+                <div>
+                  <Label htmlFor="plotLGA">L.G.A</Label>
+                  <Input id="plotLGA" {...register("plotLGA")} />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="plotDescriptionAddress">Plot Description / Address*</Label>
+                <Textarea id="plotDescriptionAddress" {...register("plotDescriptionAddress")} />
+                {errors.plotDescriptionAddress && <p className="text-destructive text-xs mt-1">{errors.plotDescriptionAddress.message}</p>}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {currentStep === 5 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg sm:text-xl">BOX 5: REQUIRED DOCUMENTS</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
+                Applicants should submit all the relevant documents, with minimum requirement indicated below. If you have multiple relevant documents, please submit them and tick the documents that you acquire. 
+                <strong className="text-primary"> Please note that any drawings should be endorsed by a relevant professional.</strong>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+                {requiredDocumentsList.map(doc => (
+                  <div key={doc.id} className="flex items-start space-x-2">
+                     <Controller
+                        name={doc.id}
+                        control={control}
+                        render={({ field }) => (
+                            <Checkbox
+                                id={doc.id}
+                                checked={!!field.value}
+                                onCheckedChange={field.onChange}
+                                className="mt-1"
+                            />
+                        )}
+                    />
+                    <Label htmlFor={doc.id} className="font-normal text-xs sm:text-sm">
+                        {doc.label}
+                        {doc.id === 'docKadgisAcknowledgement' && <span className="block text-muted-foreground text-[10px] sm:text-xs">(in case you applied for digital CofO)</span>}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {currentStep === 6 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg sm:text-xl">BOX 6: SIGNATURE / DECLARATION</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
+                All applicants must affix their signature; the application will not be accepted without signature. In the case of a representative, they must also affix their signature.
+                By checking the box below, you confirm that the information provided is true and accurate to the best of your knowledge.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="flex items-start space-x-2 p-4 border rounded-md bg-muted/30">
+                    <Controller
+                        name="declaration"
+                        control={control}
+                        render={({ field }) => (
+                            <Checkbox
+                                id="declaration"
+                                checked={!!field.value}
+                                onCheckedChange={field.onChange}
+                                className="mt-1"
+                            />
+                        )}
+                    />
+                    <Label htmlFor="declaration" className="font-normal text-sm sm:text-base leading-snug">
+                        I, the applicant or duly authorized representative, declare that the information provided in this application and any attached documents is true, correct, and complete to the best of my knowledge and belief. I understand that any false statement may result in the rejection of this application or revocation of any permit granted.
+                    </Label>
+                </div>
+                {errors.declaration && <p className="text-destructive text-xs mt-1 px-1">{errors.declaration.message}</p>}
+                <p className="text-sm text-muted-foreground px-1">
+                    Applicant Signature: <span className="font-medium">[Digital acceptance via checkbox]</span>
+                </p>
+                <p className="text-sm text-muted-foreground px-1">
+                    Representative Signature: <span className="font-medium">[Digital acceptance via checkbox, if representative details filled]</span>
+                </p>
+            </CardContent>
+          </Card>
+        )}
+
 
         <CardFooter className="flex flex-col items-center space-y-4 pt-6">
             <div className="flex w-full flex-col sm:flex-row sm:justify-between gap-2">
@@ -553,6 +722,3 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-
-    
