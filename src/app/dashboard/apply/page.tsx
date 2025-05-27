@@ -4,17 +4,17 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Tent, UserCheck, MessageSquareWarning, ArrowRight, FilePlus2 } from 'lucide-react';
+import { FileText, Tent, UserCheck, MessageSquareWarning, ArrowRight, FilePlus2, Building } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
 const permitTypes = [
   {
-    title: 'Building Permit Application', // Changed here
-    description: 'Apply for permits for new residential, commercial, or industrial buildings.',
-    icon: FileText,
-    href: '/dashboard/apply/residential-building-permit', 
-    actionText: 'Start Application',
+    title: 'Building Permit Application',
+    description: 'Apply for permits for new residential, commercial, or other types of buildings.',
+    icon: Building, // Changed icon to Building for general building permits
+    href: '/dashboard/apply/building-permit', // Updated link to sub-selection page
+    actionText: 'Select Category',
   },
   {
     title: 'Temporary Building Permit Application',
