@@ -19,10 +19,10 @@ const buildingPermitCategories = [
   {
     title: 'Commercial/Industrial/Other Permit',
     description: 'For offices, retail spaces, factories, public buildings, mixed-use, and other non-residential structures.',
-    icon: Briefcase, // Or use Building icon
-    href: '#', // Placeholder for the second form you will provide
+    icon: Briefcase,
+    href: '/dashboard/apply/commercial-industrial-other-permit', 
     actionText: 'Start Application',
-    disabled: true, // Will be enabled once you provide the form
+    disabled: false, 
   },
 ];
 
