@@ -135,10 +135,10 @@ export default function CommercialIndustrialOtherPermitPage() {
   });
 
   const onSubmit = (data: BpoPermitApplicationFormValues) => {
-    console.log("Commercial/Industrial/Other Permit Form Data:", data);
+    console.log("Building Permit for Organization Form Data:", data);
     toast({
       title: "Application Submitted (Simulated)",
-      description: "Your Commercial/Industrial/Other permit application has been received for processing.",
+      description: "Your Building Permit for Organization application has been received for processing.",
       duration: 5000,
     });
     // Potentially redirect or clear form
@@ -176,7 +176,7 @@ export default function CommercialIndustrialOtherPermitPage() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="text-xl sm:text-2xl font-bold text-center text-primary">
-            Application For Grant of Building Permission (BPO)
+            Application For Grant of Building Permission (For Organisation)
           </CardTitle>
           <CardDescription className="text-center text-sm sm:text-base">
             Kaduna State Urban Planning and Development Authority

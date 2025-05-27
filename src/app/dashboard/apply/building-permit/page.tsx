@@ -17,11 +17,11 @@ const buildingPermitCategories = [
     actionText: 'Start Residential Application',
   },
   {
-    title: 'Commercial/Industrial/Other Permit',
-    description: 'For offices, retail spaces, factories, public buildings, mixed-use, and other non-residential structures.',
+    title: 'Building permit for organization',
+    description: 'For offices, retail spaces, factories, public buildings, mixed-use, and other non-residential structures by organizations.',
     icon: Briefcase,
     href: '/dashboard/apply/commercial-industrial-other-permit', 
-    actionText: 'Start Application',
+    actionText: 'Start Organization Application',
     disabled: false, 
   },
 ];
