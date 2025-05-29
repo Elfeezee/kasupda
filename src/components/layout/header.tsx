@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, LogIn, Home as HomeIcon, FileText as FileTextIcon, Settings, Server, Info, Newspaper, Phone as PhoneIcon } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, LogIn, Home as HomeIcon, MapPin, FileText, Settings, Server, Info, Newspaper, Phone as PhoneIcon, UserPlus, Globe, Search as SearchIcon, X as XIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -35,6 +35,9 @@ import { Separator } from "@/components/ui/separator";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/context/theme-provider";
+import { Dialog, DialogContent, DialogHeader, DialogTitle as UIDialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+
 
 export default function Header() {
   const pathname = usePathname();
@@ -55,6 +58,9 @@ export default function Header() {
   const [dataCenterOpen, setDataCenterOpen] = useState(false);
   const dataCenterHideTimer = useRef<number | null>(null);
   
+  const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
+  const desktopSearchInputRef = useRef<HTMLInputElement>(null);
+
 
   const HOVER_DELAY = 150; // ms
 
@@ -67,6 +73,12 @@ export default function Header() {
       if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (isDesktopSearchInputVisible && desktopSearchInputRef.current) {
+      desktopSearchInputRef.current.focus();
+    }
+  }, [isDesktopSearchInputVisible]);
 
   const createMenuHandlers = (
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -123,7 +135,6 @@ export default function Header() {
 
   const dataCenterSubLinks = [
     { href: "#", label: "Development Register" },
-    { href: "#", label: "Purchase of Data" },
   ];
 
   const mainNavLinks = [
@@ -143,7 +154,7 @@ export default function Header() {
   };
 
   const getDropdownTriggerClassName = (currentPathSegment: string, subLinks: { href: string }[], isOpen: boolean) => {
-    const isActivePath = subLinks.some(link => pathname === link.href) || pathname.startsWith(currentPathSegment);
+    const isActivePath = subLinks.some(link => pathname === link.href || (link.href !== "#" && pathname.startsWith(link.href))) || pathname.startsWith(currentPathSegment);
     return cn(
       "transition-colors px-3 py-2 h-auto font-normal text-sm focus-visible:ring-0 focus-visible:ring-offset-0", 
       (isActivePath || isOpen)
@@ -187,6 +198,15 @@ export default function Header() {
     );
   };
 
+  const handleDesktopSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const searchTerm = formData.get('desktopSearch') as string;
+    console.log("Desktop search term:", searchTerm);
+    // Add actual search logic here
+    setIsDesktopSearchInputVisible(false); // Close search input after "submit"
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -199,165 +219,191 @@ export default function Header() {
             </span>
           </Link>
 
-          <nav className="flex items-center gap-1 text-sm">
-            <Link
-              href="/"
-              className={getLinkClassName("/")}
-            >
-              Home
-            </Link>
+          {!isDesktopSearchInputVisible && (
+            <nav className="flex items-center gap-1 text-sm">
+              <Link
+                href="/"
+                className={getLinkClassName("/")}
+              >
+                Home
+              </Link>
 
-            <DropdownMenu open={planningOpen} onOpenChange={setPlanningOpen}>
-              <DropdownMenuTrigger
-                asChild
-                onPointerEnter={planningHandlers.handleOpen}
-                onPointerLeave={planningHandlers.handleCloseWithDelay}
-              >
-                <Button
-                  variant="ghost"
-                  className={getDropdownTriggerClassName("/planning", planningSubLinks, planningOpen)}
+              <DropdownMenu open={planningOpen} onOpenChange={setPlanningOpen}>
+                <DropdownMenuTrigger
+                  asChild
+                  onPointerEnter={planningHandlers.handleOpen}
+                  onPointerLeave={planningHandlers.handleCloseWithDelay}
                 >
-                  Planning and Development
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                onPointerEnter={planningHandlers.cancelHide}
-                onPointerLeave={planningHandlers.handleCloseWithDelay}
-              >
-                {planningSubLinks.map((link) => (
-                  <DropdownMenuItem key={link.label} asChild>
-                    <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu open={developmentControlOpen} onOpenChange={setDevelopmentControlOpen}>
-              <DropdownMenuTrigger
-                asChild
-                onPointerEnter={developmentControlHandlers.handleOpen}
-                onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
-              >
-                <Button
-                  variant="ghost"
-                  className={getDropdownTriggerClassName("/development-control", developmentControlSubLinks, developmentControlOpen)}
-                >
-                  Development Control
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                onPointerEnter={developmentControlHandlers.cancelHide}
-                onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
-              >
-                {developmentControlSubLinks.map((link) => (
-                  <DropdownMenuItem key={link.label} asChild>
-                    <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu open={EServiceOpen} onOpenChange={setEServiceOpen}>
-              <DropdownMenuTrigger
-                asChild
-                onPointerEnter={EServiceHandlers.handleOpen}
-                onPointerLeave={EServiceHandlers.handleCloseWithDelay}
-              >
-                <Button
-                  variant="ghost"
-                  className={getDropdownTriggerClassName("/eservice", EServiceSubLinks, EServiceOpen)}
-                >
-                  E-service
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                onPointerEnter={EServiceHandlers.cancelHide}
-                onPointerLeave={EServiceHandlers.handleCloseWithDelay}
-              >
-                {EServiceSubLinks.map((link) => (
-                  <DropdownMenuItem key={link.label} asChild>
-                    {link.external ? (
-                      <a href={link.href} target="_blank" rel="noopener noreferrer" className={getDropdownLinkClassName(link.href)}>{link.label}</a>
-                    ) : (
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                    )}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <DropdownMenu open={modernIntegratedLabOpen} onOpenChange={setModernIntegratedLabOpen}>
-              <DropdownMenuTrigger
-                asChild
-                onPointerEnter={modernIntegratedLabHandlers.handleOpen}
-                onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
-              >
-                <Button
-                  variant="ghost"
-                  className={getDropdownTriggerClassName("/modern-integrated-lab", modernIntegratedLabLinks, modernIntegratedLabOpen)}
-                >
-                  Modern Integrated Lab
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                onPointerEnter={modernIntegratedLabHandlers.cancelHide}
-                onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
-              >
-                {modernIntegratedLabLinks.map((link) => (
-                  <DropdownMenuItem key={link.label} asChild>
-                    <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
-              <DropdownMenuTrigger
-                asChild
-                onPointerEnter={dataCenterHandlers.handleOpen}
-                onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
-              >
-                <Button
-                  variant="ghost"
-                  className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
-                >
-                  Data Center
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuPortal>
+                  <Button
+                    variant="ghost"
+                    className={getDropdownTriggerClassName("/planning", planningSubLinks, planningOpen)}
+                  >
+                    Planning and Development
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  onPointerEnter={dataCenterHandlers.cancelHide}
-                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+                  onPointerEnter={planningHandlers.cancelHide}
+                  onPointerLeave={planningHandlers.handleCloseWithDelay}
                 >
-                  {dataCenterSubLinks.map((link) => (
+                  {planningSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
                       <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
-              </DropdownMenuPortal>
-            </DropdownMenu>
+              </DropdownMenu>
 
-            {mainNavLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={getLinkClassName(link.href)}
-                target={link.external ? "_blank" : undefined}
-                rel={link.external ? "noopener noreferrer" : undefined}
-              >
-                {link.icon && <link.icon className="mr-2 h-4 w-4" />}
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+              <DropdownMenu open={developmentControlOpen} onOpenChange={setDevelopmentControlOpen}>
+                <DropdownMenuTrigger
+                  asChild
+                  onPointerEnter={developmentControlHandlers.handleOpen}
+                  onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
+                >
+                  <Button
+                    variant="ghost"
+                    className={getDropdownTriggerClassName("/development-control", developmentControlSubLinks, developmentControlOpen)}
+                  >
+                    Development Control
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  onPointerEnter={developmentControlHandlers.cancelHide}
+                  onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
+                >
+                  {developmentControlSubLinks.map((link) => (
+                    <DropdownMenuItem key={link.label} asChild>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu open={EServiceOpen} onOpenChange={setEServiceOpen}>
+                <DropdownMenuTrigger
+                  asChild
+                  onPointerEnter={EServiceHandlers.handleOpen}
+                  onPointerLeave={EServiceHandlers.handleCloseWithDelay}
+                >
+                  <Button
+                    variant="ghost"
+                    className={getDropdownTriggerClassName("/eservice", EServiceSubLinks, EServiceOpen)}
+                  >
+                    E-service
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  onPointerEnter={EServiceHandlers.cancelHide}
+                  onPointerLeave={EServiceHandlers.handleCloseWithDelay}
+                >
+                  {EServiceSubLinks.map((link) => (
+                    <DropdownMenuItem key={link.label} asChild>
+                      {link.external ? (
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" className={getDropdownLinkClassName(link.href)}>{link.label}</a>
+                      ) : (
+                        <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              <DropdownMenu open={modernIntegratedLabOpen} onOpenChange={setModernIntegratedLabOpen}>
+                <DropdownMenuTrigger
+                  asChild
+                  onPointerEnter={modernIntegratedLabHandlers.handleOpen}
+                  onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
+                >
+                  <Button
+                    variant="ghost"
+                    className={getDropdownTriggerClassName("/modern-integrated-lab", modernIntegratedLabLinks, modernIntegratedLabOpen)}
+                  >
+                    Modern Integrated Lab
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  onPointerEnter={modernIntegratedLabHandlers.cancelHide}
+                  onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
+                >
+                  {modernIntegratedLabLinks.map((link) => (
+                    <DropdownMenuItem key={link.label} asChild>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
+                <DropdownMenuTrigger
+                  asChild
+                  onPointerEnter={dataCenterHandlers.handleOpen}
+                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+                >
+                  <Button
+                    variant="ghost"
+                    className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
+                  >
+                    Data Center
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuContent
+                    onPointerEnter={dataCenterHandlers.cancelHide}
+                    onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
+                  >
+                    {dataCenterSubLinks.map((link) => (
+                      <DropdownMenuItem key={link.label} asChild>
+                        <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenuPortal>
+              </DropdownMenu>
+
+              {mainNavLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={getLinkClassName(link.href)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          )}
           
-          <div className="ml-auto flex items-center gap-2">
+          {isDesktopSearchInputVisible && (
+            <form onSubmit={handleDesktopSearchSubmit} className="flex items-center gap-2 ml-auto">
+              <Input
+                ref={desktopSearchInputRef}
+                type="search"
+                name="desktopSearch"
+                placeholder="Search..."
+                className="h-8 w-60 text-sm"
+              />
+              <Button type="submit" variant="ghost" size="icon" className="h-8 w-8 text-primary/70 hover:text-primary">
+                <SearchIcon className="h-4 w-4" />
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-primary/70 hover:text-primary"
+                onClick={() => setIsDesktopSearchInputVisible(false)}
+              >
+                <XIcon className="h-4 w-4" />
+              </Button>
+            </form>
+          )}
+
+          <div className={cn("ml-auto flex items-center gap-2", isDesktopSearchInputVisible && "hidden")}>
+             <Button variant="ghost" size="icon" onClick={() => setIsDesktopSearchInputVisible(true)} className="text-primary/70 hover:text-primary">
+              <SearchIcon className="h-5 w-5" />
+            </Button>
             <Button variant="outline" size="sm" asChild>
               <Link href="/login">
                 <LogIn className="mr-2 h-4 w-4" /> Login
@@ -504,10 +550,7 @@ export default function Header() {
                         key={link.label}
                         href={link.href}
                         className={getMobileLinkClassName(link.href)}
-                        target={link.external ? "_blank" : undefined}
-                        rel={link.external ? "noopener noreferrer" : undefined}
                       >
-                        {link.icon && <link.icon className="inline-block mr-2 h-4 w-4" />}{/* Ensure icon rendering */}
                         {link.label}
                       </Link>
                     ))}
@@ -529,6 +572,4 @@ export default function Header() {
     </header>
   );
 }
-    
-
     
