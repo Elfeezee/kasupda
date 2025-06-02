@@ -21,7 +21,7 @@ const temporaryPermitCategories = [
     title: 'Outdoor Structure Permit',
     description: 'For temporary outdoor installations like kiosks, canopies, or event structures.',
     icon: Construction, 
-    href: '/dashboard/apply/outdoor-advertisement-structure-permit', // This was the previous outdoor structure form
+    href: '/dashboard/apply/outdoor-advertisement-structure-permit', 
     actionText: 'Start Application',
     disabled: false,
   },
@@ -37,17 +37,17 @@ const temporaryPermitCategories = [
     title: 'Outdoor Advertisement Permit',
     description: 'Permits for billboards, signages, and other outdoor advertising displays.',
     icon: Megaphone,
-    href: '/dashboard/apply/outdoor-advertisement-permit', // New link for this form
+    href: '/dashboard/apply/outdoor-advertisement-permit', 
     actionText: 'Start Application',
-    disabled: false, // Enabling this
+    disabled: false, 
   },
   {
     title: 'Shop Owners Permit',
     description: 'Permits required for operating various types of shops and small businesses.',
     icon: Store,
-    href: '#',
+    href: '/dashboard/apply/shop-owners-permit',
     actionText: 'Start Application',
-    disabled: true,
+    disabled: false,
   },
 ];
 
