@@ -237,20 +237,8 @@ export default function StreetNamingPermitPage() {
           <CardTitle className="text-xl sm:text-2xl font-bold text-primary">
             Application For Grant of Street Naming Permit
           </CardTitle>
-          <CardDescription className="text-center text-xs sm:text-sm mt-2">
-            Fill in CAPITAL LETTERS and tick the appropriate items. DO NOT FOLD this form.
-            <br />
-            An application processing fee of N50,000 must be paid before or at the point of submission of the Permit Application.
-          </CardDescription>
-           <Alert variant="default" className="mt-3 text-xs text-left bg-primary/5 border-primary/20">
-            <Info className="h-4 w-4 text-primary" />
-            <AlertDescription className="text-primary/80">
-              Please attach a Passport Picture that will be used for the Permit. Do not pin the face.
-            </AlertDescription>
-          </Alert>
         </CardHeader>
         <CardContent>
-          <p className="text-center text-sm text-destructive font-semibold mb-4">This Form is FREE</p>
           <Card className="bg-muted/50 p-4">
             <CardTitle className="text-base font-semibold text-center mb-2">FOR OFFICIAL USE ONLY</CardTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
