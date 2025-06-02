@@ -21,25 +21,25 @@ const temporaryPermitCategories = [
     title: 'Outdoor Structure Permit',
     description: 'For temporary outdoor installations like kiosks, canopies, or event structures.',
     icon: Construction, 
-    href: '/dashboard/apply/outdoor-advertisement-structure-permit', // Points to the form previously for "Advertisement"
+    href: '/dashboard/apply/outdoor-advertisement-structure-permit',
     actionText: 'Start Application',
-    disabled: false, // Enabled
+    disabled: false,
   },
   {
     title: 'Mast Permit',
     description: 'Application for installation of telecommunication masts and towers.',
     icon: TowerControl,
-    href: '#',
+    href: '/dashboard/apply/mast-permit', // Updated href
     actionText: 'Start Application',
-    disabled: true,
+    disabled: false, // Enabled
   },
   {
     title: 'Outdoor Advertisement Permit',
     description: 'Permits for billboards, signages, and other outdoor advertising structures.',
     icon: Megaphone,
-    href: '#', // Reset, specific form for this (if different) is pending
+    href: '#',
     actionText: 'Start Application',
-    disabled: true, // Disabled for now
+    disabled: true,
   },
   {
     title: 'Shop Owners Permit',
@@ -109,3 +109,4 @@ export default function SelectTemporaryPermitCategoryPage() {
     </div>
   );
 }
+
