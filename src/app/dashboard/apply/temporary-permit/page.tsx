@@ -13,9 +13,9 @@ const temporaryPermitCategories = [
     title: 'Street Naming Permit',
     description: 'Apply for official naming of streets or roads.',
     icon: Milestone,
-    href: '#', 
+    href: '/dashboard/apply/street-naming-permit', 
     actionText: 'Start Application',
-    disabled: true, 
+    disabled: false, 
   },
   {
     title: 'Outdoor Structure Permit',
@@ -109,3 +109,4 @@ export default function SelectTemporaryPermitCategoryPage() {
     </div>
   );
 }
+
