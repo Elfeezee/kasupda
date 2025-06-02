@@ -462,13 +462,13 @@ export default function CommercialIndustrialOtherPermitPage() {
                 </div>
                 <div>
                   <Label htmlFor="orgState">State</Label>
-                  <Input id="orgState" {...register("orgState")} />
+                  <Input id="orgState" {...register("orgState")} defaultValue="Kaduna" />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <Label htmlFor="orgCountry">Country</Label>
-                  <Input id="orgCountry" {...register("orgCountry")} />
+                  <Input id="orgCountry" {...register("orgCountry")} defaultValue="Nigeria" />
                 </div>
                 <div>
                   <Label htmlFor="orgPOBox">P.O./P.M.B.</Label>
@@ -491,7 +491,7 @@ export default function CommercialIndustrialOtherPermitPage() {
            <Card>
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl">BOX 3: REPRESENTATIVE (Optional)</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">Applicants who wish to appoint a representative must complete this Box. Original identification document of representative is required.</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">Applicants who wish to appoint a representative must complete Box 3 in full. The original identification document used to prove the identity of the representative must be submitted; it will be copied and returned. Applicants Note: the representative is authorised to submit and receive information and documents pertaining to this application.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -695,7 +695,7 @@ export default function CommercialIndustrialOtherPermitPage() {
             </div>
           <Separator className="my-2" />
            <p className="text-xs text-muted-foreground text-center">
-            KASUPDA Regulations, 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.4 2028
+            KASUPDA Regulations, 2028 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.4 2028
           </p>
         </CardFooter>
       </form>
@@ -722,3 +722,5 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+    
