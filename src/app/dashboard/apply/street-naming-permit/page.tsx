@@ -239,13 +239,7 @@ export default function StreetNamingPermitPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Card className="bg-muted/50 p-4">
-            <CardTitle className="text-base font-semibold text-center mb-2">FOR OFFICIAL USE ONLY</CardTitle>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div><span className="font-medium">Application Date:</span> ______ / ______ / ______ (Day / Month / Year)</div>
-              <div><span className="font-medium">Application Fees:</span> [ ] Application Processing Fee</div>
-            </div>
-          </Card>
+          {/* "FOR OFFICIAL USE ONLY" section removed */}
         </CardContent>
       </Card>
 
