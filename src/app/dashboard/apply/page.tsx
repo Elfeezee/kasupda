@@ -12,17 +12,17 @@ const permitTypes = [
   {
     title: 'Building Permit Application',
     description: 'Apply for permits for new residential, commercial, or other types of buildings.',
-    icon: Building, // Changed icon to Building for general building permits
-    href: '/dashboard/apply/building-permit', // Updated link to sub-selection page
+    icon: Building,
+    href: '/dashboard/apply/building-permit', 
     actionText: 'Select Category',
   },
   {
-    title: 'Temporary Building Permit Application',
-    description: 'Permits for temporary structures, events, or extensions.',
-    icon: Tent,
-    href: '#', 
-    actionText: 'Start Application',
-    disabled: true,
+    title: 'Temporary Permit Application', // Updated title
+    description: 'Permits for street naming, outdoor structures, masts, advertisements, and shop owners.', // Updated description
+    icon: Tent, // Keeping Tent as the general icon for temporary permits group
+    href: '/dashboard/apply/temporary-permit', // Updated link to new sub-selection page
+    actionText: 'Select Category', // Updated action text
+    disabled: false, // Enabled this category
   },
   {
     title: 'Consultant Licensing', 
