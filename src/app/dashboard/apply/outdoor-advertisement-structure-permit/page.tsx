@@ -57,7 +57,7 @@ const requiredDocsList = [
 ];
 
 
-const outdoorAdvPermitSchema = z.object({
+const outdoorStructurePermitSchema = z.object({ // Renamed schema to reflect content
   kopNumber: z.string().optional(),
   // Box 1: Applicant
   companyName: z.string().min(1, "Company Name is required"),
@@ -125,20 +125,20 @@ const outdoorAdvPermitSchema = z.object({
   });
 
 
-type OutdoorAdvPermitFormValues = z.infer<typeof outdoorAdvPermitSchema>;
+type OutdoorStructurePermitFormValues = z.infer<typeof outdoorStructurePermitSchema>; // Renamed type
 
 const steps = [
-  { id: 1, name: "Applicant Details", fields: ['companyName', 'phoneNo', 'ceoNameContact', 'boardInstallations'] as FieldName<OutdoorAdvPermitFormValues>[] },
-  { id: 2, name: "Site Address", fields: ['siteStreetName', 'siteCityTown', 'siteLGA', 'siteTypeOfLand'] as FieldName<OutdoorAdvPermitFormValues>[] },
-  { id: 3, name: "Representative", fields: ['repFirstName', 'repSurname', 'repPhone1', 'repEmail', 'repIdentificationType', 'repIdNumber'] as FieldName<OutdoorAdvPermitFormValues>[] },
-  { id: 4, name: "Documents & Declaration", fields: ['declaration'] as FieldName<OutdoorAdvPermitFormValues>[] },
+  { id: 1, name: "Applicant Details", fields: ['companyName', 'phoneNo', 'ceoNameContact', 'boardInstallations'] as FieldName<OutdoorStructurePermitFormValues>[] },
+  { id: 2, name: "Site Address", fields: ['siteStreetName', 'siteCityTown', 'siteLGA', 'siteTypeOfLand'] as FieldName<OutdoorStructurePermitFormValues>[] },
+  { id: 3, name: "Representative", fields: ['repFirstName', 'repSurname', 'repPhone1', 'repEmail', 'repIdentificationType', 'repIdNumber'] as FieldName<OutdoorStructurePermitFormValues>[] },
+  { id: 4, name: "Documents & Declaration", fields: ['declaration'] as FieldName<OutdoorStructurePermitFormValues>[] },
 ];
 
-export default function OutdoorAdvertisementStructurePermitPage() {
+export default function OutdoorStructurePermitPage() { // Renamed component, though file name is the same
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
-  const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<OutdoorAdvPermitFormValues>({
-    resolver: zodResolver(outdoorAdvPermitSchema),
+  const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<OutdoorStructurePermitFormValues>({
+    resolver: zodResolver(outdoorStructurePermitSchema),
     mode: "onChange",
     defaultValues: {
       kopNumber: "",
@@ -173,14 +173,14 @@ export default function OutdoorAdvertisementStructurePermitPage() {
     }
   });
 
-  const watchedBoardInstallations = watch("boardInstallations.othersSpecify" as any); // Type assertion for nested dynamic field
+  const watchedBoardInstallations = watch("boardInstallations.othersSpecify" as any); 
   const watchedTypeOfLand = watch("siteTypeOfLand");
 
-  const onSubmit = (data: OutdoorAdvPermitFormValues) => {
-    console.log("Outdoor Advertisement Structure Permit Form Data:", data);
+  const onSubmit = (data: OutdoorStructurePermitFormValues) => {
+    console.log("Outdoor Structure Permit Form Data:", data); // Updated log message
     toast({
       title: "Application Submitted (Simulated)",
-      description: "Your Outdoor Advertisement Structure Permit application has been received.",
+      description: "Your Outdoor Structure Permit application has been received.", // Updated toast message
       duration: 5000,
     });
   };
@@ -198,9 +198,8 @@ export default function OutdoorAdvertisementStructurePermitPage() {
         return;
       }
     }
-    // Specific validation for 'Others Specify' text field when its checkbox is checked
     if (currentStep === 1 && watchedBoardInstallations && !watch('boardInstallationOthersText')?.trim()) {
-        await trigger('boardInstallationOthersText'); // Trigger validation for the text field
+        await trigger('boardInstallationOthersText'); 
         if (errors.boardInstallationOthersText) {
              toast({
                 title: "Validation Error",
@@ -210,7 +209,6 @@ export default function OutdoorAdvertisementStructurePermitPage() {
             return;
         }
     }
-    // Specific validation for 'Proof of Ownership' when land type is 'Private'
     if (currentStep === 2 && watchedTypeOfLand === "Private" && !watch('siteProofOfOwnership')?.trim()){
         await trigger('siteProofOfOwnership');
         if(errors.siteProofOfOwnership){
@@ -246,7 +244,7 @@ export default function OutdoorAdvertisementStructurePermitPage() {
             </div>
           </div>
           <CardTitle className="text-xl sm:text-2xl font-bold text-primary">
-            Application For Outdoor Advertisement Structure Permit
+            Application For Outdoor Structure Permit {/* Updated Title */}
           </CardTitle>
         </CardHeader>
       </Card>
@@ -311,7 +309,7 @@ export default function OutdoorAdvertisementStructurePermitPage() {
 
         {currentStep === 2 && (
           <Card>
-            <CardHeader><CardTitle className="text-lg sm:text-xl">BOX 2: SITE ADDRESS</CardTitle><CardDescription className="text-xs sm:text-sm">All applicants must complete Box 2 in full. This should be the Site Address for the Advertisement.</CardDescription></CardHeader>
+            <CardHeader><CardTitle className="text-lg sm:text-xl">BOX 2: SITE ADDRESS</CardTitle><CardDescription className="text-xs sm:text-sm">All applicants must complete Box 2 in full. This should be the Site Address for the Structure.</CardDescription></CardHeader>
             <CardContent className="space-y-4">
               <div><Label htmlFor="siteStreetName">Street Name*</Label><Input id="siteStreetName" {...register("siteStreetName")} />{errors.siteStreetName && <p className="text-destructive text-xs mt-1">{errors.siteStreetName.message}</p>}</div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -381,7 +379,7 @@ export default function OutdoorAdvertisementStructurePermitPage() {
                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 mt-2">
                         {requiredDocsList.map(doc => (
                         <div key={doc.id} className="flex items-start space-x-2">
-                            <Controller name={doc.id as FieldName<OutdoorAdvPermitFormValues>} control={control} render={({ field }) => (<Checkbox id={doc.id} checked={!!field.value} onCheckedChange={field.onChange} className="mt-1"/>)} />
+                            <Controller name={doc.id as FieldName<OutdoorStructurePermitFormValues>} control={control} render={({ field }) => (<Checkbox id={doc.id} checked={!!field.value} onCheckedChange={field.onChange} className="mt-1"/>)} />
                             <Label htmlFor={doc.id} className="font-normal text-xs sm:text-sm">{doc.label}</Label>
                         </div>
                         ))}
@@ -428,4 +426,3 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
   );
 }
-
