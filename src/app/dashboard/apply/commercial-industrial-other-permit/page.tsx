@@ -695,7 +695,7 @@ export default function CommercialIndustrialOtherPermitPage() {
             </div>
           <Separator className="my-2" />
            <p className="text-xs text-muted-foreground text-center">
-            KASUPDA Regulations, 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.4 2028
+            KASUPDA Regulations, 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.4 2025
           </p>
         </CardFooter>
       </form>
@@ -722,6 +722,8 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+    
 
     
 
