@@ -245,20 +245,7 @@ export default function CommercialIndustrialOtherPermitPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-center text-sm text-destructive font-semibold mb-1">This Form is FREE</p>
-          <p className="text-center text-xs sm:text-sm mb-1">
-            Fill in CAPITAL LETTERS and tick the appropriate items. DO NOT FOLD this form.
-          </p>
-          <p className="text-center text-xs sm:text-sm mb-4">
-            An application processing fee of N10,000 must be paid before or at the point of submission of the Permit Application.
-          </p>
-          <Card className="bg-muted/50 p-4">
-            <CardTitle className="text-base font-semibold text-center mb-2">FOR OFFICIAL USE ONLY</CardTitle>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div><span className="font-medium">Application Date:</span> ______ / ______ / ______ (Day / Month / Year)</div>
-              <div><span className="font-medium">Application Fees:</span> [ ] Application Processing Fee</div>
-            </div>
-          </Card>
+          {/* Informational texts and "FOR OFFICIAL USE ONLY" section removed as per request */}
         </CardContent>
       </Card>
 

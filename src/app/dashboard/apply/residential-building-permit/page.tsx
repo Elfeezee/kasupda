@@ -223,14 +223,6 @@ export default function ResidentialBuildingPermitPage() {
             Kaduna State Urban Planning and Development Authority
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-center text-sm text-destructive font-semibold mb-2">
-            This Form is FREE
-          </p>
-          <p className="text-center text-xs sm:text-sm mb-4">
-            An application processing fee of N10,000 must be paid before or at the point of submission of the Permit Application.
-          </p>
-        </CardContent>
       </Card>
 
       {/* Stepper UI */}
@@ -270,7 +262,7 @@ export default function ResidentialBuildingPermitPage() {
         {currentStep === 1 && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">BOX 1: APPLICANT</CardTitle>
+              <CardTitle className="text-lg sm:text-xl">BOX 1: APPLICANT (Individual)</CardTitle>
               <CardDescription className="text-xs sm:text-sm">The person whose name would be reflected on the Building Permit. Original identification document must be submitted.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
