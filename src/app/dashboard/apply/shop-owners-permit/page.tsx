@@ -291,7 +291,7 @@ export default function ShopOwnersPermitPage() {
             )}
           </div>
           <Separator className="my-2" />
-          <p className="text-xs text-muted-foreground text-center">KASUPDA Regulations, 2008 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.1 2020</p>
+          <p className="text-xs text-muted-foreground text-center">KASUPDA Regulations, 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.1 2025</p>
         </CardFooter>
       </form>
     </div>

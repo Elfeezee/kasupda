@@ -433,7 +433,7 @@ export default function MastPermitPage() {
             {currentStep < steps.length ? (<Button type="button" onClick={handleNextStep} className="w-full sm:w-auto">Next <ChevronRight className="ml-2 h-4 w-4" /></Button>) : (<Button type="submit" className="w-full sm:w-auto py-3 text-base sm:text-lg">Submit Application</Button>)}
           </div>
           <Separator className="my-2" />
-          <p className="text-xs text-muted-foreground text-center">KASUPDA Regulations, 2022 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.1 2020</p>
+          <p className="text-xs text-muted-foreground text-center">KASUPDA Regulations, 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.1 2025</p>
         </CardFooter>
       </form>
     </div>
@@ -444,3 +444,4 @@ export default function MastPermitPage() {
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (<svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>);
 }
+
