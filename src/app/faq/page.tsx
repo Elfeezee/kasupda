@@ -41,7 +41,7 @@ const faqItems = [
   {
     question: "What are KASUPDA's office hours?",
     answer:
-      "Our offices are typically open from 8:00 AM to 5:00 PM, Monday to Friday, excluding public holidays. For specific department timings, please check our contact page or call our main line.",
+      "Our offices are typically open from 8:00 AM to 5:00 PM, Monday to Thursday, excluding public holidays. For specific department timings, please check our contact page or call our main line.",
   },
 ];
 
