@@ -186,9 +186,9 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src={KASUPDALogo}
-                alt="KASUPDA Logo representing the Director General Dr. Abdrrahman Yahya"
-                data-ai-hint="logo brand"
+             
+                src="/src/image/dg.jpg"
+ alt="Dr. Abdrrahman Yahya, Director General of KASUPDA"
                 width={400}
                 height={400}
                 className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-2"
