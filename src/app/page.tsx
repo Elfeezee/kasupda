@@ -186,7 +186,6 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src={KASUPDALogo}
                 src="/src/image/dg.jpg"
  alt="Dr. Abdrrahman Yahya, Director General of KASUPDA"
                 width={400}
