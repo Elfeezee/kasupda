@@ -119,6 +119,7 @@ export default function Header() {
   ];
   
   const mainNavLinks = [
+    { href: "#", label: "Monitoring and Compliance" },
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
     { href: "/contact", label: "Contact Us" },
