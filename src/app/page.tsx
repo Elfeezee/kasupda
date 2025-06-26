@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, MapPin, FileText, ShieldCheck, Users, RefreshCcw } from "lucide-react";
+import { ArrowRight, MapPin, FileText, ShieldCheck, Users, RefreshCcw, Server, Beaker } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
@@ -88,7 +88,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="mx-auto grid max-w-5xl items-stretch gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:max-w-none mt-12">
+          <div className="mx-auto grid max-w-5xl items-stretch gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:max-w-none mt-12">
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
               <CardHeader>
                 <FileText className="h-8 w-8 text-primary mb-2" />
@@ -164,6 +164,45 @@ export default function Home() {
               <CardFooter>
                 <Button variant="link" className="p-0" asChild>
                   <Link href="/news">Get Informed</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+              <CardHeader>
+                <Beaker className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Modern Integrated Lab</CardTitle>
+                <CardDescription>
+                  State-of-the-art laboratory for soil testing, integrity tests, and material analysis.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p>Our accredited lab provides essential testing services to ensure the structural integrity and safety of buildings and infrastructure projects across the state.</p>
+              </CardContent>
+              <CardFooter>
+                <div className="flex flex-col space-y-1 items-start">
+                  <Link href="#" className="text-sm text-primary hover:underline p-0">
+                    - Soil Test
+                  </Link>
+                  <Link href="#" className="text-sm text-primary hover:underline p-0">
+                    - Integrity Test
+                  </Link>
+                </div>
+              </CardFooter>
+            </Card>
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+              <CardHeader>
+                <Server className="h-8 w-8 text-primary mb-2" />
+                <CardTitle>Data Center</CardTitle>
+                <CardDescription>
+                  Centralized hub for managing and accessing urban planning data and development records.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p>The data center houses a comprehensive development register, providing transparent and accessible information for stakeholders and the public.</p>
+              </CardContent>
+              <CardFooter>
+                <Button variant="link" className="p-0" asChild>
+                  <Link href="#">Development Register</Link>
                 </Button>
               </CardFooter>
             </Card>

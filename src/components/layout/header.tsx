@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, ChevronDown, Sun, Moon, LogIn, Home as HomeIcon, MapPin, FileText, Settings, Server, Info, Newspaper, Phone as PhoneIcon, UserPlus, Globe, Search as SearchIcon, X as XIcon } from "lucide-react";
+import { Menu, ChevronDown, Sun, Moon, LogIn, Home as HomeIcon, MapPin, FileText, Settings, Info, Newspaper, Phone as PhoneIcon, UserPlus, Globe, Search as SearchIcon, X as XIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import KASUPDALogo from '@/image/logo.png';
@@ -52,12 +52,6 @@ export default function Header() {
   const [EServiceOpen, setEServiceOpen] = useState(false);
   const EServiceHideTimer = useRef<number | null>(null);
   
-  const [modernIntegratedLabOpen, setModernIntegratedLabOpen] = useState(false);
-  const modernIntegratedLabHideTimer = useRef<number | null>(null);
-
-  const [dataCenterOpen, setDataCenterOpen] = useState(false);
-  const dataCenterHideTimer = useRef<number | null>(null);
-  
   const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
 
@@ -69,8 +63,6 @@ export default function Header() {
       if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
       if (developmentControlHideTimer.current) clearTimeout(developmentControlHideTimer.current);
       if (EServiceHideTimer.current) clearTimeout(EServiceHideTimer.current);
-      if (modernIntegratedLabHideTimer.current) clearTimeout(modernIntegratedLabHideTimer.current);
-      if (dataCenterHideTimer.current) clearTimeout(dataCenterHideTimer.current);
     };
   }, []);
 
@@ -101,11 +93,9 @@ export default function Header() {
     return { handleOpen, handleCloseWithDelay, cancelHide };
   };
 
-  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen, setModernIntegratedLabOpen, setDataCenterOpen]);
-  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setModernIntegratedLabOpen, setDataCenterOpen]);
-  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setModernIntegratedLabOpen, setDataCenterOpen]);
-  const modernIntegratedLabHandlers = createMenuHandlers(setModernIntegratedLabOpen, modernIntegratedLabHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen, setDataCenterOpen]);
-  const dataCenterHandlers = createMenuHandlers(setDataCenterOpen, dataCenterHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen, setModernIntegratedLabOpen]);
+  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen]);
+  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen]);
+  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen]);
   
 
   const planningSubLinks = [
@@ -128,15 +118,6 @@ export default function Header() {
     { href: "https://kasupdapermit.com", label: "Renew permit", external: true },
   ];
   
-  const modernIntegratedLabLinks = [
-    { href: "#", label: "Soil Test" },
-    { href: "#", label: "Integrity Test" },
-  ];
-
-  const dataCenterSubLinks = [
-    { href: "#", label: "Development Register" },
-  ];
-
   const mainNavLinks = [
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
@@ -310,60 +291,6 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
               
-              <DropdownMenu open={modernIntegratedLabOpen} onOpenChange={setModernIntegratedLabOpen}>
-                <DropdownMenuTrigger
-                  asChild
-                  onPointerEnter={modernIntegratedLabHandlers.handleOpen}
-                  onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
-                >
-                  <Button
-                    variant="ghost"
-                    className={getDropdownTriggerClassName("/modern-integrated-lab", modernIntegratedLabLinks, modernIntegratedLabOpen)}
-                  >
-                    Modern Integrated Lab
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onPointerEnter={modernIntegratedLabHandlers.cancelHide}
-                  onPointerLeave={modernIntegratedLabHandlers.handleCloseWithDelay}
-                >
-                  {modernIntegratedLabLinks.map((link) => (
-                    <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu open={dataCenterOpen} onOpenChange={setDataCenterOpen}>
-                <DropdownMenuTrigger
-                  asChild
-                  onPointerEnter={dataCenterHandlers.handleOpen}
-                  onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
-                >
-                  <Button
-                    variant="ghost"
-                    className={getDropdownTriggerClassName("/data-center", dataCenterSubLinks, dataCenterOpen)}
-                  >
-                    Data Center
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuContent
-                    onPointerEnter={dataCenterHandlers.cancelHide}
-                    onPointerLeave={dataCenterHandlers.handleCloseWithDelay}
-                  >
-                    {dataCenterSubLinks.map((link) => (
-                      <DropdownMenuItem key={link.label} asChild>
-                        <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenuPortal>
-              </DropdownMenu>
-
               {mainNavLinks.map((link) => (
                 <Link
                   key={link.label}
@@ -508,38 +435,6 @@ export default function Header() {
                               ) : (
                                 <Link key={link.label} href={link.href} className={getMobileSubLinkClassName(link.href)}>{link.label}</Link>
                               )
-                          ))}
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="modern-integrated-lab" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(modernIntegratedLabLinks), "px-3")}>
-                           Modern Integrated Lab
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-4 pb-1">
-                          {modernIntegratedLabLinks.map((link) => (
-                            <Link
-                              key={link.label}
-                              href={link.href}
-                              className={getMobileSubLinkClassName(link.href)}
-                            >
-                              {link.label}
-                            </Link>
-                          ))}
-                        </AccordionContent>
-                      </AccordionItem>
-                       <AccordionItem value="data-center" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(dataCenterSubLinks), "px-3")}>
-                          Data Center
-                        </AccordionTrigger>
-                        <AccordionContent className="pl-4 pb-1">
-                          {dataCenterSubLinks.map((link) => (
-                            <Link
-                              key={link.label}
-                              href={link.href}
-                              className={getMobileSubLinkClassName(link.href)}
-                            >
-                              {link.label}
-                            </Link>
                           ))}
                         </AccordionContent>
                       </AccordionItem>
