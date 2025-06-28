@@ -8,13 +8,13 @@ export const metadata: Metadata = {
   description: 'Learn more about KASUPDA, its mission, vision, and the dedicated team working towards sustainable urban development in Kaduna State.',
 };
 
-const boardMembers = [
-  { name: "Board Member 1", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Board Member 2", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Board Member 3", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Board Member 4", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Board Member 5", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Board Member 6", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+const directors = [
+  { name: "Director 1", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director 2", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director 3", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director 4", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director 5", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director 6", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
 ];
 
 export default function AboutPage() {
@@ -60,28 +60,28 @@ export default function AboutPage() {
         <div className="container px-4 md:px-6">
           <div className="text-center mb-10 md:mb-12">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-primary">
-              Our Board Members
+              Our Directors
             </h2>
             <p className="mt-3 max-w-xl mx-auto text-lg text-muted-foreground sm:text-xl">
               Meet the dedicated individuals guiding KASUPDA.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {boardMembers.map((member, index) => (
+            {directors.map((director, index) => (
               <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center text-center">
                 <CardHeader className="p-0 pt-6">
                   <Image
-                    src={member.imageUrl}
-                    alt={`Photo of ${member.name}`}
-                    data-ai-hint={member.hint}
+                    src={director.imageUrl}
+                    alt={`Photo of ${director.name}`}
+                    data-ai-hint={director.hint}
                     width={150}
                     height={150}
                     className="rounded-full object-cover aspect-square border-4 border-primary bg-white"
                   />
                 </CardHeader>
                 <CardContent className="p-6">
-                  <CardTitle className="text-xl font-semibold">{member.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">Board Member</p>
+                  <CardTitle className="text-xl font-semibold">{director.name}</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">Director</p>
                 </CardContent>
               </Card>
             ))}
