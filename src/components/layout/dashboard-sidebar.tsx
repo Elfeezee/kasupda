@@ -29,7 +29,6 @@ import {
   // LifeBuoy, // Example usage, can be removed if not needed
 } from 'lucide-react';
 import Image from 'next/image';
-import KASUPDALogo from '@/image/logo.png';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -71,7 +70,7 @@ export default function DashboardSidebar() {
     <>
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-2">
-          <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} />
+          <Image src="/image/logo.png" alt="KASUPDA Logo" width={32} height={32} />
           <div className={cn("font-semibold text-lg text-primary", state === 'collapsed' && "hidden")}>
             KASUPDA
           </div>

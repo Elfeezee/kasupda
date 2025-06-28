@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import KASUPDALogo from '@/image/logo.png';
 import { Facebook, Instagram, MapPin, Phone } from 'lucide-react';
 
 export default function Footer() {
@@ -69,7 +68,7 @@ export default function Footer() {
 
         {/* Copyright, Address, and Hotline Section - Centered at the bottom */}
         <div className="flex flex-col items-center text-center gap-2 mt-6 pt-6 border-t border-border/20 w-full">
-          <Image src={KASUPDALogo} alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8 mb-2" />
+          <Image src="/image/logo.png" alt="KASUPDA Logo" width={32} height={32} className="h-8 w-8 mb-2" />
           <p className="text-xs text-muted-foreground">
             &copy; {currentYear ? currentYear : new Date().getFullYear()} KASUPDA. All rights reserved.
           </p>
@@ -87,5 +86,3 @@ export default function Footer() {
     </footer>
   );
 }
-
-    

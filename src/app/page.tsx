@@ -7,25 +7,24 @@ import { ArrowRight, MapPin, FileText, ShieldCheck, Users, RefreshCcw, Server, B
 import Image from "next/image";
 import Link from "next/link";
 import { Carousel, type CarouselImage } from "@/components/ui/carousel";
-import KASUPDALogo from '@/image/logo.png';
 
 const initialCarouselImages: CarouselImage[] = [
   {
-    src: KASUPDALogo,
-    alt: 'KASUPDA Logo 1',
-    hint: 'logo brand',
+    src: "https://placehold.co/1920x1080.png",
+    alt: 'Kaduna Cityscape',
+    hint: 'cityscape urban',
     customClassName: "object-cover",
   },
   {
-    src: KASUPDALogo,
-    alt: 'KASUPDA Logo 2',
-    hint: 'logo brand',
+    src: "https://placehold.co/1920x1080.png",
+    alt: 'Urban Planning Blueprint',
+    hint: 'blueprint architecture',
     customClassName: "object-cover",
   },
   {
-    src: KASUPDALogo,
-    alt: 'KASUPDA Logo 3',
-    hint: 'logo brand',
+    src: "https://placehold.co/1920x1080.png",
+    alt: 'Modern building in Kaduna',
+    hint: 'modern architecture',
     customClassName: "object-cover",
   },
 ];
@@ -225,12 +224,12 @@ export default function Home() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex justify-center">
               <Image
-                src={KASUPDALogo}
-                alt="KASUPDA Logo representing the Director General Dr. Abdrrahman Yahya"
-                data-ai-hint="logo brand"
+                src="/image/dg.jpg"
+                alt="Photo of the Director General, Dr. Abdrrahman Yahya"
+                data-ai-hint="person portrait"
                 width={400}
                 height={400}
-                className="rounded-full object-contain aspect-square shadow-2xl border-4 border-primary bg-white p-2"
+                className="rounded-full object-cover aspect-square shadow-2xl border-4 border-primary bg-white p-2"
               />
             </div>
             <div className="flex flex-col justify-center space-y-4 text-left">
