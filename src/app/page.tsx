@@ -10,22 +10,22 @@ import { Carousel, type CarouselImage } from "@/components/ui/carousel";
 
 const initialCarouselImages: CarouselImage[] = [
   {
-    src: "https://placehold.co/1920x1080.png",
-    alt: 'Kaduna Cityscape',
-    hint: 'cityscape urban',
-    customClassName: "object-cover",
+    src: "/image/logo.png",
+    alt: 'KASUPDA Logo',
+    hint: 'logo',
+    customClassName: "object-contain p-8",
   },
   {
-    src: "https://placehold.co/1920x1080.png",
-    alt: 'Urban Planning Blueprint',
-    hint: 'blueprint architecture',
-    customClassName: "object-cover",
+    src: "/image/logo.png",
+    alt: 'KASUPDA Logo',
+    hint: 'logo',
+    customClassName: "object-contain p-8",
   },
   {
-    src: "https://placehold.co/1920x1080.png",
-    alt: 'Modern building in Kaduna',
-    hint: 'modern architecture',
-    customClassName: "object-cover",
+    src: "/image/logo.png",
+    alt: 'KASUPDA Logo',
+    hint: 'logo',
+    customClassName: "object-contain p-8",
   },
 ];
 
@@ -37,8 +37,8 @@ export default function Home() {
           <div className="relative">
             <Carousel
               images={initialCarouselImages}
-              className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg"
-              imageClassName="object-cover"
+              className="w-full h-[calc(100vh-var(--header-height,100px))] min-h-[400px] md:min-h-[500px] lg:min-h-[600px] shadow-lg bg-muted"
+              imageClassName="object-contain"
               autoPlay={initialCarouselImages.length > 1}
               interval={5000}
               showDots={initialCarouselImages.length > 1}
