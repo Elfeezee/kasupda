@@ -100,8 +100,24 @@ export default function Header() {
   const monitoringHandlers = createMenuHandlers(setMonitoringOpen, monitoringHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen]);
   
   const monitoringSubLinks = [
-    { href: "#", label: "Building Control" },
+    {
+      label: "Building Control",
+      isSubTrigger: true,
+      subLinks: [
+        { href: "#", label: "Stage Approvals" },
+        { href: "#", label: "Certificate of Fitness and Habitation" },
+      ],
+    },
+    {
+      label: "Development Design Vetting",
+      isSubTrigger: true,
+      subLinks: [
+        { href: "#", label: "Development Design Guidelines" },
+      ],
+    },
   ];
+  
+  const allMonitoringLinks = monitoringSubLinks.flatMap(item => item.subLinks || []);
 
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
@@ -274,7 +290,7 @@ export default function Header() {
                 >
                   <Button
                     variant="ghost"
-                    className={getDropdownTriggerClassName("/monitoring", monitoringSubLinks, monitoringOpen)}
+                    className={getDropdownTriggerClassName("/monitoring", allMonitoringLinks, monitoringOpen)}
                   >
                     Monitoring and Compliance
                     <ChevronDown className="ml-1 h-4 w-4" />
@@ -284,10 +300,30 @@ export default function Header() {
                   onPointerEnter={monitoringHandlers.cancelHide}
                   onPointerLeave={monitoringHandlers.handleCloseWithDelay}
                 >
-                  {monitoringSubLinks.map((link) => (
-                    <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
-                    </DropdownMenuItem>
+                  {monitoringSubLinks.map((item) => (
+                    item.isSubTrigger ? (
+                      <DropdownMenuSub key={item.label}>
+                        <DropdownMenuSubTrigger>
+                          <span>{item.label}</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                          <DropdownMenuSubContent>
+                            {item.subLinks.map((subLink) => (
+                              <DropdownMenuItem key={subLink.label} asChild>
+                                <Link href={subLink.href} className={getDropdownLinkClassName(subLink.href)}>
+                                  {subLink.label}
+                                </Link>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                      </DropdownMenuSub>
+                    ) : (
+                      // This is a fallback for non-nested items
+                      <DropdownMenuItem key={item.label} asChild>
+                        <Link href={'#'} className={getDropdownLinkClassName('#')}>{item.label}</Link>
+                      </DropdownMenuItem>
+                    )
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -456,18 +492,25 @@ export default function Header() {
                         </AccordionContent>
                       </AccordionItem>
                        <AccordionItem value="monitoring-compliance" className="border-b-0">
-                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(monitoringSubLinks), "px-3")}>
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(allMonitoringLinks), "px-3")}>
                           Monitoring and Compliance
                         </AccordionTrigger>
-                        <AccordionContent className="pl-4 pb-1">
-                          {monitoringSubLinks.map((link) => (
-                            <Link
-                              key={link.label}
-                              href={link.href}
-                              className={getMobileSubLinkClassName(link.href)}
-                            >
-                              {link.label}
-                            </Link>
+                        <AccordionContent className="pl-4 pb-1 space-y-2">
+                           {monitoringSubLinks.map((item) => (
+                            <div key={item.label}>
+                              <p className="font-semibold text-primary/90 px-3 py-1.5 text-sm">{item.label}</p>
+                              <div className="pl-4">
+                                {item.subLinks.map((subLink) => (
+                                  <Link
+                                    key={subLink.label}
+                                    href={subLink.href}
+                                    className={getMobileSubLinkClassName(subLink.href)}
+                                  >
+                                    {subLink.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
                           ))}
                         </AccordionContent>
                       </AccordionItem>
