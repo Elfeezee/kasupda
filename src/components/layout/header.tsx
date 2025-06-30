@@ -42,13 +42,14 @@ export default function Header() {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
 
+  const [monitoringOpen, setMonitoringOpen] = useState(false);
   const [planningOpen, setPlanningOpen] = useState(false);
-  const planningHideTimer = useRef<number | null>(null);
-
   const [developmentControlOpen, setDevelopmentControlOpen] = useState(false);
-  const developmentControlHideTimer = useRef<number | null>(null);
-
   const [EServiceOpen, setEServiceOpen] = useState(false);
+  
+  const monitoringHideTimer = useRef<number | null>(null);
+  const planningHideTimer = useRef<number | null>(null);
+  const developmentControlHideTimer = useRef<number | null>(null);
   const EServiceHideTimer = useRef<number | null>(null);
   
   const [isDesktopSearchInputVisible, setIsDesktopSearchInputVisible] = useState(false);
@@ -59,6 +60,7 @@ export default function Header() {
 
   useEffect(() => {
     return () => {
+      if (monitoringHideTimer.current) clearTimeout(monitoringHideTimer.current);
       if (planningHideTimer.current) clearTimeout(planningHideTimer.current);
       if (developmentControlHideTimer.current) clearTimeout(developmentControlHideTimer.current);
       if (EServiceHideTimer.current) clearTimeout(EServiceHideTimer.current);
@@ -92,10 +94,14 @@ export default function Header() {
     return { handleOpen, handleCloseWithDelay, cancelHide };
   };
 
-  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen]);
-  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen]);
-  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen]);
+  const planningHandlers = createMenuHandlers(setPlanningOpen, planningHideTimer, [setDevelopmentControlOpen, setEServiceOpen, setMonitoringOpen]);
+  const developmentControlHandlers = createMenuHandlers(setDevelopmentControlOpen, developmentControlHideTimer, [setPlanningOpen, setEServiceOpen, setMonitoringOpen]);
+  const EServiceHandlers = createMenuHandlers(setEServiceOpen, EServiceHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setMonitoringOpen]);
+  const monitoringHandlers = createMenuHandlers(setMonitoringOpen, monitoringHideTimer, [setPlanningOpen, setDevelopmentControlOpen, setEServiceOpen]);
   
+  const monitoringSubLinks = [
+    { href: "#", label: "Building Control" },
+  ];
 
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
@@ -118,7 +124,6 @@ export default function Header() {
   ];
   
   const mainNavLinks = [
-    { href: "#", label: "Monitoring and Compliance" },
     { href: "/about", label: "About Us" },
     { href: "/news", label: "News and Publications" },
     { href: "/contact", label: "Contact Us" },
@@ -254,6 +259,32 @@ export default function Header() {
                   onPointerLeave={developmentControlHandlers.handleCloseWithDelay}
                 >
                   {developmentControlSubLinks.map((link) => (
+                    <DropdownMenuItem key={link.label} asChild>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu open={monitoringOpen} onOpenChange={setMonitoringOpen}>
+                <DropdownMenuTrigger
+                  asChild
+                  onPointerEnter={monitoringHandlers.handleOpen}
+                  onPointerLeave={monitoringHandlers.handleCloseWithDelay}
+                >
+                  <Button
+                    variant="ghost"
+                    className={getDropdownTriggerClassName("/monitoring", monitoringSubLinks, monitoringOpen)}
+                  >
+                    Monitoring and Compliance
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  onPointerEnter={monitoringHandlers.cancelHide}
+                  onPointerLeave={monitoringHandlers.handleCloseWithDelay}
+                >
+                  {monitoringSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
                       <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
                     </DropdownMenuItem>
@@ -414,6 +445,22 @@ export default function Header() {
                         </AccordionTrigger>
                         <AccordionContent className="pl-4 pb-1">
                           {developmentControlSubLinks.map((link) => (
+                            <Link
+                              key={link.label}
+                              href={link.href}
+                              className={getMobileSubLinkClassName(link.href)}
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                       <AccordionItem value="monitoring-compliance" className="border-b-0">
+                        <AccordionTrigger className={cn(getMobileAccordionTriggerClassName(monitoringSubLinks), "px-3")}>
+                          Monitoring and Compliance
+                        </AccordionTrigger>
+                        <AccordionContent className="pl-4 pb-1">
+                          {monitoringSubLinks.map((link) => (
                             <Link
                               key={link.label}
                               href={link.href}
