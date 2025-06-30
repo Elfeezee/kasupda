@@ -105,21 +105,6 @@ const permitApplicationSchema = z.object({
     utilityBill: z.boolean().optional().default(false),
   }).optional().default({}),
 
-  docReligious: z.object({
-    landTitle: z.boolean().optional().default(false),
-    sar: z.boolean().optional().default(false),
-    workingDrawings: z.boolean().optional().default(false),
-    structuralInfo: z.boolean().optional().default(false),
-    buildersDoc: z.boolean().optional().default(false),
-    soilTest: z.boolean().optional().default(false),
-    pdfDrawings: z.boolean().optional().default(false),
-    applicantId: z.boolean().optional().default(false),
-    repId: z.boolean().optional().default(false),
-    utilityBill: z.boolean().optional().default(false),
-    interfaithCert: z.boolean().optional().default(false),
-    kepaEia: z.boolean().optional().default(false),
-  }).optional().default({}),
-
   declaration: z.boolean().refine(val => val === true, {
     message: "You must agree to the declaration to submit the application."
   })
@@ -146,21 +131,6 @@ const residentialDocs = [
     { id: "applicantId" as const, label: "Means of ID of applicant" },
     { id: "repId" as const, label: "Means of ID of representative (optional)" },
     { id: "utilityBill" as const, label: "Copy of utility bill" },
-];
-
-const religiousDocs = [
-    { id: "landTitle" as const, label: "Land title document (Digitized C of O, KADGIS Offer Letter, KADGIS Acknowledgment)" },
-    { id: "sar" as const, label: "Site Analysis Report (SAR)" },
-    { id: "workingDrawings" as const, label: "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)" },
-    { id: "structuralInfo" as const, label: "Calculation sheet, Letter for Supervision/ Responsibility for storey buildings." },
-    { id: "buildersDoc" as const, label: "Builder’s Document to be produced by Registered Builder" },
-    { id: "soilTest" as const, label: "Geotechnical investigation Report (Soil Test) for Multi storey development that exceeds two (2) floors." },
-    { id: "pdfDrawings" as const, label: "Soft copy of all drawings on CD" },
-    { id: "applicantId" as const, label: "Means of ID of applicant" },
-    { id: "repId" as const, label: "Means of ID of representative (optional)" },
-    { id: "utilityBill" as const, label: "Copy of utility bill" },
-    { id: "interfaithCert" as const, label: "Certificate of Registration with Bureau For Interfaith" },
-    { id: "kepaEia" as const, label: "KEPA EIA Certificate (could be submitted while application is in process)" },
 ];
 
 
@@ -226,7 +196,6 @@ export default function ResidentialBuildingPermitPage() {
       plotLGA: "",
       plotDescriptionAddress: "",
       docResidential: {},
-      docReligious: {},
       declaration: false,
     }
   });
@@ -675,7 +644,7 @@ export default function ResidentialBuildingPermitPage() {
                 <CardContent className="space-y-8">
                     {/* Residential Documents */}
                     <div className="space-y-4">
-                        <h3 className="text-md font-semibold text-primary">A. Residential Documents</h3>
+                        <h3 className="text-md font-semibold text-primary">Required Documents</h3>
                         <div className="grid grid-cols-1 gap-y-3 gap-x-4 sm:grid-cols-2">
                         {residentialDocs.map(doc => (
                             <div key={doc.id} className="flex items-start space-x-2">
@@ -692,32 +661,6 @@ export default function ResidentialBuildingPermitPage() {
                                     )}
                                 />
                                 <Label htmlFor={`res_${doc.id}`} className="font-normal text-xs sm:text-sm">{doc.label}</Label>
-                            </div>
-                        ))}
-                        </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Religious Documents */}
-                    <div className="space-y-4">
-                        <h3 className="text-md font-semibold text-primary">B. RELIGIOUS (Prayer House and Religious School)</h3>
-                         <div className="grid grid-cols-1 gap-y-3 gap-x-4 sm:grid-cols-2">
-                        {religiousDocs.map(doc => (
-                            <div key={doc.id} className="flex items-start space-x-2">
-                                <Controller
-                                    name={`docReligious.${doc.id}`}
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Checkbox
-                                            id={`rel_${doc.id}`}
-                                            checked={!!field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="mt-1"
-                                        />
-                                    )}
-                                />
-                                <Label htmlFor={`rel_${doc.id}`} className="font-normal text-xs sm:text-sm">{doc.label}</Label>
                             </div>
                         ))}
                         </div>
