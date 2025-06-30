@@ -84,18 +84,21 @@ const bpoPermitApplicationSchema = z.object({
   plotDescriptionAddress: z.string().min(1, "Plot Description/Address is required"),
 
   // Box 5: REQUIRED DOCUMENTS
-  docDigitalCertOfOccupancy: z.boolean().optional().default(false),
-  docKadgisAcknowledgement: z.boolean().optional().default(false),
-  docStructuralCalculations: z.boolean().optional().default(false),
-  docArchitecturalDrawings: z.boolean().optional().default(false),
-  docMechanicalElectricalDrawings: z.boolean().optional().default(false),
-  docStructuralDrawings: z.boolean().optional().default(false),
-  docSiteAnalysisReport: z.boolean().optional().default(false),
-  docKepasEnvImpactAssessment: z.boolean().optional().default(false),
-  docKadgisDlaSketchPlan: z.boolean().optional().default(false),
-  docSoilInvestigationReport: z.boolean().optional().default(false),
-  docServiceApprovals: z.boolean().optional().default(false),
-  docTaxClearanceCert: z.boolean().optional().default(false),
+  docOrg: z.object({
+    docLandTitle: z.any().optional(),
+    docKadgisAcknowledgement: z.any().optional(),
+    docSar: z.any().optional(),
+    docWorkingDrawings: z.any().optional(),
+    docCalculationSheet: z.any().optional(),
+    docBuildersDoc: z.any().optional(),
+    docSoilTest: z.any().optional(),
+    docPdfDrawings: z.any().optional(),
+    docApplicantId: z.any().optional(),
+    docRepId: z.any().optional(),
+    docUtilityBill: z.any().optional(),
+    docQualityAssurance: z.any().optional(),
+    docKepaEiaCert: z.any().optional(),
+  }).optional().default({}),
   
   // Box 6: SIGNATURE (as Declaration)
   declaration: z.boolean().refine(val => val === true, {
@@ -113,19 +116,20 @@ const identificationOptions = [
   { id: "driversLicense" as const, label: "Driver's License" },
 ];
 
-const requiredDocumentsList = [
-    { id: "docDigitalCertOfOccupancy" as const, label: "Copy of the Digital Certificate of Occupancy (KADGIS)" },
-    { id: "docKadgisAcknowledgement" as const, label: "Copy of KADGIS Acknowledgement Letter (in case you applied for digital CofO)" },
-    { id: "docStructuralCalculations" as const, label: "Copy of Structural Calculations" },
-    { id: "docArchitecturalDrawings" as const, label: "Copy of Architectural Drawings and Details" },
-    { id: "docMechanicalElectricalDrawings" as const, label: "Copy of Mechanical/Electrical Drawings and Details" },
-    { id: "docStructuralDrawings" as const, label: "Copy of Structural Drawings" },
-    { id: "docSiteAnalysisReport" as const, label: "Site Analysis Report" },
-    { id: "docKepasEnvImpactAssessment" as const, label: "Copy of KEPA's Environment Impact Assessment" },
-    { id: "docKadgisDlaSketchPlan" as const, label: "Copy of KADGIS DLA Sketch Plan" },
-    { id: "docSoilInvestigationReport" as const, label: "Soil Investigation Report" },
-    { id: "docServiceApprovals" as const, label: "Copy Of Service Approvals (Fire and Police Reports)" },
-    { id: "docTaxClearanceCert" as const, label: "Copy of Tax Clearance Certificate" },
+const orgRequiredDocs = [
+    { id: "docLandTitle" as const, label: "Land title document (Digitized C of O, KADGIS Offer Letter)" },
+    { id: "docKadgisAcknowledgement" as const, label: "KADGIS Acknowledgment" },
+    { id: "docSar" as const, label: "Site Analysis Report (SAR)" },
+    { id: "docWorkingDrawings" as const, label: "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)" },
+    { id: "docCalculationSheet" as const, label: "Calculation sheet, Letter for Supervision/ Responsibility for storey buildings." },
+    { id: "docBuildersDoc" as const, label: "Builder’s Document to be produced by Registered Builder" },
+    { id: "docSoilTest" as const, label: "Geotechnical investigation Report (Soil Test) for Multi storey development that exceeds two (2) floors." },
+    { id: "docPdfDrawings" as const, label: "PDF copy of all drawings on CD" },
+    { id: "docApplicantId" as const, label: "Means of ID of applicant" },
+    { id: "docRepId" as const, label: "Means of ID of representative (optional)" },
+    { id: "docUtilityBill" as const, label: "Copy of utility bill" },
+    { id: "docQualityAssurance" as const, label: "Clearance From Quality Assurance" },
+    { id: "docKepaEiaCert" as const, label: "KEPA EIA Certificate (could be submitted while application is in process)" }
 ];
 
 
@@ -134,8 +138,7 @@ const steps = [
   { id: 2, name: "Organisation Address", fields: [] as FieldName<BpoPermitApplicationFormValues>[] }, 
   { id: 3, name: "Representative", fields: ['repEmail'] as FieldName<BpoPermitApplicationFormValues>[] },
   { id: 4, name: "Plot Details", fields: ['plotDescriptionAddress'] as FieldName<BpoPermitApplicationFormValues>[] },
-  { id: 5, name: "Required Documents", fields: [] as FieldName<BpoPermitApplicationFormValues>[] },
-  { id: 6, name: "Declaration", fields: ['declaration'] as FieldName<BpoPermitApplicationFormValues>[] },
+  { id: 5, name: "Documents & Declaration", fields: ['declaration'] as FieldName<BpoPermitApplicationFormValues>[] },
 ];
 
 export default function CommercialIndustrialOtherPermitPage() {
@@ -183,18 +186,7 @@ export default function CommercialIndustrialOtherPermitPage() {
       plotDistrict: "",
       plotLGA: "",
       plotDescriptionAddress: "",
-      docDigitalCertOfOccupancy: false,
-      docKadgisAcknowledgement: false,
-      docStructuralCalculations: false,
-      docArchitecturalDrawings: false,
-      docMechanicalElectricalDrawings: false,
-      docStructuralDrawings: false,
-      docSiteAnalysisReport: false,
-      docKepasEnvImpactAssessment: false,
-      docKadgisDlaSketchPlan: false,
-      docSoilInvestigationReport: false,
-      docServiceApprovals: false,
-      docTaxClearanceCert: false,
+      docOrg: {},
       declaration: false,
     }
   });
@@ -238,15 +230,12 @@ export default function CommercialIndustrialOtherPermitPage() {
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="text-xl sm:text-2xl font-bold text-center text-primary">
-            Application For Grant of Building Permit (For Organisation)
+            Building Permit Application (For Organisation)
           </CardTitle>
           <CardDescription className="text-center text-sm sm:text-base">
             Kaduna State Urban Planning and Development Authority
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          {/* Informational texts and "FOR OFFICIAL USE ONLY" section removed as per request */}
-        </CardContent>
       </Card>
 
       {/* Stepper UI */}
@@ -298,7 +287,7 @@ export default function CommercialIndustrialOtherPermitPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl">BOX 1: APPLICANT (Organisation)</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">All applicants must complete Box 1 in full. All applicants must submit the original documents used to identify the organisations; they will be copied and retained. The original identification document used to prove identity of the MD/CEO/Chairman must be submitted; it will be copied and retained.</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">All applicants must complete Box 1 in full. The original identification document used to prove identity of the MD/CEO/Chairman must be submitted; it will be copied and retained.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -578,77 +567,67 @@ export default function CommercialIndustrialOtherPermitPage() {
         )}
 
         {currentStep === 5 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">BOX 5: REQUIRED DOCUMENTS</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                Applicants should submit all the relevant documents, with minimum requirement indicated below. If you have multiple relevant documents, please submit them and tick the documents that you acquire. 
-                <strong className="text-primary"> Please note that any drawings should be endorsed by a relevant professional.</strong>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-                {requiredDocumentsList.map(doc => (
-                  <div key={doc.id} className="flex items-start space-x-2">
-                     <Controller
-                        name={doc.id}
-                        control={control}
-                        render={({ field }) => (
-                            <Checkbox
-                                id={doc.id}
-                                checked={!!field.value}
-                                onCheckedChange={field.onChange}
-                                className="mt-1"
-                            />
-                        )}
-                    />
-                    <Label htmlFor={doc.id} className="font-normal text-xs sm:text-sm">
-                        {doc.label}
-                        {doc.id === 'docKadgisAcknowledgement' && <span className="block text-muted-foreground text-[10px] sm:text-xs">(in case you applied for digital CofO)</span>}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-lg sm:text-xl">BOX 5: DOCUMENT UPLOAD &amp; DECLARATION</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
+                        Please upload the required documents.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                    {/* Documents Upload */}
+                    <div className="space-y-4">
+                        <h3 className="text-md font-semibold text-primary">Required Documents for Organisation Permit</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                        {orgRequiredDocs.map(doc => (
+                            <div key={doc.id} className="space-y-1.5">
+                                <Label htmlFor={doc.id} className="text-sm font-medium">
+                                    {doc.label}
+                                </Label>
+                                <Input
+                                    id={doc.id}
+                                    type="file"
+                                    {...register(`docOrg.${doc.id}`)}
+                                    className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                                />
+                            </div>
+                        ))}
+                        </div>
+                    </div>
 
-        {currentStep === 6 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg sm:text-xl">BOX 6: SIGNATURE / DECLARATION</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
-                All applicants must affix their signature; the application will not be accepted without signature. In the case of a representative, they must also affix their signature.
-                By checking the box below, you confirm that the information provided is true and accurate to the best of your knowledge.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="flex items-start space-x-2 p-4 border rounded-md bg-muted/30">
-                    <Controller
-                        name="declaration"
-                        control={control}
-                        render={({ field }) => (
-                            <Checkbox
-                                id="declaration"
-                                checked={!!field.value}
-                                onCheckedChange={field.onChange}
-                                className="mt-1"
+                    <Separator />
+
+                    {/* Declaration */}
+                    <div>
+                        <Label className="text-md font-semibold">Declaration</Label>
+                        <div className="flex items-start space-x-2 p-4 border rounded-md bg-muted/30 mt-2">
+                             <Controller
+                                name="declaration"
+                                control={control}
+                                render={({ field }) => (
+                                    <Checkbox
+                                        id="declaration"
+                                        checked={!!field.value}
+                                        onCheckedChange={field.onChange}
+                                        className="mt-1"
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                    <Label htmlFor="declaration" className="font-normal text-sm sm:text-base leading-snug">
-                        I, the applicant or duly authorized representative, declare that the information provided in this application and any attached documents is true, correct, and complete to the best of my knowledge and belief. I understand that any false statement may result in the rejection of this application or revocation of any permit granted.
-                    </Label>
-                </div>
-                {errors.declaration && <p className="text-destructive text-xs mt-1 px-1">{errors.declaration.message}</p>}
-                <p className="text-sm text-muted-foreground px-1">
-                    Applicant Signature: <span className="font-medium">[Digital acceptance via checkbox]</span>
-                </p>
-                <p className="text-sm text-muted-foreground px-1">
-                    Representative Signature: <span className="font-medium">[Digital acceptance via checkbox, if representative details filled]</span>
-                </p>
-            </CardContent>
-          </Card>
+                            <Label htmlFor="declaration" className="font-normal text-sm sm:text-base leading-snug">
+                                I, the applicant or duly authorized representative, declare that the information provided in this application and any attached documents is true, correct, and complete to the best of my knowledge and belief. I understand that any false statement may result in the rejection of this application or revocation of any permit granted.
+                            </Label>
+                        </div>
+                         {errors.declaration && <p className="text-destructive text-xs mt-1 px-1">{errors.declaration.message}</p>}
+                         <p className="text-sm text-muted-foreground px-1 mt-2">
+                            Applicant Signature: <span className="font-medium">[Digital acceptance via checkbox]</span>
+                        </p>
+                        <p className="text-sm text-muted-foreground px-1">
+                            Representative Signature: <span className="font-medium">[Digital acceptance via checkbox, if representative details filled]</span>
+                        </p>
+                    </div>
+
+                </CardContent>
+            </Card>
         )}
 
 
@@ -709,9 +688,3 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-    
-
-    
-
-    
