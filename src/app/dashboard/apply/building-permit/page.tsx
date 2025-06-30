@@ -10,11 +10,11 @@ import { useToast } from '@/hooks/use-toast';
 
 const buildingPermitCategories = [
   {
-    title: 'Residential Building Permit',
-    description: 'For single-family homes, duplexes, apartment buildings, and other residential structures.',
+    title: 'Building Permit Individual',
+    description: 'For single-family homes, duplexes, apartment buildings, and other residential structures by individuals.',
     icon: Home,
     href: '/dashboard/apply/residential-building-permit', 
-    actionText: 'Start Residential Application',
+    actionText: 'Start Individual Application',
   },
   {
     title: 'Building permit for organization',
