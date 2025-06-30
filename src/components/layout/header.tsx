@@ -305,7 +305,7 @@ export default function Header() {
                   {monitoringSubLinks.map((item) => (
                     item.isSubTrigger ? (
                       <DropdownMenuSub key={item.label}>
-                        <DropdownMenuSubTrigger>
+                        <DropdownMenuSubTrigger className="text-primary/90 hover:text-primary">
                           <span>{item.label}</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
