@@ -90,6 +90,39 @@ const permitApplicationSchema = z.object({
   plotDistrict: z.string().optional(),
   plotLGA: z.string().optional(),
   plotDescriptionAddress: z.string().min(1, "Plot Description/Address is required"),
+  
+  // Box 6: Documents
+  docResidential: z.object({
+    landTitle: z.boolean().optional().default(false),
+    sar: z.boolean().optional().default(false),
+    workingDrawings: z.boolean().optional().default(false),
+    structuralInfo: z.boolean().optional().default(false),
+    buildersDoc: z.boolean().optional().default(false),
+    soilTest: z.boolean().optional().default(false),
+    pdfDrawings: z.boolean().optional().default(false),
+    applicantId: z.boolean().optional().default(false),
+    repId: z.boolean().optional().default(false),
+    utilityBill: z.boolean().optional().default(false),
+  }).optional().default({}),
+
+  docReligious: z.object({
+    landTitle: z.boolean().optional().default(false),
+    sar: z.boolean().optional().default(false),
+    workingDrawings: z.boolean().optional().default(false),
+    structuralInfo: z.boolean().optional().default(false),
+    buildersDoc: z.boolean().optional().default(false),
+    soilTest: z.boolean().optional().default(false),
+    pdfDrawings: z.boolean().optional().default(false),
+    applicantId: z.boolean().optional().default(false),
+    repId: z.boolean().optional().default(false),
+    utilityBill: z.boolean().optional().default(false),
+    interfaithCert: z.boolean().optional().default(false),
+    kepaEia: z.boolean().optional().default(false),
+  }).optional().default({}),
+
+  declaration: z.boolean().refine(val => val === true, {
+    message: "You must agree to the declaration to submit the application."
+  })
 });
 
 type PermitApplicationFormValues = z.infer<typeof permitApplicationSchema>;
@@ -102,18 +135,48 @@ const identificationOptions = [
   { id: "driversLicense" as const, label: "Driver's License" },
 ];
 
+const residentialDocs = [
+    { id: "landTitle" as const, label: "Land title document (Digitized C of O, KADGIS Offer Letter, KADGIS Acknowledgment)" },
+    { id: "sar" as const, label: "Site Analysis Report (SAR)" },
+    { id: "workingDrawings" as const, label: "Complete working Drawings (Architectural, Mechanical and Electrical)" },
+    { id: "structuralInfo" as const, label: "Structural drawing, Calculation sheet, Letter for Supervision/ Responsibility for storey buildings." },
+    { id: "buildersDoc" as const, label: "Builder’s Document to be produced by Registered Builder for commercial Residential" },
+    { id: "soilTest" as const, label: "Geotechnical investigation Report (Soil Test) for Multi storey development that exceeds two (2) floors." },
+    { id: "pdfDrawings" as const, label: "PDF copy of all drawings on CD" },
+    { id: "applicantId" as const, label: "Means of ID of applicant" },
+    { id: "repId" as const, label: "Means of ID of representative (optional)" },
+    { id: "utilityBill" as const, label: "Copy of utility bill" },
+];
+
+const religiousDocs = [
+    { id: "landTitle" as const, label: "Land title document (Digitized C of O, KADGIS Offer Letter, KADGIS Acknowledgment)" },
+    { id: "sar" as const, label: "Site Analysis Report (SAR)" },
+    { id: "workingDrawings" as const, label: "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)" },
+    { id: "structuralInfo" as const, label: "Calculation sheet, Letter for Supervision/ Responsibility for storey buildings." },
+    { id: "buildersDoc" as const, label: "Builder’s Document to be produced by Registered Builder" },
+    { id: "soilTest" as const, label: "Geotechnical investigation Report (Soil Test) for Multi storey development that exceeds two (2) floors." },
+    { id: "pdfDrawings" as const, label: "Soft copy of all drawings on CD" },
+    { id: "applicantId" as const, label: "Means of ID of applicant" },
+    { id: "repId" as const, label: "Means of ID of representative (optional)" },
+    { id: "utilityBill" as const, label: "Copy of utility bill" },
+    { id: "interfaithCert" as const, label: "Certificate of Registration with Bureau For Interfaith" },
+    { id: "kepaEia" as const, label: "KEPA EIA Certificate (could be submitted while application is in process)" },
+];
+
+
 const steps = [
   { id: 1, name: "Applicant", fields: ['firstName', 'surname', 'gender', 'dateOfBirth', 'phone1', 'email'] as FieldName<PermitApplicationFormValues>[] },
   { id: 2, name: "Applicant Address", fields: [] as FieldName<PermitApplicationFormValues>[] }, 
   { id: 3, name: "Representative", fields: ['repEmail'] as FieldName<PermitApplicationFormValues>[] },
   { id: 4, name: "Representative Address", fields: [] as FieldName<PermitApplicationFormValues>[] },
   { id: 5, name: "Plot Details", fields: ['plotDescriptionAddress'] as FieldName<PermitApplicationFormValues>[] },
+  { id: 6, name: "Documents & Declaration", fields: ['declaration'] as FieldName<PermitApplicationFormValues>[] },
 ];
 
 export default function ResidentialBuildingPermitPage() {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
-  const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<PermitApplicationFormValues>({
+  const { register, handleSubmit, control, formState: { errors }, trigger } = useForm<PermitApplicationFormValues>({
     resolver: zodResolver(permitApplicationSchema),
     mode: "onChange", 
     defaultValues: { 
@@ -121,8 +184,6 @@ export default function ResidentialBuildingPermitPage() {
       firstName: "",
       middleName: "",
       surname: "",
-      // gender: undefined, // Let zod handle default or required error
-      // dateOfBirth: undefined,
       occupation: "",
       nationality: "Nigerian",
       stateOfOrigin: "",
@@ -131,13 +192,7 @@ export default function ResidentialBuildingPermitPage() {
       phone2: "",
       phone3: "",
       email: "",
-      identificationType: {
-        internationalPassport: false,
-        taxIdCard: false,
-        nationalIdCard: false,
-        voterRegCard: false,
-        driversLicense: false,
-      },
+      identificationType: {},
       idNumber: "",
       appHouseNo: "",
       appStreetName: "",
@@ -154,13 +209,7 @@ export default function ResidentialBuildingPermitPage() {
       repPhone1: "",
       repPhone2: "",
       repEmail: "",
-      repIdentificationType: {
-        internationalPassport: false,
-        taxIdCard: false,
-        nationalIdCard: false,
-        voterRegCard: false,
-        driversLicense: false,
-      },
+      repIdentificationType: {},
       repIdNumber: "",
       repHouseNo: "",
       repStreetName: "",
@@ -176,6 +225,9 @@ export default function ResidentialBuildingPermitPage() {
       plotDistrict: "",
       plotLGA: "",
       plotDescriptionAddress: "",
+      docResidential: {},
+      docReligious: {},
+      declaration: false,
     }
   });
 
@@ -230,7 +282,7 @@ export default function ResidentialBuildingPermitPage() {
         <div className="flex items-start w-full min-w-[360px] sm:min-w-full">
           {steps.map((step, index) => (
             <React.Fragment key={step.id}>
-              <div className="flex flex-col items-center text-center px-0.5 sm:px-1 py-1 flex-shrink-0 w-1/5">
+              <div className="flex flex-col items-center text-center px-0.5 sm:px-1 py-1 flex-shrink-0" style={{width: `${100 / steps.length}%`}}>
                 <div
                   className={cn(
                     "w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300",
@@ -248,7 +300,7 @@ export default function ResidentialBuildingPermitPage() {
               </div>
               {index < steps.length - 1 && (
                 <div className={cn(
-                    "flex-1 h-0.5 sm:h-1 mt-2.5 sm:mt-3.5 mx-0.5 sm:mx-1 transition-all duration-300", // Line styles
+                    "flex-1 h-0.5 sm:h-1 mt-2.5 sm:mt-3.5 mx-0.5 sm:mx-1 transition-all duration-300", 
                     currentStep > step.id ? "bg-primary" : "bg-border" 
                     )} />
               )}
@@ -294,7 +346,7 @@ export default function ResidentialBuildingPermitPage() {
                     name="gender"
                     control={control}
                     render={({ field }) => (
-                      <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex items-center space-x-2 sm:space-x-4 mt-2">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex items-center space-x-2 sm:space-x-4 mt-2">
                         <div className="flex items-center space-x-1 sm:space-x-2">
                           <RadioGroupItem value="Male" id="male" />
                           <Label htmlFor="male" className="font-normal text-sm">Male</Label>
@@ -611,6 +663,94 @@ export default function ResidentialBuildingPermitPage() {
             </CardContent>
           </Card>
         )}
+        
+        {currentStep === 6 && (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-lg sm:text-xl">BOX 6: REQUIRED DOCUMENTS &amp; DECLARATION</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
+                        Please confirm you have all the required documents ready for upload. Checking the box signifies you have the document prepared.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                    {/* Residential Documents */}
+                    <div className="space-y-4">
+                        <h3 className="text-md font-semibold text-primary">A. Residential Documents</h3>
+                        <div className="grid grid-cols-1 gap-y-3 gap-x-4 sm:grid-cols-2">
+                        {residentialDocs.map(doc => (
+                            <div key={doc.id} className="flex items-start space-x-2">
+                                <Controller
+                                    name={`docResidential.${doc.id}`}
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Checkbox
+                                            id={`res_${doc.id}`}
+                                            checked={!!field.value}
+                                            onCheckedChange={field.onChange}
+                                            className="mt-1"
+                                        />
+                                    )}
+                                />
+                                <Label htmlFor={`res_${doc.id}`} className="font-normal text-xs sm:text-sm">{doc.label}</Label>
+                            </div>
+                        ))}
+                        </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Religious Documents */}
+                    <div className="space-y-4">
+                        <h3 className="text-md font-semibold text-primary">B. RELIGIOUS (Prayer House and Religious School)</h3>
+                         <div className="grid grid-cols-1 gap-y-3 gap-x-4 sm:grid-cols-2">
+                        {religiousDocs.map(doc => (
+                            <div key={doc.id} className="flex items-start space-x-2">
+                                <Controller
+                                    name={`docReligious.${doc.id}`}
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Checkbox
+                                            id={`rel_${doc.id}`}
+                                            checked={!!field.value}
+                                            onCheckedChange={field.onChange}
+                                            className="mt-1"
+                                        />
+                                    )}
+                                />
+                                <Label htmlFor={`rel_${doc.id}`} className="font-normal text-xs sm:text-sm">{doc.label}</Label>
+                            </div>
+                        ))}
+                        </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Declaration */}
+                    <div>
+                        <Label className="text-md font-semibold">Declaration</Label>
+                        <div className="flex items-start space-x-2 p-4 border rounded-md bg-muted/30 mt-2">
+                             <Controller
+                                name="declaration"
+                                control={control}
+                                render={({ field }) => (
+                                    <Checkbox
+                                        id="declaration"
+                                        checked={!!field.value}
+                                        onCheckedChange={field.onChange}
+                                        className="mt-1"
+                                    />
+                                )}
+                            />
+                            <Label htmlFor="declaration" className="font-normal text-sm sm:text-base leading-snug">
+                                I, the applicant or duly authorized representative, declare that the information provided in this application and any attached documents is true, correct, and complete to the best of my knowledge and belief. I understand that any false statement may result in the rejection of this application or revocation of any permit granted.
+                            </Label>
+                        </div>
+                         {errors.declaration && <p className="text-destructive text-xs mt-1 px-1">{errors.declaration.message}</p>}
+                    </div>
+
+                </CardContent>
+            </Card>
+        )}
 
         <CardFooter className="flex flex-col items-center space-y-4 pt-6">
             <div className="flex w-full flex-col sm:flex-row sm:justify-between gap-2">
@@ -669,7 +809,5 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-    
 
     
