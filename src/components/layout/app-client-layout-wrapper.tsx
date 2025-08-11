@@ -16,17 +16,22 @@ export default function AppClientLayoutWrapper({
 }>) {
   const pathname = usePathname();
   const isDashboardPage = pathname.startsWith('/dashboard');
+  const isAdminPage = pathname.startsWith('/admin');
+
+  // Determine if header and footer should be shown
+  const showHeaderFooter = !isDashboardPage && !isAdminPage;
 
   return (
     <ThemeProvider>
-      {!isDashboardPage && <Header />}
+      {showHeaderFooter && <Header />}
       <main className={cn(
         "flex-grow",
-        !isDashboardPage && "container mx-auto px-4 py-8" 
+        // Apply container styles only to non-dashboard/non-admin pages
+        !isDashboardPage && !isAdminPage && "container mx-auto px-4 py-8" 
       )}>
         {children}
       </main>
-      {!isDashboardPage && <Footer />}
+      {showHeaderFooter && <Footer />}
       <Toaster />
       <ScrollToTopButton />
     </ThemeProvider>
