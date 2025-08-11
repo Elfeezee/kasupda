@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { ListChecks, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 import type { VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils'; // Ensure cn is imported
+import { format } from 'date-fns';
 
 // Mock data for submitted applications
 const mockApplications = [
@@ -108,7 +109,7 @@ export default function MyApplicationsPage() {
                   <strong>ID:</strong> {app.id}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  <strong>Submitted:</strong> {new Date(app.date).toLocaleDateString()}
+                  <strong>Submitted:</strong> {format(new Date(app.date), 'dd/MM/yyyy')}
                 </p>
                 <div className="flex items-center">
                   <p className="text-sm text-muted-foreground mr-2"><strong>Status:</strong></p>

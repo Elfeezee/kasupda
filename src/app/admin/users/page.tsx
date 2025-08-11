@@ -17,6 +17,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { format } from 'date-fns';
 
 
 const mockUsers = [
@@ -76,7 +77,7 @@ export default function ManageUsersPage() {
                     <TableCell>
                       <Badge variant={user.role === 'Admin' ? 'destructive' : 'secondary'}>{user.role}</Badge>
                     </TableCell>
-                    <TableCell>{new Date(user.joined).toLocaleDateString()}</TableCell>
+                    <TableCell>{format(new Date(user.joined), 'dd/MM/yyyy')}</TableCell>
                     <TableCell className="text-right">
                        <DropdownMenu>
                         <DropdownMenuTrigger asChild>

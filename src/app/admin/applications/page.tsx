@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
+import { format } from 'date-fns';
 
 
 type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
@@ -114,7 +115,7 @@ export default function ManageApplicationsPage() {
                     <TableCell className="font-medium">{app.id}</TableCell>
                     <TableCell>{app.applicantName}</TableCell>
                     <TableCell className="text-sm">{app.type}</TableCell>
-                    <TableCell>{new Date(app.date).toLocaleDateString()}</TableCell>
+                    <TableCell>{format(new Date(app.date), 'dd/MM/yyyy')}</TableCell>
                     <TableCell>
                       <StatusBadge status={app.status} />
                     </TableCell>
