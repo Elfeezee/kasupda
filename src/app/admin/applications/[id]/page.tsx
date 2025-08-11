@@ -14,9 +14,9 @@ type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
 // Mock data - in a real app, this would be fetched based on the [id]
 const mockApplicationDetails = {
     'APP-2023-001': {
-        id: 'APP-2023-001', applicantName: 'John Doe', type: 'Building Permit Individual', date: '2023-10-15', status: 'Pending' as ApplicationStatus,
+        id: 'APP-2023-001', applicantName: 'Muhammad Kabir', type: 'Building Permit Individual', date: '2023-10-15', status: 'Pending' as ApplicationStatus,
         details: {
-            "First Name": "John", "Surname": "Doe", "Gender": "Male", "Date of Birth": "1985-05-20", "Phone 1": "08012345678", "Email": "john.doe@example.com",
+            "First Name": "Muhammad", "Surname": "Kabir", "Gender": "Male", "Date of Birth": "1997-01-19", "Phone 1": "08012345678", "Email": "muhammad.kabir@example.com",
             "Plot Address": "Plot 123, GRA, Kaduna", "Land Use": "Residential",
         },
         documents: [

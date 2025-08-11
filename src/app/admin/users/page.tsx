@@ -20,7 +20,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLab
 
 
 const mockUsers = [
-  { id: 'USR-001', name: 'John Doe', email: 'john.doe@example.com', role: 'Applicant', joined: '2023-10-01', avatar: 'https://placehold.co/40x40.png' },
+  { id: 'USR-001', name: 'Muhammad Kabir', email: 'muhammad.kabir@example.com', role: 'Applicant', joined: '2023-10-01', avatar: 'https://placehold.co/40x40.png' },
   { id: 'USR-002', name: 'Jane Smith', email: 'jane.smith@example.com', role: 'Applicant', joined: '2023-09-15', avatar: 'https://placehold.co/40x40.png' },
   { id: 'USR-003', name: 'Admin User', email: 'admin@kasupda.gov.ng', role: 'Admin', joined: '2023-01-01', avatar: 'https://placehold.co/40x40.png' },
   { id: 'USR-004', name: 'Acme Inc.', email: 'contact@acme.com', role: 'Organization', joined: '2023-08-20', avatar: 'https://placehold.co/40x40.png' },

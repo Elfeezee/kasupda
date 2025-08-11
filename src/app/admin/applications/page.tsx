@@ -25,7 +25,7 @@ type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
 
 // Mock data for applications
 const mockApplications = [
-  { id: 'APP-2023-001', applicantName: 'John Doe', type: 'Building Permit Individual', date: '2023-10-15', status: 'Pending' as ApplicationStatus },
+  { id: 'APP-2023-001', applicantName: 'Muhammad Kabir', type: 'Building Permit Individual', date: '2023-10-15', status: 'Pending' as ApplicationStatus },
   { id: 'APP-2023-002', applicantName: 'Acme Inc.', type: 'Building permit for organization', date: '2023-10-14', status: 'Approved' as ApplicationStatus },
   { id: 'APP-2023-003', applicantName: 'Jane Smith', type: 'Street Naming Permit', date: '2023-10-12', status: 'Rejected' as ApplicationStatus },
   { id: 'APP-2023-004', applicantName: 'TeleCom Co.', type: 'Mast Permit', date: '2023-10-11', status: 'Processing' as ApplicationStatus },
