@@ -6,7 +6,9 @@ import React, { useState, useEffect } from 'react';
 import { SidebarTrigger } from '@/components/ui/sidebar'; // For mobile toggle
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Clock, CalendarDays } from 'lucide-react';
+import { Clock, CalendarDays, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const DashboardPage: React.FC = () => {
   const searchParams = useSearchParams();
@@ -82,6 +84,26 @@ const DashboardPage: React.FC = () => {
             Use the sidebar navigation to apply for permits, check your application status, manage your profile, or access other KASUPDA services.
           </p>
         </CardContent>
+      </Card>
+      
+      {/* Temporary Admin Access Card */}
+      <Card className="shadow-lg bg-secondary/50 border-primary/20">
+        <CardHeader className="flex flex-row items-center justify-between">
+            <div className='space-y-1.5'>
+                <CardTitle className="flex items-center text-primary">
+                    <ShieldCheck className="mr-2 h-5 w-5" />
+                    Admin Access
+                </CardTitle>
+                <CardDescription>
+                    For administrative use only. Access the system management dashboard.
+                </CardDescription>
+            </div>
+            <Button asChild>
+                <Link href="/admin/dashboard">
+                    Go to Admin <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+            </Button>
+        </CardHeader>
       </Card>
 
     </div>
