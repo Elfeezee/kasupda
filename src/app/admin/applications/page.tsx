@@ -61,6 +61,8 @@ export default function ManageApplicationsPage() {
   const loadApplications = () => {
     const loadedApplications = getApplications();
     setApplications(loadedApplications);
+    // Initially, the filtered list is the full list
+    setFilteredApplications(loadedApplications.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
   };
 
   useEffect(() => {
