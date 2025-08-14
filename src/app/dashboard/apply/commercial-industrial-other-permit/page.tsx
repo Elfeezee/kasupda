@@ -18,6 +18,8 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { saveApplication } from '@/lib/application-store';
+import { useRouter } from 'next/navigation';
 
 // Define Zod schema based on the form
 const bpoPermitApplicationSchema = z.object({
@@ -143,6 +145,7 @@ const steps = [
 
 export default function CommercialIndustrialOtherPermitPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const { register, handleSubmit, control, formState: { errors }, trigger } = useForm<BpoPermitApplicationFormValues>({
     resolver: zodResolver(bpoPermitApplicationSchema),
@@ -191,14 +194,32 @@ export default function CommercialIndustrialOtherPermitPage() {
     }
   });
 
-  const onSubmit = (data: BpoPermitApplicationFormValues) => {
-    console.log("Building Permit for Organization Form Data:", data);
-    toast({
-      title: "Application Submitted (Simulated)",
-      description: "Your Building Permit for Organization application has been received for processing.",
-      duration: 5000,
+ const onSubmit = (data: BpoPermitApplicationFormValues) => {
+    // Transform file lists into single files
+    const processedData = { ...data };
+    if (processedData.docOrg) {
+      for (const key in processedData.docOrg) {
+        const fileList = (processedData.docOrg as any)[key];
+        if (fileList instanceof FileList && fileList.length > 0) {
+          (processedData.docOrg as any)[key] = fileList[0];
+        } else {
+           (processedData.docOrg as any)[key] = undefined;
+        }
+      }
+    }
+    
+    saveApplication({
+      type: "Building Permit (Organization)",
+      applicantName: data.orgName,
+      data: processedData,
     });
-    // Potentially redirect or clear form
+    
+    toast({
+      title: "Application Submitted",
+      description: "Your Building Permit for Organization application has been received.",
+    });
+    
+    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {

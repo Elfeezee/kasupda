@@ -19,6 +19,8 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { saveApplication } from '@/lib/application-store';
+import { useRouter } from 'next/navigation';
 
 // Define Zod schema based on the form
 const permitApplicationSchema = z.object({
@@ -145,6 +147,7 @@ const steps = [
 
 export default function ResidentialBuildingPermitPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const { register, handleSubmit, control, formState: { errors }, trigger } = useForm<PermitApplicationFormValues>({
     resolver: zodResolver(permitApplicationSchema),
@@ -201,12 +204,31 @@ export default function ResidentialBuildingPermitPage() {
   });
 
   const onSubmit = (data: PermitApplicationFormValues) => {
-    console.log("Form Data:", data);
-    toast({
-      title: "Application Submitted (Simulated)",
-      description: "Your residential building permit application has been received for processing.",
-      duration: 5000,
+    // Transform file lists into single files
+    const processedData = { ...data };
+    if (processedData.docResidential) {
+      for (const key in processedData.docResidential) {
+        const fileList = (processedData.docResidential as any)[key];
+        if (fileList instanceof FileList && fileList.length > 0) {
+          (processedData.docResidential as any)[key] = fileList[0];
+        } else {
+           (processedData.docResidential as any)[key] = undefined;
+        }
+      }
+    }
+    
+    saveApplication({
+      type: "Building Permit (Individual)",
+      applicantName: `${data.firstName} ${data.surname}`,
+      data: processedData,
     });
+    
+    toast({
+      title: "Application Submitted",
+      description: "Your residential building permit application has been received.",
+    });
+    
+    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {
@@ -748,7 +770,3 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-    
-
-    
