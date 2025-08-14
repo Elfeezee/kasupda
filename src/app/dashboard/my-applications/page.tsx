@@ -2,17 +2,21 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ListChecks, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 import type { VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { getApplications, type StoredApplication } from '@/lib/application-store';
+import { format, parseISO } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
+import { auth, db } from '@/lib/firebase/config';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { onAuthStateChanged, type User } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
-// NOTE: This component will be updated later to use Firebase to get the current user
-// and fetch applications from Firestore instead of local storage.
+// Reuse the type definition
+import type { StoredApplication } from '@/app/admin/applications/page';
+
 
 type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
 
@@ -49,30 +53,62 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
 
 
 function MyApplicationsPageComponent() {
-  const searchParams = useSearchParams();
+  const { toast } = useToast();
+  const router = useRouter();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userName, setUserName] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // In a real app, you'd get the user from a session. Here we simulate it.
-    // The name is passed on login/signup and we retrieve it.
-    const nameFromParams = searchParams.get('name');
-    setUserName(nameFromParams);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+        // If not logged in, redirect to login page after a short delay
+        setTimeout(() => {
+          router.push('/login');
+        }, 1000);
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
 
-    const loadedApps = getApplications();
-    
-    // This logic will be replaced with a Firebase query for the current user.
-    if (nameFromParams) {
-        const userApps = loadedApps.filter(app => app.applicantName === nameFromParams);
-        setApplications(userApps.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+  useEffect(() => {
+    if (user) {
+      const fetchApplications = async () => {
+        setLoading(true);
+        try {
+          const appsRef = collection(db, "applications");
+          const q = query(
+            appsRef, 
+            where("userId", "==", user.uid),
+            orderBy("date", "desc")
+          );
+          const querySnapshot = await getDocs(q);
+          const userApps = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          } as StoredApplication));
+          setApplications(userApps);
+        } catch (error) {
+          console.error("Error fetching user applications:", error);
+          toast({
+            title: "Error",
+            description: "Could not fetch your applications from the database.",
+            variant: "destructive",
+          });
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchApplications();
     } else {
-        // Fallback for direct navigation: show all apps as we can't identify the user.
-        setApplications(loadedApps.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+      // If user is not logged in, stop loading and show empty list
+      setLoading(false);
+      setApplications([]);
     }
-
-    setLoading(false);
-  }, [searchParams]);
+  }, [user, toast]);
 
   if (loading) {
       return (
@@ -82,7 +118,7 @@ function MyApplicationsPageComponent() {
                 <ListChecks className="mr-3 h-7 w-7" /> My Submitted Applications
                 </CardTitle>
                 <CardDescription>
-                Loading your application history...
+                Loading your application history from the database...
                 </CardDescription>
             </CardHeader>
             <div className="text-center">Loading...</div>
@@ -98,11 +134,17 @@ function MyApplicationsPageComponent() {
         </CardTitle>
         <CardDescription>
           Track the status of all your permit applications and complaints.
-          {userName && ` (Viewing for: ${userName})`}
+          {user && ` (Viewing for: ${user.displayName || user.email})`}
         </CardDescription>
       </CardHeader>
 
-      {applications.length === 0 ? (
+      {!user ? (
+        <Card>
+            <CardContent className="pt-6">
+                <p className="text-muted-foreground">Please log in to view your applications. Redirecting...</p>
+            </CardContent>
+        </Card>
+      ) : applications.length === 0 ? (
         <Card>
           <CardContent className="pt-6">
             <p className="text-muted-foreground">You have not submitted any applications yet.</p>
@@ -124,7 +166,7 @@ function MyApplicationsPageComponent() {
                   <strong>ID:</strong> {app.id}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  <strong>Submitted:</strong> {format(new Date(app.date), 'dd/MM/yyyy')}
+                  <strong>Submitted:</strong> {app.date ? format(parseISO(app.date), 'dd/MM/yyyy') : 'N/A'}
                 </p>
                 <div className="flex items-center">
                   <p className="text-sm text-muted-foreground mr-2"><strong>Status:</strong></p>
@@ -140,8 +182,7 @@ function MyApplicationsPageComponent() {
 }
 
 
-// A wrapper component is needed because useSearchParams can only be used in a Client Component
-// that is a child of a <Suspense> boundary. The Layout provides this.
+// A wrapper component is needed because hooks like useToast and useEffect need to be in a Client Component.
 export default function MyApplicationsPage() {
     return (
         <React.Suspense fallback={<div>Loading...</div>}>

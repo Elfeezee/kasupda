@@ -1,9 +1,9 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, FileText, CheckCircle2, Clock, XCircle, BarChart as BarChartIcon } from 'lucide-react';
+import { FileText, Clock, CheckCircle2, XCircle, BarChart as BarChartIcon } from 'lucide-react';
 import {
   Bar,
   XAxis,
@@ -14,7 +14,9 @@ import {
   ResponsiveContainer,
   BarChart,
 } from 'recharts';
-import { getApplications, type StoredApplication } from '@/lib/application-store';
+import { db } from '@/lib/firebase/config';
+import { collection, getDocs } from 'firebase/firestore';
+import type { StoredApplication } from '../applications/page'; // Import the type from the applications page
 
 // This function processes applications to get statistics
 const processApplicationData = (applications: StoredApplication[]) => {
@@ -23,7 +25,6 @@ const processApplicationData = (applications: StoredApplication[]) => {
     pending: 0,
     approved: 0,
     rejected: 0,
-    users: new Set(applications.map(app => app.applicantName)).size,
     byType: {} as Record<string, { pending: number; approved: number; rejected: number; total: number }>,
   };
 
@@ -63,26 +64,38 @@ const processApplicationData = (applications: StoredApplication[]) => {
 
 export default function AdminDashboardPage() {
   const [dashboardData, setDashboardData] = React.useState<{ overview: any[], chartData: any[] }>({ overview: [], chartData: [] });
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
-    // This runs on the client and has access to localStorage
-    const applications = getApplications();
-    const processedData = processApplicationData(applications);
-    setDashboardData(processedData);
+  useEffect(() => {
+    const fetchApplications = async () => {
+        setLoading(true);
+        try {
+            const querySnapshot = await getDocs(collection(db, 'applications'));
+            const apps = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as StoredApplication));
+            const processedData = processApplicationData(apps);
+            setDashboardData(processedData);
+        } catch (error) {
+            console.error("Failed to fetch applications for dashboard:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    fetchApplications();
   }, []);
   
-  const overviewCards = dashboardData.overview.length > 0 ? dashboardData.overview : [
-      { title: "Total Applications", value: "0", icon: FileText },
-      { title: "Pending Applications", value: "0", icon: Clock },
-      { title: "Approved Applications", value: "0", icon: CheckCircle2 },
-      { title: "Rejected Applications", value: "0", icon: XCircle },
-  ];
+  const overviewCards = loading ? [
+      { title: "Total Applications", value: "...", icon: FileText },
+      { title: "Pending Applications", value: "...", icon: Clock },
+      { title: "Approved Applications", value: "...", icon: CheckCircle2 },
+      { title: "Rejected Applications", value: "...", icon: XCircle },
+  ] : dashboardData.overview;
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-primary">Admin Dashboard</h1>
-        <p className="text-muted-foreground">System overview and statistics.</p>
+        <p className="text-muted-foreground">System overview and statistics from the database.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -108,7 +121,11 @@ export default function AdminDashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="h-[350px] w-full">
-             {dashboardData.chartData.length > 0 ? (
+             {loading ? (
+                 <div className="flex items-center justify-center h-full text-muted-foreground">
+                    Loading chart data...
+                </div>
+             ) : dashboardData.chartData.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={dashboardData.chartData}>
                     <CartesianGrid strokeDasharray="3 3" />

@@ -17,12 +17,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { format } from 'date-fns';
-import { getApplications, type StoredApplication } from '@/lib/application-store';
+import { format, parseISO } from 'date-fns';
+import { db } from '@/lib/firebase/config';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import type { StoredApplication } from '../applications/page';
+
 
 // Define a user structure based on application data
 interface AppUser {
-  id: string;
+  id: string; // Using userId as the unique ID
   name: string;
   email: string;
   role: 'Applicant' | 'Admin'; // Simple roles for now
@@ -32,51 +35,57 @@ interface AppUser {
 
 export default function ManageUsersPage() {
   const [users, setUsers] = useState<AppUser[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<AppUser[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Derive user list from applications in local storage
-    const applications = getApplications();
-    const userMap = new Map<string, AppUser>();
+    const deriveUsersFromApplications = async () => {
+      setLoading(true);
+      try {
+        const q = query(collection(db, "applications"), orderBy("date", "asc"));
+        const querySnapshot = await getDocs(q);
+        const applications = querySnapshot.docs.map(doc => doc.data() as Omit<StoredApplication, 'id'>);
 
-    applications.forEach(app => {
-      const applicantEmail = app.data.email || `${app.applicantName.replace(/\s+/g, '.').toLowerCase()}@example.com`; // Fallback email
-      
-      if (userMap.has(applicantEmail)) {
-        const existingUser = userMap.get(applicantEmail)!;
-        existingUser.applicationCount += 1;
-        // Keep the earliest application date as the join date
-        if (new Date(app.date) < new Date(existingUser.joined)) {
-          existingUser.joined = app.date;
-        }
-      } else {
-        userMap.set(applicantEmail, {
-          id: `USR-${userMap.size + 1}`,
-          name: app.applicantName,
-          email: applicantEmail,
-          role: 'Applicant',
-          joined: app.date,
-          applicationCount: 1,
+        const userMap = new Map<string, AppUser>();
+
+        applications.forEach(app => {
+          // A user is uniquely identified by their userId
+          const userId = app.userId;
+          if (!userId) return; // Skip if no user ID
+
+          if (userMap.has(userId)) {
+            const existingUser = userMap.get(userId)!;
+            existingUser.applicationCount += 1;
+            // No need to update join date since we are ordering by asc date
+          } else {
+            userMap.set(userId, {
+              id: userId,
+              name: app.applicantName,
+              // Attempt to get email from data, otherwise create a placeholder
+              email: app.data.email || app.data.orgEmail || `user-${userId.substring(0,5)}@kasupda.gov.ng`,
+              role: 'Applicant',
+              joined: app.date,
+              applicationCount: 1,
+            });
+          }
         });
-      }
-    });
 
-    const derivedUsers = Array.from(userMap.values()).sort((a, b) => new Date(b.joined).getTime() - new Date(a.joined).getTime());
-    setUsers(derivedUsers);
-    setFilteredUsers(derivedUsers);
+        const derivedUsers = Array.from(userMap.values()).sort((a, b) => new Date(b.joined).getTime() - new Date(a.joined).getTime());
+        setUsers(derivedUsers);
+      } catch (error) {
+          console.error("Failed to derive users from Firestore:", error);
+      } finally {
+          setLoading(false);
+      }
+    };
+    
+    deriveUsersFromApplications();
   }, []);
 
-  useEffect(() => {
-    let result = users;
-    if (searchTerm) {
-      result = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    setFilteredUsers(result);
-  }, [searchTerm, users]);
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
 
   return (
@@ -119,7 +128,13 @@ export default function ManageUsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredUsers.length > 0 ? (
+                {loading ? (
+                    <TableRow>
+                        <TableCell colSpan={6} className="h-24 text-center">
+                            Loading user data from database...
+                        </TableCell>
+                    </TableRow>
+                ) : filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => (
                     <TableRow key={user.id}>
                         <TableCell className="font-medium">
@@ -135,7 +150,7 @@ export default function ManageUsersPage() {
                         <TableCell>
                         <Badge variant={user.role === 'Admin' ? 'destructive' : 'secondary'}>{user.role}</Badge>
                         </TableCell>
-                        <TableCell>{format(new Date(user.joined), 'dd/MM/yyyy')}</TableCell>
+                        <TableCell>{user.joined ? format(parseISO(user.joined), 'dd/MM/yyyy') : 'N/A'}</TableCell>
                         <TableCell>{user.applicationCount}</TableCell>
                         <TableCell className="text-right">
                         <DropdownMenu>

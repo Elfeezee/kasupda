@@ -19,7 +19,7 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { saveApplication } from '@/lib/application-store';
+import { saveApplication } from '@/app/actions/applicationActions';
 import { useRouter } from 'next/navigation';
 
 const phoneRegex = /^\+?[0-9\s-()]+$/;
@@ -152,6 +152,7 @@ export default function MastPermitPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<MastPermitFormValues>({
     resolver: zodResolver(mastPermitSchema),
     mode: "onChange",
@@ -203,18 +204,42 @@ export default function MastPermitPage() {
   const watchedTypeOfLand = watch("siteTypeOfLand");
   const watchedMastType = watch("mastType");
 
-  const onSubmit = (data: MastPermitFormValues) => {
-    saveApplication({
-      type: "Mast Installation Permit",
-      applicantName: data.orgName,
-      data: data,
-    });
+  const onSubmit = async (data: MastPermitFormValues) => {
+    setIsSubmitting(true);
     
-    toast({
-      title: "Application Submitted",
-      description: "Your Mast Installation Permit application has been received for processing.",
-    });
-    router.push('/dashboard/my-applications');
+    const formData = new FormData();
+    formData.append('type', "Mast Installation Permit");
+    formData.append('applicantName', data.orgName);
+    
+    // Serialize the full data object, handling files
+    formData.append('data', JSON.stringify(data, (key, value) => {
+        if (value instanceof FileList) {
+            return Array.from(value).map(file => ({ name: file.name, size: file.size, type: file.type }));
+        }
+        return value;
+    }));
+
+    try {
+        const result = await saveApplication(formData);
+        if (result.success) {
+            toast({
+                title: "Application Submitted!",
+                description: "Your Mast Installation Permit application has been received.",
+            });
+            router.push('/dashboard/my-applications');
+        } else {
+            throw new Error(result.error || "An unknown error occurred.");
+        }
+    } catch (error) {
+        console.error("Submission failed:", error);
+        toast({
+            title: "Submission Failed",
+            description: error instanceof Error ? error.message : "Could not submit the application.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   const handleNextStep = async () => {
@@ -443,7 +468,7 @@ export default function MastPermitPage() {
         <CardFooter className="flex flex-col items-center space-y-4 pt-6">
           <div className="flex w-full flex-col sm:flex-row sm:justify-between gap-2">
             <Button type="button" onClick={handlePreviousStep} disabled={currentStep === 1} variant="outline" className="w-full sm:w-auto"><ChevronLeft className="mr-2 h-4 w-4" /> Previous</Button>
-            {currentStep < steps.length ? (<Button type="button" onClick={handleNextStep} className="w-full sm:w-auto">Next <ChevronRight className="ml-2 h-4 w-4" /></Button>) : (<Button type="submit" className="w-full sm:w-auto py-3 text-base sm:text-lg">Submit Application</Button>)}
+            {currentStep < steps.length ? (<Button type="button" onClick={handleNextStep} className="w-full sm:w-auto">Next <ChevronRight className="ml-2 h-4 w-4" /></Button>) : (<Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto py-3 text-base sm:text-lg">{isSubmitting ? 'Submitting...' : 'Submit Application'}</Button>)}
           </div>
           <Separator className="my-2" />
           <p className="text-xs text-muted-foreground text-center">KASUPDA Regulations, 2025 &nbsp;&nbsp;|&nbsp;&nbsp; Version 1.1 2025</p>
@@ -457,5 +482,3 @@ export default function MastPermitPage() {
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (<svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>);
 }
-
-    

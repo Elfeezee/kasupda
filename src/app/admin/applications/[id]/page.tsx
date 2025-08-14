@@ -1,16 +1,27 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Check, X, Download, File as FileIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { getApplicationById, updateApplicationStatus, type StoredApplication } from '@/lib/application-store';
 import { useToast } from '@/hooks/use-toast';
+import { db } from '@/lib/firebase/config';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
+// Reuse the StoredApplication type
+export interface StoredApplication {
+  id: string;
+  type: string;
+  applicantName: string;
+  status: string;
+  date: string;
+  data: Record<string, any>; // This will hold the parsed JSON data
+  userId?: string;
+}
 
 type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
 
@@ -32,16 +43,16 @@ const DetailItem = ({ label, value }: { label: string; value: string | undefined
     </div>
 );
 
-const DocumentItem = ({ name, file }: { name: string; file: { name: string; __isFile?: boolean } | undefined }) => (
+const DocumentItem = ({ name, file }: { name: string; file: { name: string; type: string, size: number } | undefined }) => (
      <li className="flex items-center justify-between p-3 rounded-md border bg-muted/50">
         <div className="flex items-center gap-2">
             <FileIcon className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium">{name}</span>
         </div>
-        {file?.__isFile ? (
+        {file?.name ? (
            <div className='flex items-center gap-2'>
                 <span className="text-xs text-muted-foreground truncate max-w-[150px]">{file.name}</span>
-                <Button variant="outline" size="sm" className="gap-2" onClick={() => alert(`Simulating download for: ${file.name}`)}>
+                <Button variant="outline" size="sm" className="gap-2" onClick={() => alert(`This is a prototype. File download for '${file.name}' is not implemented.`)}>
                     <Download className="h-4 w-4" /> Download
                 </Button>
            </div>
@@ -51,6 +62,7 @@ const DocumentItem = ({ name, file }: { name: string; file: { name: string; __is
     </li>
 );
 
+// This function now renders details from the 'data' sub-object
 const renderDetails = (details: Record<string, any>) => {
     // Exclude special/internal keys from the main details list
     const detailEntries = Object.entries(details).filter(([key]) => !key.startsWith('doc') && key !== 'declaration');
@@ -63,16 +75,15 @@ const renderDetails = (details: Record<string, any>) => {
         if (value instanceof Date) return value.toLocaleDateString();
         if (typeof value === 'boolean') return value ? 'Yes' : 'No';
         if (typeof value === 'object' && value !== null) {
-            // For simple objects, filter and join checked keys (like for identification types)
-             const checkedKeys = Object.keys(value).filter(k => (value as any)[k] === true);
+            const checkedKeys = Object.keys(value).filter(k => (value as any)[k] === true);
             if (checkedKeys.length > 0 && !checkedKeys.some(k => typeof (value as any)[k] === 'object')) {
                  return checkedKeys.map(k => k.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())).join(', ') || 'None';
             }
-             // For file-like objects from localStorage
-            if (value.__isFile) {
-                return <DocumentItem name="File" file={value} />;
+            // A file object from our serialized data will have a name property
+            if (value.name && value.size !== undefined) {
+                 return <DocumentItem name="File" file={value} />;
             }
-            return 'Complex object - view details below'; // Fallback for complex objects not handled
+            return 'Complex object - view details below'; 
         }
         return String(value);
     };
@@ -92,11 +103,11 @@ const renderDetails = (details: Record<string, any>) => {
               <h3 className="text-lg font-semibold text-primary mb-4">Uploaded Documents</h3>
               <ul className="space-y-3">
                 {docGroups.map(([groupKey, docObject]) => 
-                    Object.entries(docObject).map(([docKey, docFile]) => (
+                    Object.entries(docObject).map(([docKey, docValue]) => (
                         <DocumentItem 
                             key={`${groupKey}-${docKey}`} 
                             name={docKey.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} 
-                            file={docFile as { name: string; __isFile?: boolean } | undefined} 
+                            file={docValue as { name: string; type: string; size: number } | undefined} 
                         />
                     ))
                 )}
@@ -117,35 +128,60 @@ export default function ApplicationDetailPage() {
   const [application, setApplication] = useState<StoredApplication | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchApplication = useCallback(async (appId: string) => {
+    setLoading(true);
+    try {
+        const appDocRef = doc(db, 'applications', appId);
+        const docSnap = await getDoc(appDocRef);
+
+        if (docSnap.exists()) {
+            const docData = docSnap.data();
+            setApplication({ id: docSnap.id, ...docData } as StoredApplication);
+        } else {
+            toast({ title: 'Not Found', description: 'Application does not exist.', variant: 'destructive' });
+            setApplication(null);
+        }
+    } catch (error) {
+        console.error("Error fetching document:", error);
+        toast({ title: 'Error', description: 'Failed to fetch application details.', variant: 'destructive' });
+    } finally {
+        setLoading(false);
+    }
+  }, [toast]);
+
+
   useEffect(() => {
     if (id) {
-      const appData = getApplicationById(id as string);
-      setApplication(appData);
+      fetchApplication(id as string);
     }
-    setLoading(false);
-  }, [id]);
+  }, [id, fetchApplication]);
 
-  const handleStatusChange = (newStatus: 'Approved' | 'Rejected') => {
+  const handleStatusChange = async (newStatus: 'Approved' | 'Rejected') => {
     if (!application) return;
 
-    const updatedApplication = updateApplicationStatus(application.id, newStatus);
-    if (updatedApplication) {
-        setApplication(updatedApplication); // Update state to re-render with new status
+    try {
+        const appDocRef = doc(db, 'applications', application.id);
+        await updateDoc(appDocRef, { status: newStatus });
+
+        // Optimistically update the UI
+        setApplication(prevApp => prevApp ? { ...prevApp, status: newStatus } : null);
+        
         toast({
             title: `Application ${newStatus}`,
             description: `The application (ID: ${application.id}) has been marked as ${newStatus}.`
         });
-    } else {
+    } catch (error) {
+        console.error("Error updating status:", error);
         toast({
             title: 'Error',
-            description: 'Could not update the application status.',
+            description: 'Could not update the application status in the database.',
             variant: 'destructive',
         });
     }
   };
 
   if (loading) {
-    return <div className="text-center p-8">Loading application details...</div>;
+    return <div className="text-center p-8">Loading application details from database...</div>;
   }
   
   if (!application) {
@@ -180,6 +216,7 @@ export default function ApplicationDetailPage() {
             <h3 className="text-lg font-semibold text-primary mb-4">Applicant: {application.applicantName}</h3>
             <Separator />
             <h3 className="text-lg font-semibold text-primary mb-4">Application Details</h3>
+            {/* Pass the nested 'data' object to the renderer */}
             {renderDetails(application.data)}
         </CardContent>
         <CardFooter className="flex justify-end gap-2">

@@ -19,7 +19,7 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { saveApplication } from '@/lib/application-store';
+import { saveApplication } from '@/app/actions/applicationActions';
 import { useRouter } from 'next/navigation';
 
 // Define Zod schema based on the form
@@ -149,6 +149,7 @@ export default function ResidentialBuildingPermitPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { register, handleSubmit, control, formState: { errors }, trigger } = useForm<PermitApplicationFormValues>({
     resolver: zodResolver(permitApplicationSchema),
     mode: "onChange", 
@@ -203,32 +204,41 @@ export default function ResidentialBuildingPermitPage() {
     }
   });
 
-  const onSubmit = (data: PermitApplicationFormValues) => {
-    // Transform file lists into single files
-    const processedData = { ...data };
-    if (processedData.docResidential) {
-      for (const key in processedData.docResidential) {
-        const fileList = (processedData.docResidential as any)[key];
-        if (fileList instanceof FileList && fileList.length > 0) {
-          (processedData.docResidential as any)[key] = fileList[0];
+  const onSubmit = async (data: PermitApplicationFormValues) => {
+    setIsSubmitting(true);
+    
+    // NOTE: In a real app, file uploads would be handled separately to a storage service
+    // and the URLs would be stored in Firestore. For this prototype, we'll store file names.
+    const formData = new FormData();
+
+    // We need to serialize the data to pass to a server action
+    formData.append('type', "Building Permit (Individual)");
+    formData.append('applicantName', `${data.firstName} ${data.surname}`);
+    formData.append('data', JSON.stringify(data));
+
+    try {
+        const result = await saveApplication(formData);
+
+        if (result.success) {
+             toast({
+                title: "Application Submitted!",
+                description: `Your application has been received. ID: ${result.applicationId}`,
+            });
+            router.push('/dashboard/my-applications');
         } else {
-           (processedData.docResidential as any)[key] = undefined;
+            throw new Error(result.error || "An unknown error occurred.");
         }
-      }
+
+    } catch (error) {
+        console.error("Submission failed:", error);
+        toast({
+            title: "Submission Failed",
+            description: error instanceof Error ? error.message : "Could not submit the application. Please try again.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsSubmitting(false);
     }
-    
-    saveApplication({
-      type: "Building Permit (Individual)",
-      applicantName: `${data.firstName} ${data.surname}`,
-      data: processedData,
-    });
-    
-    toast({
-      title: "Application Submitted",
-      description: "Your residential building permit application has been received.",
-    });
-    
-    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {
@@ -736,8 +746,9 @@ export default function ResidentialBuildingPermitPage() {
                     <Button 
                       type="submit" 
                       className="w-full sm:w-auto py-3 text-base sm:text-lg"
+                      disabled={isSubmitting}
                     >
-                        Submit Application
+                        {isSubmitting ? 'Submitting...' : 'Submit Application'}
                     </Button>
                 )}
             </div>

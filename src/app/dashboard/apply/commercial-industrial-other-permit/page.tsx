@@ -18,7 +18,7 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { saveApplication } from '@/lib/application-store';
+import { saveApplication } from '@/app/actions/applicationActions';
 import { useRouter } from 'next/navigation';
 
 // Define Zod schema based on the form
@@ -147,6 +147,7 @@ export default function CommercialIndustrialOtherPermitPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { register, handleSubmit, control, formState: { errors }, trigger } = useForm<BpoPermitApplicationFormValues>({
     resolver: zodResolver(bpoPermitApplicationSchema),
     mode: "onChange", 
@@ -194,32 +195,48 @@ export default function CommercialIndustrialOtherPermitPage() {
     }
   });
 
- const onSubmit = (data: BpoPermitApplicationFormValues) => {
-    // Transform file lists into single files
-    const processedData = { ...data };
-    if (processedData.docOrg) {
-      for (const key in processedData.docOrg) {
-        const fileList = (processedData.docOrg as any)[key];
-        if (fileList instanceof FileList && fileList.length > 0) {
-          (processedData.docOrg as any)[key] = fileList[0];
-        } else {
-           (processedData.docOrg as any)[key] = undefined;
+ const onSubmit = async (data: BpoPermitApplicationFormValues) => {
+    setIsSubmitting(true);
+    
+    // NOTE: In a real app, file uploads would be handled separately to a storage service
+    // and the URLs would be stored in Firestore. For this prototype, we'll store file names.
+    const formData = new FormData();
+
+    // We need to serialize the data to pass to a server action
+    formData.append('type', "Building Permit (Organization)");
+    formData.append('applicantName', data.orgName);
+    // Convert all data to a JSON string. File objects cannot be passed to server actions directly.
+    const serializableData = { ...data };
+    formData.append('data', JSON.stringify(serializableData, (key, value) => {
+        if (value instanceof FileList) {
+            return Array.from(value).map(file => ({ name: file.name, size: file.size, type: file.type }));
         }
-      }
+        return value;
+    }));
+
+    try {
+        const result = await saveApplication(formData);
+
+        if (result.success) {
+             toast({
+                title: "Application Submitted!",
+                description: `Your application has been received. ID: ${result.applicationId}`,
+            });
+            router.push('/dashboard/my-applications');
+        } else {
+            throw new Error(result.error || "An unknown error occurred.");
+        }
+
+    } catch (error) {
+        console.error("Submission failed:", error);
+        toast({
+            title: "Submission Failed",
+            description: error instanceof Error ? error.message : "Could not submit the application. Please try again.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsSubmitting(false);
     }
-    
-    saveApplication({
-      type: "Building Permit (Organization)",
-      applicantName: data.orgName,
-      data: processedData,
-    });
-    
-    toast({
-      title: "Application Submitted",
-      description: "Your Building Permit for Organization application has been received.",
-    });
-    
-    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {
@@ -675,8 +692,9 @@ export default function CommercialIndustrialOtherPermitPage() {
                     <Button 
                       type="submit" 
                       className="w-full sm:w-auto py-3 text-base sm:text-lg"
+                      disabled={isSubmitting}
                     >
-                        Submit Application
+                        {isSubmitting ? 'Submitting...' : 'Submit Application'}
                     </Button>
                 )}
             </div>

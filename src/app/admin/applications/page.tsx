@@ -20,9 +20,21 @@ import {
 import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
 import { format, parseISO } from 'date-fns';
-import { getApplications, type StoredApplication, updateApplicationStatus } from '@/lib/application-store';
 import { useToast } from '@/hooks/use-toast';
+import { db } from '@/lib/firebase/config';
+import { collection, getDocs, doc, updateDoc, query, orderBy } from 'firebase/firestore';
 
+
+// Define the structure of an application from Firestore
+export interface StoredApplication {
+  id: string;
+  type: string;
+  applicantName: string;
+  status: string;
+  date: string;
+  data: Record<string, any>;
+  userId?: string;
+}
 
 type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
 
@@ -53,38 +65,63 @@ export default function ManageApplicationsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'All'>('All');
   
-  // Directly load applications on component mount and define a function to refresh
-  const loadApplications = () => {
-    const loadedApplications = getApplications();
-    const sortedApps = loadedApplications.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    setApplications(sortedApps);
-  };
+  const loadApplications = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const applicationsRef = collection(db, "applications");
+      const q = query(applicationsRef, orderBy("date", "desc"));
+      const querySnapshot = await getDocs(q);
+      const loadedApplications = querySnapshot.docs.map(doc => {
+        return { id: doc.id, ...doc.data() } as StoredApplication;
+      });
+      setApplications(loadedApplications);
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load applications from the database.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
 
   useEffect(() => {
     loadApplications();
-  }, []);
+  }, [loadApplications]);
 
   const handleViewDetails = (appId: string) => {
     router.push(`/admin/applications/${appId}`);
   };
 
-  const handleStatusChange = (appId: string, newStatus: 'Approved' | 'Rejected') => {
-    const updatedApplication = updateApplicationStatus(appId, newStatus);
-    if (updatedApplication) {
-      loadApplications(); // Refresh the list from storage to show the change
-      toast({
-        title: `Application ${newStatus}`,
-        description: `The application (ID: ${appId}) has been marked as ${newStatus}.`
-      });
-    } else {
-      toast({
-        title: 'Error',
-        description: 'Could not update the application status.',
-        variant: 'destructive',
-      });
+  const handleStatusChange = async (appId: string, newStatus: 'Approved' | 'Rejected') => {
+     try {
+        const appDocRef = doc(db, 'applications', appId);
+        await updateDoc(appDocRef, { status: newStatus });
+        
+        // Update local state to reflect change immediately
+        setApplications(prevApps => 
+            prevApps.map(app => 
+                app.id === appId ? { ...app, status: newStatus } : app
+            )
+        );
+
+        toast({
+            title: `Application ${newStatus}`,
+            description: `The application (ID: ${appId}) has been marked as ${newStatus}.`
+        });
+    } catch (error) {
+        console.error("Error updating status:", error);
+        toast({
+            title: 'Error',
+            description: 'Could not update the application status in the database.',
+            variant: 'destructive',
+        });
     }
   };
 
@@ -103,7 +140,7 @@ export default function ManageApplicationsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Manage Applications</CardTitle>
-          <CardDescription>View, filter, and manage all submitted applications.</CardDescription>
+          <CardDescription>View, filter, and manage all submitted applications from the database.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between gap-4 mb-6">
@@ -148,13 +185,19 @@ export default function ManageApplicationsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredApplications.length > 0 ? (
+                {loading ? (
+                    <TableRow>
+                        <TableCell colSpan={6} className="h-24 text-center">
+                            Loading applications from database...
+                        </TableCell>
+                    </TableRow>
+                ) : filteredApplications.length > 0 ? (
                   filteredApplications.map((app) => (
                     <TableRow key={app.id}>
                       <TableCell className="font-medium text-xs">{app.id}</TableCell>
                       <TableCell>{app.applicantName}</TableCell>
                       <TableCell className="text-sm">{app.type}</TableCell>
-                      <TableCell>{format(parseISO(app.date), 'dd/MM/yyyy')}</TableCell>
+                      <TableCell>{app.date ? format(parseISO(app.date), 'dd/MM/yyyy') : 'N/A'}</TableCell>
                       <TableCell>
                         <StatusBadge status={app.status as ApplicationStatus} />
                       </TableCell>
