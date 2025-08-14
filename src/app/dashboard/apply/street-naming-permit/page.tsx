@@ -20,6 +20,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { saveApplication } from '@/lib/application-store';
+import { useRouter } from 'next/navigation';
 
 const phoneRegex = /^\+?[0-9\s-()]+$/;
 
@@ -89,8 +91,8 @@ const streetNamingPermitSchema = z.object({
   locationOfSite: z.string().min(1, "Location of site is required"),
 
   // Box 5: REQUIRED DOCUMENTS
-  docImageShowingSite: z.boolean().optional().default(false),
-  docConsentLetter: z.boolean().optional().default(false),
+  docImageShowingSite: z.any().optional(),
+  docConsentLetter: z.any().optional(),
 
   // Box 6: SIGNATURE (Declaration)
   declaration: z.boolean().refine(val => val === true, {
@@ -133,6 +135,7 @@ const steps = [
 
 export default function StreetNamingPermitPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<StreetNamingPermitFormValues>({
     resolver: zodResolver(streetNamingPermitSchema),
@@ -181,8 +184,8 @@ export default function StreetNamingPermitPage() {
       roadLength: "",
       coordinates: "",
       locationOfSite: "",
-      docImageShowingSite: false,
-      docConsentLetter: false,
+      docImageShowingSite: undefined,
+      docConsentLetter: undefined,
       declaration: false,
     }
   });
@@ -190,12 +193,18 @@ export default function StreetNamingPermitPage() {
   const watchedEducationLevel = watch("educationLevel");
 
   const onSubmit = (data: StreetNamingPermitFormValues) => {
-    console.log("Street Naming Permit Form Data:", data);
-    toast({
-      title: "Application Submitted (Simulated)",
-      description: "Your Street Naming Permit application has been received for processing.",
-      duration: 5000,
+    saveApplication({
+      type: "Street Naming Permit",
+      applicantName: `${data.firstName} ${data.surname}`,
+      data: data,
     });
+    
+    toast({
+      title: "Application Submitted",
+      description: "Your Street Naming Permit application has been received for processing.",
+    });
+
+    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {
@@ -283,7 +292,7 @@ export default function StreetNamingPermitPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl">BOX 1: APPLICANT</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">The person whose name would be reflected on the Street Naming Permit. Original identification document used to prove identity must be submitted; it will be copied and retained.</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">The person whose name would be reflected on the Street Naming Permit. Original identification document used to prove identity must be submitted; it will be copied and returned.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -424,9 +433,15 @@ export default function StreetNamingPermitPage() {
               <div>
                 <Label className="text-md font-semibold">Required Documents</Label>
                 <CardDescription className="text-xs sm:text-sm mb-2">Applicants should submit all of the relevant documents, with minimum requirement indicated below. If you have multiple relevant documents, please submit them and tick the documents that you acquire.</CardDescription>
-                <div className="space-y-2 mt-2">
-                    <div className="flex items-start space-x-2"><Controller name="docImageShowingSite" control={control} render={({ field }) => (<Checkbox id="docImageShowingSite" checked={!!field.value} onCheckedChange={field.onChange} className="mt-1"/>)} /><Label htmlFor="docImageShowingSite" className="font-normal text-sm">Sabir the Image showing the site</Label></div>
-                    <div className="flex items-start space-x-2"><Controller name="docConsentLetter" control={control} render={({ field }) => (<Checkbox id="docConsentLetter" checked={!!field.value} onCheckedChange={field.onChange} className="mt-1"/>)} /><Label htmlFor="docConsentLetter" className="font-normal text-sm">Consent/Introduction Letter from Community Head</Label></div>
+                <div className="space-y-4 mt-2">
+                    <div className="space-y-1.5">
+                        <Label htmlFor="docImageShowingSite" className="text-sm font-medium">Image showing the site</Label>
+                        <Input id="docImageShowingSite" type="file" {...register("docImageShowingSite")} className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                    </div>
+                    <div className="space-y-1.5">
+                        <Label htmlFor="docConsentLetter" className="text-sm font-medium">Consent/Introduction Letter from Community Head</Label>
+                        <Input id="docConsentLetter" type="file" {...register("docConsentLetter")} className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                    </div>
                 </div>
               </div>
               <Separator />
@@ -469,3 +484,4 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+    

@@ -16,6 +16,8 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { saveApplication } from '@/lib/application-store';
+import { useRouter } from 'next/navigation';
 
 const phoneRegex = /^\+?[0-9\s-()]+$/;
 
@@ -84,7 +86,7 @@ const outdoorAdvertisementPermitSchema = z.object({
   repIdNumber: z.string().optional(),
   
   // Box 4: Required Documents
-  ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, z.boolean().optional().default(false)])),
+  ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, z.any().optional()])),
 
   // Box 5: Signature
   declaration: z.boolean().refine(val => val === true, {
@@ -112,6 +114,7 @@ const steps = [
 
 export default function OutdoorAdvertisementPermitPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<OutdoorAdvertisementPermitFormValues>({
     resolver: zodResolver(outdoorAdvertisementPermitSchema),
@@ -143,7 +146,7 @@ export default function OutdoorAdvertisementPermitPage() {
       repIdentificationType: {},
       repIdNumber: "",
       declaration: false,
-      ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, false])),
+      ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, undefined])),
     }
   });
 
@@ -151,12 +154,18 @@ export default function OutdoorAdvertisementPermitPage() {
   const watchedTypeOfLand = watch("siteTypeOfLand");
 
   const onSubmit = (data: OutdoorAdvertisementPermitFormValues) => {
-    console.log("Outdoor Advertisement Permit Form Data:", data);
-    toast({
-      title: "Application Submitted (Simulated)",
-      description: "Your Outdoor Advertisement Permit application has been received.",
-      duration: 5000,
+    saveApplication({
+      type: "Outdoor Advertisement Permit",
+      applicantName: data.applicantCompanyNameIndividual,
+      data: data,
     });
+    
+    toast({
+      title: "Application Submitted",
+      description: "Your Outdoor Advertisement Permit application has been received.",
+    });
+
+    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {
@@ -350,12 +359,12 @@ export default function OutdoorAdvertisementPermitPage() {
             <CardContent className="space-y-6">
                 <div>
                     <Label className="text-md font-semibold">BOX 4: Required Documents</Label>
-                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 mt-2">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                         {requiredDocsList.map(doc => (
-                        <div key={doc.id} className="flex items-start space-x-2">
-                            <Controller name={doc.id as FieldName<OutdoorAdvertisementPermitFormValues>} control={control} render={({ field }) => (<Checkbox id={doc.id} checked={!!field.value} onCheckedChange={field.onChange} className="mt-1"/>)} />
-                            <Label htmlFor={doc.id} className="font-normal text-xs sm:text-sm">{doc.label}</Label>
-                        </div>
+                            <div key={doc.id} className="space-y-1.5">
+                                <Label htmlFor={doc.id} className="text-sm font-medium">{doc.label}</Label>
+                                <Input id={doc.id} type="file" {...register(doc.id as FieldName<OutdoorAdvertisementPermitFormValues>)} className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -401,3 +410,4 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+    

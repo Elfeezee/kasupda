@@ -16,6 +16,8 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { saveApplication } from '@/lib/application-store';
+import { useRouter } from 'next/navigation';
 
 const phoneRegex = /^\+?[0-9\s-()]+$/;
 
@@ -99,7 +101,7 @@ const outdoorStructurePermitSchema = z.object({ // Renamed schema to reflect con
   repIdNumber: z.string().min(1, "Representative ID Number is required"),
   
   // Box 4: Required Documents
-  ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, z.boolean().optional().default(false)])),
+  ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, z.any().optional()])),
 
   // Box 5: Signature
   declaration: z.boolean().refine(val => val === true, {
@@ -136,6 +138,7 @@ const steps = [
 
 export default function OutdoorStructurePermitPage() { // Renamed component, though file name is the same
   const { toast } = useToast();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<OutdoorStructurePermitFormValues>({
     resolver: zodResolver(outdoorStructurePermitSchema),
@@ -169,7 +172,7 @@ export default function OutdoorStructurePermitPage() { // Renamed component, tho
       repIdNumber: "",
       declaration: false,
       // Initialize all doc fields to false
-      ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, false])),
+      ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, undefined])),
     }
   });
 
@@ -177,12 +180,18 @@ export default function OutdoorStructurePermitPage() { // Renamed component, tho
   const watchedTypeOfLand = watch("siteTypeOfLand");
 
   const onSubmit = (data: OutdoorStructurePermitFormValues) => {
-    console.log("Outdoor Structure Permit Form Data:", data); // Updated log message
-    toast({
-      title: "Application Submitted (Simulated)",
-      description: "Your Outdoor Structure Permit application has been received.", // Updated toast message
-      duration: 5000,
+    saveApplication({
+      type: "Outdoor Structure Permit",
+      applicantName: data.companyName,
+      data: data,
     });
+    
+    toast({
+      title: "Application Submitted",
+      description: "Your Outdoor Structure Permit application has been received.",
+    });
+
+    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {
@@ -376,12 +385,12 @@ export default function OutdoorStructurePermitPage() { // Renamed component, tho
             <CardContent className="space-y-6">
                 <div>
                     <Label className="text-md font-semibold">BOX 4: Required Documents</Label>
-                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 mt-2">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                         {requiredDocsList.map(doc => (
-                        <div key={doc.id} className="flex items-start space-x-2">
-                            <Controller name={doc.id as FieldName<OutdoorStructurePermitFormValues>} control={control} render={({ field }) => (<Checkbox id={doc.id} checked={!!field.value} onCheckedChange={field.onChange} className="mt-1"/>)} />
-                            <Label htmlFor={doc.id} className="font-normal text-xs sm:text-sm">{doc.label}</Label>
-                        </div>
+                            <div key={doc.id} className="space-y-1.5">
+                                <Label htmlFor={doc.id} className="text-sm font-medium">{doc.label}</Label>
+                                <Input id={doc.id} type="file" {...register(doc.id as FieldName<OutdoorStructurePermitFormValues>)} className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -426,3 +435,5 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
   );
 }
+
+    

@@ -19,6 +19,8 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { saveApplication } from '@/lib/application-store';
+import { useRouter } from 'next/navigation';
 
 const phoneRegex = /^\+?[0-9\s-()]+$/;
 
@@ -122,7 +124,7 @@ const mastPermitSchema = z.object({
   mastLocationOfShield: z.string().optional(),
   
   // Box 5: Required Documents
-  ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, z.boolean().optional().default(false)])),
+  ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, z.any().optional()])),
 
   // Box 6: Signature (Declaration)
   declaration: z.boolean().refine(val => val === true, {
@@ -148,6 +150,7 @@ const steps = [
 
 export default function MastPermitPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<MastPermitFormValues>({
     resolver: zodResolver(mastPermitSchema),
@@ -193,7 +196,7 @@ export default function MastPermitPage() {
       mastCoordinates: "",
       mastLocationOfShield: "",
       declaration: false,
-      ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, false])),
+      ...Object.fromEntries(requiredDocsList.map(doc => [doc.id, undefined])),
     }
   });
 
@@ -201,12 +204,17 @@ export default function MastPermitPage() {
   const watchedMastType = watch("mastType");
 
   const onSubmit = (data: MastPermitFormValues) => {
-    console.log("Mast Installation Permit Form Data:", data);
-    toast({
-      title: "Application Submitted (Simulated)",
-      description: "Your Mast Installation Permit application has been received for processing.",
-      duration: 5000,
+    saveApplication({
+      type: "Mast Installation Permit",
+      applicantName: data.orgName,
+      data: data,
     });
+    
+    toast({
+      title: "Application Submitted",
+      description: "Your Mast Installation Permit application has been received for processing.",
+    });
+    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {
@@ -405,8 +413,13 @@ export default function MastPermitPage() {
               <div>
                 <Label className="text-md font-semibold">BOX 5: Required Documents</Label>
                 <CardDescription className="text-xs sm:text-sm mb-2">Applicants should submit all relevant documents. Please note that any drawings should be endorsed by a relevant professional.</CardDescription>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 mt-2">
-                  {requiredDocsList.map(doc => (<div key={doc.id} className="flex items-start space-x-2"><Controller name={doc.id as FieldName<MastPermitFormValues>} control={control} render={({ field }) => (<Checkbox id={doc.id} checked={!!field.value} onCheckedChange={field.onChange} className="mt-1" />)} /><Label htmlFor={doc.id} className="font-normal text-xs sm:text-sm">{doc.label}</Label></div>))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                  {requiredDocsList.map(doc => (
+                    <div key={doc.id} className="space-y-1.5">
+                      <Label htmlFor={doc.id} className="text-sm font-medium">{doc.label}</Label>
+                      <Input id={doc.id} type="file" {...register(doc.id as FieldName<MastPermitFormValues>)} className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" />
+                    </div>
+                  ))}
                 </div>
               </div>
               <Separator />
@@ -445,3 +458,4 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (<svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>);
 }
 
+    

@@ -19,6 +19,8 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { saveApplication } from '@/lib/application-store';
+import { useRouter } from 'next/navigation';
 
 const phoneRegex = /^\+?[0-9\s-()]+$/;
 
@@ -92,6 +94,7 @@ const steps = [
 
 export default function ShopOwnersPermitPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const { register, handleSubmit, control, formState: { errors }, trigger } = useForm<ShopOwnersPermitFormValues>({
     resolver: zodResolver(shopOwnersPermitSchema),
@@ -131,12 +134,18 @@ export default function ShopOwnersPermitPage() {
   });
 
   const onSubmit = (data: ShopOwnersPermitFormValues) => {
-    console.log("Shop Owners Permit Form Data:", data);
-    toast({
-      title: "Application Submitted (Simulated)",
-      description: "Your Temporary Shop Owners Permit application has been received.",
-      duration: 5000,
+    saveApplication({
+      type: "Temporary Shop Owners Permit",
+      applicantName: `${data.firstName} ${data.surname}`,
+      data: data,
     });
+    
+    toast({
+      title: "Application Submitted",
+      description: "Your Temporary Shop Owners Permit application has been received.",
+    });
+
+    router.push('/dashboard/my-applications');
   };
 
   const handleNextStep = async () => {
@@ -303,3 +312,4 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (<svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>);
 }
 
+    
