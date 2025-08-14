@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { getApplications, type StoredApplication, updateApplicationStatus } from '@/lib/application-store';
 import { useToast } from '@/hooks/use-toast';
 
@@ -53,42 +53,19 @@ export default function ManageApplicationsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
-  const [filteredApplications, setFilteredApplications] = useState<StoredApplication[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'All'>('All');
   
-  // Function to load applications, can be recalled to refresh data
+  // Directly load applications on component mount and define a function to refresh
   const loadApplications = () => {
     const loadedApplications = getApplications();
-    setApplications(loadedApplications);
-    // Initially, the filtered list is the full list
-    setFilteredApplications(loadedApplications.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+    const sortedApps = loadedApplications.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    setApplications(sortedApps);
   };
 
   useEffect(() => {
     loadApplications();
   }, []);
-
-  useEffect(() => {
-    let result = applications;
-
-    // Filter by search term
-    if (searchTerm) {
-      result = result.filter(app =>
-        app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.id.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Filter by status
-    if (statusFilter !== 'All') {
-      result = result.filter(app => app.status === statusFilter);
-    }
-    
-    setFilteredApplications(result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
-
-  }, [searchTerm, statusFilter, applications]);
-
 
   const handleViewDetails = (appId: string) => {
     router.push(`/admin/applications/${appId}`);
@@ -97,7 +74,7 @@ export default function ManageApplicationsPage() {
   const handleStatusChange = (appId: string, newStatus: 'Approved' | 'Rejected') => {
     const updatedApplication = updateApplicationStatus(appId, newStatus);
     if (updatedApplication) {
-      loadApplications(); // Refresh the list from storage
+      loadApplications(); // Refresh the list from storage to show the change
       toast({
         title: `Application ${newStatus}`,
         description: `The application (ID: ${appId}) has been marked as ${newStatus}.`
@@ -111,6 +88,15 @@ export default function ManageApplicationsPage() {
     }
   };
 
+  const filteredApplications = applications.filter(app => {
+    const termMatch = searchTerm.trim() === '' || 
+        app.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        app.id.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const statusMatch = statusFilter === 'All' || app.status === statusFilter;
+
+    return termMatch && statusMatch;
+  });
 
   return (
     <div className="space-y-8">
@@ -168,7 +154,7 @@ export default function ManageApplicationsPage() {
                       <TableCell className="font-medium text-xs">{app.id}</TableCell>
                       <TableCell>{app.applicantName}</TableCell>
                       <TableCell className="text-sm">{app.type}</TableCell>
-                      <TableCell>{format(new Date(app.date), 'dd/MM/yyyy')}</TableCell>
+                      <TableCell>{format(parseISO(app.date), 'dd/MM/yyyy')}</TableCell>
                       <TableCell>
                         <StatusBadge status={app.status as ApplicationStatus} />
                       </TableCell>
