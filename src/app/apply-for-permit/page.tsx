@@ -2,7 +2,7 @@
 "use client";
 
 import React from 'react';
-import { useFormStatus } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,12 +12,12 @@ import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
-// Removed: import { signUpWithEmail, type SignUpState } from '@/app/actions/authActions';
-// Removed: import { useActionState } from 'react';
+import { signUpWithEmail, type SignUpState } from '@/app/actions/authActions';
+import { useEffect } from 'react';
 
 
 function SubmitButton() {
-  const { pending } = useFormStatus(); // This will always be false now without a server action
+  const { pending } = useFormStatus();
   return (
     <Button type="submit" className="w-full text-lg py-3" disabled={pending} aria-disabled={pending}>
       {pending ? 'Creating Profile...' : 'Create Profile'}
@@ -28,40 +28,34 @@ function SubmitButton() {
 export default function ApplyForPermitPage() {
   const router = useRouter();
   const { toast } = useToast();
+  
+  const initialState: SignUpState = { message: null, success: false, errors: null };
+  const [state, formAction] = useFormState(signUpWithEmail, initialState);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const applicantName = formData.get('applicantName') as string || 'User';
-    const email = formData.get('email') as string;
-    const phone = formData.get('phone') as string;
-    const password = formData.get('password') as string;
-
-    // Basic client-side validation (can be expanded)
-    if (!applicantName.trim() || !email.trim() || !phone.trim() || !password.trim()) {
+  useEffect(() => {
+    if (state.success) {
+      if (state.redirectTo) {
+        toast({
+            title: 'Sign Up Successful!',
+            description: state.message || 'Redirecting to your dashboard...',
+        });
+        router.push(state.redirectTo);
+      } else if (state.pendingConfirmation) {
+        toast({
+            title: 'Please Confirm Your Email',
+            description: state.message || 'A confirmation link has been sent to your email.',
+            duration: 8000,
+        });
+         // Potentially redirect to a "check your email" page or stay here
+      }
+    } else if (state.message) {
       toast({
         title: 'Error',
-        description: 'Please fill in all required fields.',
+        description: state.message,
         variant: 'destructive',
       });
-      return;
     }
-    if (password.length < 6) {
-      toast({
-        title: 'Error',
-        description: 'Password must be at least 6 characters.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-
-    toast({
-      title: 'Profile Created (Simulated)',
-      description: 'Redirecting to your dashboard...',
-    });
-    router.push(`/dashboard?name=${encodeURIComponent(applicantName)}`);
-  };
+  }, [state, router, toast]);
 
   return (
     <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-var(--header-height,100px)-var(--footer-height,100px))]">
@@ -71,22 +65,26 @@ export default function ApplyForPermitPage() {
           <CardDescription>Apply for permits and manage your applications.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
+          <form action={formAction} className="grid grid-cols-1 gap-6">
             <div className="space-y-2">
               <Label htmlFor="applicantName">Applicant Name</Label>
               <Input id="applicantName" name="applicantName" placeholder="Enter your full name" required />
+               {state.errors?.applicantName && <p className="text-destructive text-xs mt-1">{state.errors.applicantName[0]}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
               <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+               {state.errors?.email && <p className="text-destructive text-xs mt-1">{state.errors.email[0]}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
               <Input id="phone" name="phone" type="tel" placeholder="e.g., 08012345678" required />
+               {state.errors?.phone && <p className="text-destructive text-xs mt-1">{state.errors.phone[0]}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input id="password" name="password" type="password" placeholder="Create a strong password (min. 6 characters)" required />
+               {state.errors?.password && <p className="text-destructive text-xs mt-1">{state.errors.password[0]}</p>}
             </div>
             
             <SubmitButton />
