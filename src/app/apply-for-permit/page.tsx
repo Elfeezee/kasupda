@@ -37,16 +37,15 @@ export default function ApplyForPermitPage() {
       if (state.redirectTo) {
         toast({
             title: 'Sign Up Successful!',
-            description: state.message || 'Redirecting to your dashboard...',
+            description: state.message || 'Redirecting to login...',
         });
         router.push(state.redirectTo);
-      } else if (state.pendingConfirmation) {
+      } else {
         toast({
-            title: 'Please Confirm Your Email',
-            description: state.message || 'A confirmation link has been sent to your email.',
+            title: 'Sign Up Successful!',
+            description: state.message || 'Please check your email to confirm your account.',
             duration: 8000,
         });
-         // Potentially redirect to a "check your email" page or stay here
       }
     } else if (state.message) {
       toast({
@@ -78,7 +77,7 @@ export default function ApplyForPermitPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" name="phone" type="tel" placeholder="e.g., 08012345678" required />
+              <Input id="phone" name="phone" type="tel" placeholder="e.g., +2348012345678" required />
                {state.errors?.phone && <p className="text-destructive text-xs mt-1">{state.errors.phone[0]}</p>}
             </div>
             <div className="space-y-2">
