@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ListChecks, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
@@ -44,16 +45,34 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
 };
 
 
-export default function MyApplicationsPage() {
+function MyApplicationsPageComponent() {
+  const searchParams = useSearchParams();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    // This effect runs on the client-side
+    // In a real app, you'd get the user from a session. Here we simulate it.
+    // The name is passed on login/signup and we retrieve it.
+    // A more robust solution might store this in session storage.
+    const nameFromParams = searchParams.get('name');
+    setUserName(nameFromParams);
+
     const loadedApps = getApplications();
-    setApplications(loadedApps);
+    
+    // Filter applications for the "logged-in" user
+    if (nameFromParams) {
+        const userApps = loadedApps.filter(app => app.applicantName === nameFromParams);
+        setApplications(userApps.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+    } else {
+        // Fallback for direct navigation: show all apps as we can't identify the user.
+        // Or show a message asking them to log in.
+        // For this prototype, we'll assume a user context is available or we show all.
+        setApplications(loadedApps.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+    }
+
     setLoading(false);
-  }, []);
+  }, [searchParams]);
 
   if (loading) {
       return (
@@ -117,4 +136,15 @@ export default function MyApplicationsPage() {
       )}
     </div>
   );
+}
+
+
+// A wrapper component is needed because useSearchParams can only be used in a Client Component
+// that is a child of a <Suspense> boundary. The Layout provides this.
+export default function MyApplicationsPage() {
+    return (
+        <React.Suspense fallback={<div>Loading...</div>}>
+            <MyApplicationsPageComponent />
+        </React.Suspense>
+    )
 }
