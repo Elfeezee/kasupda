@@ -58,7 +58,6 @@ export default function ManageApplicationsPage() {
     // This code runs only on the client, after the component mounts
     const loadedApplications = getApplications();
     setApplications(loadedApplications);
-    setFilteredApplications(loadedApplications);
   }, []);
 
   useEffect(() => {
