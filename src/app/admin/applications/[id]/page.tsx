@@ -8,7 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Check, X, Download, File as FileIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { getApplicationById, type StoredApplication } from '@/lib/application-store';
+import { getApplicationById, updateApplicationStatus, type StoredApplication } from '@/lib/application-store';
+import { useToast } from '@/hooks/use-toast';
+
 
 type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
 
@@ -21,7 +23,7 @@ const StatusBadge: React.FC<{ status: ApplicationStatus }> = ({ status }) => {
   return <Badge variant={variant} className="capitalize">{status}</Badge>;
 };
 
-const DetailItem = ({ label, value }: { label: string; value: string | undefined | boolean }) => (
+const DetailItem = ({ label, value }: { label: string; value: string | undefined | boolean | React.ReactNode }) => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-4 py-2 border-b">
         <dt className="font-medium text-muted-foreground">{label}</dt>
         <dd className="md:col-span-2">
@@ -30,13 +32,13 @@ const DetailItem = ({ label, value }: { label: string; value: string | undefined
     </div>
 );
 
-const DocumentItem = ({ name, file }: { name: string; file: File | undefined }) => (
+const DocumentItem = ({ name, file }: { name: string; file: { name: string; __isFile?: boolean } | undefined }) => (
      <li className="flex items-center justify-between p-3 rounded-md border bg-muted/50">
         <div className="flex items-center gap-2">
             <FileIcon className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium">{name}</span>
         </div>
-        {file ? (
+        {file?.__isFile ? (
            <div className='flex items-center gap-2'>
                 <span className="text-xs text-muted-foreground truncate max-w-[150px]">{file.name}</span>
                 <Button variant="outline" size="sm" className="gap-2" onClick={() => alert(`Simulating download for: ${file.name}`)}>
@@ -50,13 +52,28 @@ const DocumentItem = ({ name, file }: { name: string; file: File | undefined }) 
 );
 
 const renderDetails = (details: Record<string, any>) => {
+    // Exclude special/internal keys from the main details list
     const detailEntries = Object.entries(details).filter(([key]) => !key.startsWith('doc') && key !== 'declaration');
-    const docEntries = Object.entries(details).filter(([key]) => key.startsWith('doc'));
+    
+    // Find all document objects, which should be under keys like 'docResidential', 'docOrg', etc.
+    const docGroups = Object.entries(details)
+        .filter(([key, value]) => key.startsWith('doc') && typeof value === 'object' && value !== null);
 
-    const renderValue = (value: any): string => {
+    const renderValue = (value: any): string | React.ReactNode => {
         if (value instanceof Date) return value.toLocaleDateString();
         if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-        if (typeof value === 'object' && value !== null) return Object.keys(value).filter(k => (value as any)[k]).join(', ') || 'None';
+        if (typeof value === 'object' && value !== null) {
+            // For simple objects, filter and join checked keys (like for identification types)
+             const checkedKeys = Object.keys(value).filter(k => (value as any)[k] === true);
+            if (checkedKeys.length > 0 && !checkedKeys.some(k => typeof (value as any)[k] === 'object')) {
+                 return checkedKeys.map(k => k.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())).join(', ') || 'None';
+            }
+             // For file-like objects from localStorage
+            if (value.__isFile) {
+                return <DocumentItem name="File" file={value} />;
+            }
+            return 'Complex object - view details below'; // Fallback for complex objects not handled
+        }
         return String(value);
     };
 
@@ -68,18 +85,21 @@ const renderDetails = (details: Record<string, any>) => {
             ))}
         </dl>
 
-        {docEntries.length > 0 && (
+        {docGroups.length > 0 && (
           <>
             <Separator className="my-6" />
             <div>
               <h3 className="text-lg font-semibold text-primary mb-4">Uploaded Documents</h3>
               <ul className="space-y-3">
-                {docEntries.map(([key, docObject]) => {
-                  if (typeof docObject !== 'object' || docObject === null) return null;
-                  return Object.entries(docObject).map(([docKey, docFile]) => (
-                    <DocumentItem key={`${key}-${docKey}`} name={docKey.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} file={docFile as File | undefined} />
-                  ));
-                })}
+                {docGroups.map(([groupKey, docObject]) => 
+                    Object.entries(docObject).map(([docKey, docFile]) => (
+                        <DocumentItem 
+                            key={`${groupKey}-${docKey}`} 
+                            name={docKey.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} 
+                            file={docFile as { name: string; __isFile?: boolean } | undefined} 
+                        />
+                    ))
+                )}
               </ul>
             </div>
           </>
@@ -92,6 +112,7 @@ const renderDetails = (details: Record<string, any>) => {
 export default function ApplicationDetailPage() {
   const router = useRouter();
   const params = useParams();
+  const { toast } = useToast();
   const { id } = params;
   const [application, setApplication] = useState<StoredApplication | null>(null);
   const [loading, setLoading] = useState(true);
@@ -103,6 +124,25 @@ export default function ApplicationDetailPage() {
     }
     setLoading(false);
   }, [id]);
+
+  const handleStatusChange = (newStatus: 'Approved' | 'Rejected') => {
+    if (!application) return;
+
+    const updatedApplication = updateApplicationStatus(application.id, newStatus);
+    if (updatedApplication) {
+        setApplication(updatedApplication); // Update state to re-render with new status
+        toast({
+            title: `Application ${newStatus}`,
+            description: `The application (ID: ${application.id}) has been marked as ${newStatus}.`
+        });
+    } else {
+        toast({
+            title: 'Error',
+            description: 'Could not update the application status.',
+            variant: 'destructive',
+        });
+    }
+  };
 
   if (loading) {
     return <div className="text-center p-8">Loading application details...</div>;
@@ -137,14 +177,16 @@ export default function ApplicationDetailPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-8">
+            <h3 className="text-lg font-semibold text-primary mb-4">Applicant: {application.applicantName}</h3>
+            <Separator />
             <h3 className="text-lg font-semibold text-primary mb-4">Application Details</h3>
             {renderDetails(application.data)}
         </CardContent>
         <CardFooter className="flex justify-end gap-2">
-            <Button variant="destructive" className="gap-2">
+            <Button variant="destructive" className="gap-2" onClick={() => handleStatusChange('Rejected')}>
                 <X className="h-4 w-4" /> Reject Application
             </Button>
-            <Button className="gap-2 bg-green-600 hover:bg-green-700">
+            <Button className="gap-2 bg-green-600 hover:bg-green-700" onClick={() => handleStatusChange('Approved')}>
                 <Check className="h-4 w-4" /> Approve Application
             </Button>
         </CardFooter>

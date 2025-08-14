@@ -45,7 +45,7 @@ export function getApplicationById(id: string): StoredApplication | null {
     // Note: File objects cannot be stored in JSON. The data retrieved will not contain actual File objects.
     // This is a limitation of this prototype implementation.
     if (app) {
-        console.log("Retrieved application:", app);
+        // console.log("Retrieved application:", app); // This can be noisy, commenting out
     }
     
     return app;
@@ -74,20 +74,19 @@ export function saveApplication(newApplication: { type: string, applicantName: s
         // A real app would upload these files to a server.
         const serializableData = { ...applicationToStore.data };
         for (const key in serializableData) {
-            if (serializableData[key] instanceof File) {
-                 serializableData[key] = {
-                    name: serializableData[key].name,
-                    size: serializableData[key].size,
-                    type: serializableData[key].type,
-                    __isFile: true // Add a flag to identify it later if needed
-                };
-            }
             // Handle nested document objects
-            if (typeof serializableData[key] === 'object' && serializableData[key] !== null) {
+            if (typeof serializableData[key] === 'object' && serializableData[key] !== null && !Array.isArray(serializableData[key])) {
                 for (const docKey in serializableData[key]) {
                      const docValue = serializableData[key][docKey];
-                     if (docValue instanceof File) {
+                     if (docValue instanceof FileList && docValue.length > 0) {
                          serializableData[key][docKey] = {
+                             name: docValue[0].name,
+                             size: docValue[0].size,
+                             type: docValue[0].type,
+                             __isFile: true
+                         }
+                     } else if (docValue instanceof File) {
+                          serializableData[key][docKey] = {
                              name: docValue.name,
                              size: docValue.size,
                              type: docValue.type,
@@ -105,5 +104,31 @@ export function saveApplication(newApplication: { type: string, applicantName: s
         
     } catch (error) {
         console.error("Failed to save application to localStorage:", error);
+    }
+}
+
+/**
+ * Updates the status of an application in localStorage.
+ * @param {string} id The ID of the application to update.
+ * @param {'Approved' | 'Rejected'} status The new status.
+ * @returns {StoredApplication | null} The updated application object or null if not found.
+ */
+export function updateApplicationStatus(id: string, status: 'Approved' | 'Rejected'): StoredApplication | null {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+    try {
+        const applications = getApplications();
+        const appIndex = applications.findIndex(app => app.id === id);
+        if (appIndex === -1) {
+            console.error(`Application with ID ${id} not found.`);
+            return null;
+        }
+        applications[appIndex].status = status;
+        window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(applications));
+        return applications[appIndex];
+    } catch (error) {
+        console.error("Failed to update application status in localStorage:", error);
+        return null;
     }
 }
