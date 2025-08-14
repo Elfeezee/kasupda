@@ -11,24 +11,23 @@ const SignUpSchema = z.object({
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
-export interface SignUpState {
+export interface AuthState {
   message: string | null;
   errors?: {
     applicantName?: string[];
     email?: string[];
     phone?: string[];
     password?: string[];
-    general?: string[]; // For errors not specific to a field
+    general?: string[]; 
   } | null;
   success: boolean;
   redirectTo?: string | null;
-  pendingConfirmation?: boolean;
 }
 
 export async function signUpWithEmail(
-  prevState: SignUpState | null, 
+  prevState: AuthState | null, 
   formData: FormData
-): Promise<SignUpState> {
+): Promise<AuthState> {
 
   const validatedFields = SignUpSchema.safeParse({
     applicantName: formData.get('applicantName'),
@@ -48,21 +47,22 @@ export async function signUpWithEmail(
   const { applicantName, email, phone, password } = validatedFields.data;
 
   try {
-    await auth.createUser({
+    const userRecord = await auth.createUser({
       email,
       password,
       displayName: applicantName,
       phoneNumber: phone,
-      emailVerified: false, // Set to false, Firebase sends a verification email by default if enabled
+      emailVerified: false, 
     });
 
-    // In a real app, you'd likely want to send a verification email.
-    // For this prototype, we will assume auto-verification or proceed as if verified.
-    
+    // This is a simplified approach. In a production app, you would not pass the user's name
+    // in the URL. You would use session cookies or a similar mechanism to manage auth state.
+    const redirectName = userRecord.displayName || email.split('@')[0];
+
     return {
-      message: 'Sign up successful! Please check your email for verification. For now, you can proceed to login.',
+      message: 'Sign up successful! You can now log in.',
       success: true,
-      redirectTo: `/login`, // Redirect to login page after signup
+      redirectTo: `/login?name=${encodeURIComponent(redirectName)}`,
       errors: null,
     };
 
@@ -77,6 +77,66 @@ export async function signUpWithEmail(
       message: errorMessage,
       errors: { general: [errorMessage] },
       success: false,
+    };
+  }
+}
+
+
+const LoginSchema = z.object({
+  email: z.string().email({ message: 'Invalid email address.' }),
+  password: z.string().min(1, { message: 'Password cannot be empty.' }),
+});
+
+
+// NOTE: This is a simplified login for demonstration. 
+// A full implementation would involve creating a session cookie after verifying credentials.
+// For now, we simulate a successful login and redirect.
+export async function loginWithEmail(
+  prevState: AuthState | null,
+  formData: FormData
+): Promise<AuthState> {
+  const validatedFields = LoginSchema.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      message: 'Invalid form data.',
+      errors: validatedFields.error.flatten().fieldErrors,
+      success: false,
+    };
+  }
+  
+  const { email } = validatedFields.data;
+
+  try {
+    // In a real app, you would verify the password here.
+    // For this prototype, we'll fetch the user by email to confirm they exist.
+    const userRecord = await auth.getUserByEmail(email);
+
+    const redirectName = userRecord.displayName || email.split('@')[0];
+    
+    return {
+        message: 'Login Successful!',
+        success: true,
+        redirectTo: `/dashboard?name=${encodeURIComponent(redirectName)}`,
+        errors: null,
+    };
+
+  } catch (error: any) {
+    let errorMessage = 'Login failed. Please check your credentials.';
+     if (error.code === 'auth/user-not-found') {
+      errorMessage = 'No account found with this email address.';
+    } else if (error.code === 'auth/wrong-password') {
+      // Note: Admin SDK cannot verify passwords directly. This is a conceptual error message.
+      // Client-side SDK should be used for the actual sign-in flow to check passwords.
+      errorMessage = 'Incorrect password. Please try again.';
+    }
+     return {
+        message: errorMessage,
+        errors: { general: [errorMessage] },
+        success: false,
     };
   }
 }

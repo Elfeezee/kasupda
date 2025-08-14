@@ -11,6 +11,9 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { getApplications, type StoredApplication } from '@/lib/application-store';
 
+// NOTE: This component will be updated later to use Firebase to get the current user
+// and fetch applications from Firestore instead of local storage.
+
 type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
 
 interface StatusBadgeProps extends VariantProps<typeof badgeVariantsForStatus> {
@@ -54,20 +57,17 @@ function MyApplicationsPageComponent() {
   useEffect(() => {
     // In a real app, you'd get the user from a session. Here we simulate it.
     // The name is passed on login/signup and we retrieve it.
-    // A more robust solution might store this in session storage.
     const nameFromParams = searchParams.get('name');
     setUserName(nameFromParams);
 
     const loadedApps = getApplications();
     
-    // Filter applications for the "logged-in" user
+    // This logic will be replaced with a Firebase query for the current user.
     if (nameFromParams) {
         const userApps = loadedApps.filter(app => app.applicantName === nameFromParams);
         setApplications(userApps.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
     } else {
         // Fallback for direct navigation: show all apps as we can't identify the user.
-        // Or show a message asking them to log in.
-        // For this prototype, we'll assume a user context is available or we show all.
         setApplications(loadedApps.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
     }
 
@@ -98,6 +98,7 @@ function MyApplicationsPageComponent() {
         </CardTitle>
         <CardDescription>
           Track the status of all your permit applications and complaints.
+          {userName && ` (Viewing for: ${userName})`}
         </CardDescription>
       </CardHeader>
 

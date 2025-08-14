@@ -1,7 +1,8 @@
 
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,33 +11,40 @@ import { Separator } from "@/components/ui/separator";
 import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useToast } from "@/hooks/use-toast"; // Import useToast
+import { useToast } from "@/hooks/use-toast";
+import { loginWithEmail, type AuthState } from '@/app/actions/authActions';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="w-full text-lg py-3" disabled={pending}>
+      {pending ? 'Logging in...' : 'Login'}
+    </Button>
+  );
+}
 
 export default function LoginPage() {
   const router = useRouter();
-  const { toast } = useToast(); // Initialize toast
+  const { toast } = useToast();
+  
+  const initialState: AuthState = { message: null, success: false, errors: null };
+  const [state, formAction] = useFormState(loginWithEmail, initialState);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const emailInput = form.elements.namedItem('email') as HTMLInputElement | null;
-    const email = emailInput ? emailInput.value.trim() : '';
-    
-    if (email) {
-      toast({ // Add toast message
-        title: 'Login Successful (Simulated)',
+  useEffect(() => {
+    if (state.success && state.redirectTo) {
+      toast({
+        title: 'Login Successful!',
         description: 'Redirecting to your dashboard...',
       });
-      router.push(`/dashboard?name=${encodeURIComponent(email.split('@')[0] || 'User')}`);
-    } else {
-      toast({ // Add toast for missing email
+      router.push(state.redirectTo);
+    } else if (!state.success && state.message) {
+      toast({
         title: 'Login Error',
-        description: 'Please enter your email address.',
+        description: state.message,
         variant: 'destructive',
       });
-      console.warn("Email not entered for login.");
     }
-  };
+  }, [state, router, toast]);
 
   return (
     <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-var(--header-height,100px)-var(--footer-height,100px))]">
@@ -46,18 +54,19 @@ export default function LoginPage() {
           <CardDescription>Sign in to access your KASUPDA dashboard.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+          <form action={formAction} className="grid grid-cols-1 gap-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
               <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+              {state.errors?.email && <p className="text-destructive text-xs mt-1">{state.errors.email[0]}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input id="password" name="password" type="password" placeholder="••••••••" required />
+              {state.errors?.password && <p className="text-destructive text-xs mt-1">{state.errors.password[0]}</p>}
             </div>
-            <Button type="submit" className="w-full text-lg py-3">
-              Login
-            </Button>
+            
+            <SubmitButton />
           </form>
           
           <div className="text-center mt-6 text-sm">

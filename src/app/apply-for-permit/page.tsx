@@ -12,7 +12,7 @@ import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
-import { signUpWithEmail, type SignUpState } from '@/app/actions/authActions';
+import { signUpWithEmail, type AuthState } from '@/app/actions/authActions';
 import { useEffect } from 'react';
 
 
@@ -29,7 +29,7 @@ export default function ApplyForPermitPage() {
   const router = useRouter();
   const { toast } = useToast();
   
-  const initialState: SignUpState = { message: null, success: false, errors: null };
+  const initialState: AuthState = { message: null, success: false, errors: null };
   const [state, formAction] = useFormState(signUpWithEmail, initialState);
 
   useEffect(() => {
@@ -40,12 +40,6 @@ export default function ApplyForPermitPage() {
             description: state.message || 'Redirecting to login...',
         });
         router.push(state.redirectTo);
-      } else {
-        toast({
-            title: 'Sign Up Successful!',
-            description: state.message || 'Please check your email to confirm your account.',
-            duration: 8000,
-        });
       }
     } else if (state.message) {
       toast({
