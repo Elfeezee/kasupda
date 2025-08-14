@@ -20,7 +20,9 @@ import {
 import { cn } from '@/lib/utils';
 import type { VariantProps } from 'class-variance-authority';
 import { format } from 'date-fns';
-import { getApplications, type StoredApplication } from '@/lib/application-store';
+import { getApplications, type StoredApplication, updateApplicationStatus } from '@/lib/application-store';
+import { useToast } from '@/hooks/use-toast';
+
 
 type ApplicationStatus = 'Pending' | 'Approved' | 'Rejected' | 'Processing';
 
@@ -49,15 +51,20 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
 
 export default function ManageApplicationsPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
   const [filteredApplications, setFilteredApplications] = useState<StoredApplication[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'All'>('All');
-
-  useEffect(() => {
-    // This code runs only on the client, after the component mounts
+  
+  // Function to load applications, can be recalled to refresh data
+  const loadApplications = () => {
     const loadedApplications = getApplications();
     setApplications(loadedApplications);
+  };
+
+  useEffect(() => {
+    loadApplications();
   }, []);
 
   useEffect(() => {
@@ -76,7 +83,7 @@ export default function ManageApplicationsPage() {
       result = result.filter(app => app.status === statusFilter);
     }
     
-    setFilteredApplications(result);
+    setFilteredApplications(result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
 
   }, [searchTerm, statusFilter, applications]);
 
@@ -84,6 +91,24 @@ export default function ManageApplicationsPage() {
   const handleViewDetails = (appId: string) => {
     router.push(`/admin/applications/${appId}`);
   };
+
+  const handleStatusChange = (appId: string, newStatus: 'Approved' | 'Rejected') => {
+    const updatedApplication = updateApplicationStatus(appId, newStatus);
+    if (updatedApplication) {
+      loadApplications(); // Refresh the list from storage
+      toast({
+        title: `Application ${newStatus}`,
+        description: `The application (ID: ${appId}) has been marked as ${newStatus}.`
+      });
+    } else {
+      toast({
+        title: 'Error',
+        description: 'Could not update the application status.',
+        variant: 'destructive',
+      });
+    }
+  };
+
 
   return (
     <div className="space-y-8">
@@ -138,7 +163,7 @@ export default function ManageApplicationsPage() {
                 {filteredApplications.length > 0 ? (
                   filteredApplications.map((app) => (
                     <TableRow key={app.id}>
-                      <TableCell className="font-medium">{app.id}</TableCell>
+                      <TableCell className="font-medium text-xs">{app.id}</TableCell>
                       <TableCell>{app.applicantName}</TableCell>
                       <TableCell className="text-sm">{app.type}</TableCell>
                       <TableCell>{format(new Date(app.date), 'dd/MM/yyyy')}</TableCell>
@@ -159,8 +184,8 @@ export default function ManageApplicationsPage() {
                               View Details
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Approve</DropdownMenuItem>
-                            <DropdownMenuItem>Reject</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleStatusChange(app.id, 'Approved')}>Approve</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleStatusChange(app.id, 'Rejected')}>Reject</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
