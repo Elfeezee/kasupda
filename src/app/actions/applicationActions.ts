@@ -1,7 +1,7 @@
 
 'use server';
 
-import { db } from '@/lib/firebase/admin';
+import { initializeFirebaseAdmin } from '@/lib/firebase/admin';
 import { z } from 'zod';
 
 // Basic schema for storing the raw data from the form
@@ -25,6 +25,8 @@ export interface ApplicationSubmissionState {
 export async function saveApplication(
     formData: FormData
 ): Promise<ApplicationSubmissionState> {
+    const { db } = initializeFirebaseAdmin();
+
     const rawData = {
         type: formData.get('type'),
         applicantName: formData.get('applicantName'),

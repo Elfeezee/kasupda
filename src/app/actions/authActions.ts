@@ -1,7 +1,7 @@
 
 'use server'
 
-import { auth } from '@/lib/firebase/admin';
+import { initializeFirebaseAdmin } from '@/lib/firebase/admin';
 import { z } from 'zod'
 
 const SignUpSchema = z.object({
@@ -28,6 +28,7 @@ export async function signUpWithEmail(
   prevState: AuthState | null, 
   formData: FormData
 ): Promise<AuthState> {
+  const { auth } = initializeFirebaseAdmin();
 
   const validatedFields = SignUpSchema.safeParse({
     applicantName: formData.get('applicantName'),
@@ -95,6 +96,8 @@ export async function loginWithEmail(
   prevState: AuthState | null,
   formData: FormData
 ): Promise<AuthState> {
+  const { auth } = initializeFirebaseAdmin();
+  
   const validatedFields = LoginSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
