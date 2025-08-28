@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Facebook, Instagram, MapPin, Phone } from 'lucide-react';
+import { Facebook, Instagram, MapPin, Phone, ShieldCheck } from 'lucide-react';
 
 export default function Footer() {
   const [currentYear, setCurrentYear] = useState<number | null>(null);
@@ -62,6 +62,13 @@ export default function Footer() {
               prefetch={false}
             >
               <MapPin className="mr-1 h-4 w-4" /> Map
+            </Link>
+             <Link
+              href="/admin/login"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center"
+              prefetch={false}
+            >
+              <ShieldCheck className="mr-1 h-4 w-4" /> Admin Login
             </Link>
           </nav>
         </div>
