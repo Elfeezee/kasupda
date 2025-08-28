@@ -7,36 +7,37 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { FcGoogle } from "react-icons/fc";
+import { ShieldCheck } from "lucide-react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
 import { loginWithEmail, type AuthState } from '@/app/actions/authActions';
+import Image from 'next/image';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" className="w-full text-lg py-3" disabled={pending}>
-      {pending ? 'Logging in...' : 'Login'}
+      {pending ? 'Logging in...' : 'Login to Admin Panel'}
     </Button>
   );
 }
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   
-  // Bind the action with a null options object for default redirect behavior
-  const loginAction = loginWithEmail.bind(null, {});
+  // We specify the redirectTo path for the login action
+  const loginAction = loginWithEmail.bind(null, { redirectTo: '/admin/dashboard' });
   const initialState: AuthState = { message: null, success: false, errors: null };
   const [state, formAction] = useActionState(loginAction, initialState);
 
   useEffect(() => {
+    // This effect handles the result of the form submission
     if (state.success && state.redirectTo) {
       toast({
-        title: 'Login Successful!',
-        description: 'Redirecting to your dashboard...',
+        title: 'Admin Login Successful!',
+        description: 'Redirecting to the admin dashboard...',
       });
       router.push(state.redirectTo);
     } else if (!state.success && state.message) {
@@ -49,17 +50,23 @@ export default function LoginPage() {
   }, [state, router, toast]);
 
   return (
-    <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-var(--header-height,100px)-var(--footer-height,100px))]">
+    <div className="bg-muted/40 min-h-screen flex justify-center items-center p-4">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-primary">Welcome Back!</CardTitle>
-          <CardDescription>Sign in to access your KASUPDA dashboard.</CardDescription>
+            <div className="flex justify-center mb-4">
+                <Image src="/image/logo.png" alt="KASUPDA Logo" width={48} height={48} />
+            </div>
+          <CardTitle className="text-3xl font-bold text-primary flex items-center justify-center gap-2">
+            <ShieldCheck className="h-8 w-8" />
+            Admin Portal
+          </CardTitle>
+          <CardDescription>Enter your credentials to access the management dashboard.</CardDescription>
         </CardHeader>
         <CardContent>
           <form action={formAction} className="grid grid-cols-1 gap-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
-              <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+              <Input id="email" name="email" type="email" placeholder="admin@kasupda.gov.ng" required />
               {state.errors?.email && <p className="text-destructive text-xs mt-1">{state.errors.email[0]}</p>}
             </div>
             <div className="space-y-2">
@@ -76,35 +83,11 @@ export default function LoginPage() {
               Forgot Password?
             </Link>
           </div>
-
-          <div className="flex items-center justify-center space-x-4 my-8">
-            <Separator className="flex-grow" />
-            <span className="text-xs text-muted-foreground uppercase">OR</span>
-            <Separator className="flex-grow" />
-          </div>
-          
-          <Button 
-            className="w-full flex items-center justify-center space-x-2 py-3 text-base" 
-            variant="outline" 
-            type="button" 
-            onClick={() => { 
-                toast({
-                    title: 'Google Sign-In',
-                    description: 'Google Sign-In is not implemented in this prototype.',
-                });
-             }}
-          >
-            <FcGoogle className="text-2xl" />
-            <span>Login with Google</span>
-          </Button>
         </CardContent>
         <CardFooter className="justify-center mt-2 pb-6">
-          <p className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link href="/apply-for-permit" className="font-medium text-primary hover:underline">
-              Create one
-            </Link>
-          </p>
+          <Link href="/" className="text-sm text-muted-foreground hover:text-primary">
+            &larr; Back to Main Site
+          </Link>
         </CardFooter>
       </Card>
     </div>

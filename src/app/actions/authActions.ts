@@ -25,7 +25,7 @@ export interface AuthState {
 }
 
 export async function signUpWithEmail(
-  prevState: AuthState | null, 
+  prevState: AuthState, 
   formData: FormData
 ): Promise<AuthState> {
   const { auth } = initializeFirebaseAdmin();
@@ -93,7 +93,8 @@ const LoginSchema = z.object({
 // A full implementation would involve creating a session cookie after verifying credentials.
 // For now, we simulate a successful login and redirect.
 export async function loginWithEmail(
-  prevState: AuthState | null,
+  options: { redirectTo?: string },
+  prevState: AuthState,
   formData: FormData
 ): Promise<AuthState> {
   const { auth } = initializeFirebaseAdmin();
@@ -120,10 +121,14 @@ export async function loginWithEmail(
 
     const redirectName = userRecord.displayName || email.split('@')[0];
     
+    // Use the provided redirect path, or default to the user dashboard
+    const defaultRedirect = `/dashboard?name=${encodeURIComponent(redirectName)}`;
+    const redirectTo = options.redirectTo || defaultRedirect;
+    
     return {
         message: 'Login Successful!',
         success: true,
-        redirectTo: `/dashboard?name=${encodeURIComponent(redirectName)}`,
+        redirectTo: redirectTo,
         errors: null,
     };
 

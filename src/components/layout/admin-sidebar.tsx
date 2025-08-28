@@ -41,7 +41,7 @@ export default function AdminSidebar() {
 
   const handleLogout = () => {
     setOpenMobile(false); 
-    router.push('/');
+    router.push('/admin/login'); // Redirect to admin login page
     toast({ title: 'Logged Out', description: 'You have been successfully logged out from the admin panel.' });
   };
   
