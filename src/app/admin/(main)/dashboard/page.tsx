@@ -16,7 +16,7 @@ import {
 } from 'recharts';
 import { db } from '@/lib/firebase/config';
 import { collection, getDocs } from 'firebase/firestore';
-import type { StoredApplication } from '@/app/admin/(main)/applications/page';
+import type { StoredApplication } from '../applications/page'; // Import the type from the applications page
 
 // This function processes applications to get statistics
 const processApplicationData = (applications: StoredApplication[]) => {
