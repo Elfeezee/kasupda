@@ -18,15 +18,14 @@ const DashboardPage: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string | null>(null);
 
   useEffect(() => {
+    // This code now runs only on the client, after hydration
     setCurrentDate(format(new Date(), "MMMM d, yyyy"));
-    
+    setCurrentTime(new Date().toLocaleTimeString());
+
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
     }, 1000);
     
-    // Set initial time
-    setCurrentTime(new Date().toLocaleTimeString());
-
     return () => clearInterval(timer);
   }, []);
 
