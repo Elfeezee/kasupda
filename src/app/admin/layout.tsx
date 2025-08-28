@@ -2,7 +2,6 @@
 import type { Metadata } from 'next';
 import { Sidebar, SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import AdminSidebar from '@/components/layout/admin-sidebar';
-import { usePathname } from 'next/navigation';
 
 
 export const metadata: Metadata = {
