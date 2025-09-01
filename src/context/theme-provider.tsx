@@ -13,24 +13,27 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<string>('light');
+  // Add a mounted state to prevent rendering theme-dependent UI on the server
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('kasupda-theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    let currentTheme = 'light';
     if (storedTheme) {
-      setThemeState(storedTheme);
-      if (storedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    } else {
-      // Check system preference if no theme is stored
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (systemPrefersDark) {
-        setThemeState('dark');
-        document.documentElement.classList.add('dark');
-      }
+      currentTheme = storedTheme;
+    } else if (systemPrefersDark) {
+      currentTheme = 'dark';
     }
+
+    setThemeState(currentTheme);
+    if (currentTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    setMounted(true);
   }, []);
 
   const setTheme = (newTheme: string) => {
@@ -47,9 +50,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
   };
+  
+  const value = { theme, setTheme, toggleTheme };
+
+  // Prevents hydration mismatch by not rendering theme-dependent UI until mounted on the client
+  if (!mounted) {
+    return (
+      <ThemeContext.Provider value={value}>
+        <div style={{ visibility: 'hidden' }}>{children}</div>
+      </ThemeContext.Provider>
+    );
+  }
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

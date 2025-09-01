@@ -26,8 +26,6 @@ export default function AppClientLayoutWrapper({
       {showHeaderFooter && <Header />}
       <main className={cn(
         "flex-grow",
-        // Apply container styles only to non-dashboard/non-admin pages
-        !isDashboardPage && !isAdminPage && "container mx-auto px-4 py-8" 
       )}>
         {children}
       </main>
