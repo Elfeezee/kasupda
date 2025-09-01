@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useActionState } from 'react';
+import React, { useActionState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail, type AuthState } from '@/app/actions/authActions';
-import { useEffect } from 'react';
 
 
 function SubmitButton() {
