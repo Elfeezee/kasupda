@@ -15,7 +15,7 @@ export default function AdminDashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-      <SidebarProvider defaultOpen>
+      <SidebarProvider>
         <div className="flex min-h-[calc(100vh-var(--header-height,60px)-var(--footer-height,60px))]">
           <Sidebar 
             collapsible="icon" 

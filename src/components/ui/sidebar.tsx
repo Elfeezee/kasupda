@@ -70,10 +70,26 @@ const SidebarProvider = React.forwardRef<
   ) => {
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
+    const [hasMounted, setHasMounted] = React.useState(false);
 
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
     const [_open, _setOpen] = React.useState(defaultOpen)
+
+    React.useEffect(() => {
+        // On mount, read the cookie to set the initial state
+        const cookieValue = document.cookie
+            .split('; ')
+            .find((row) => row.startsWith(`${SIDEBAR_COOKIE_NAME}=`))
+            ?.split('=')[1];
+        
+        if (cookieValue !== undefined) {
+            _setOpen(cookieValue === 'true');
+        }
+        setHasMounted(true);
+    }, []);
+
+
     const open = openProp ?? _open
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
@@ -130,15 +146,10 @@ const SidebarProvider = React.forwardRef<
       [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
     )
 
-    const [hasMounted, setHasMounted] = React.useState(false);
-    React.useEffect(() => {
-        setHasMounted(true);
-    }, []);
-
+    // Only render the sidebar content after the component has mounted on the client
     if (!hasMounted) {
-        return null;
+        return null; 
     }
-
 
     return (
       <SidebarContext.Provider value={contextValue}>

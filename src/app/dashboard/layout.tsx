@@ -14,7 +14,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider defaultOpen>
+    <SidebarProvider>
       <div className="flex min-h-[calc(100vh-var(--header-height,60px)-var(--footer-height,60px))]"> {/* Adjusted default heights slightly */}
         <Sidebar 
           collapsible="icon" 
