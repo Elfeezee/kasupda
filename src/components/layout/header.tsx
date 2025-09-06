@@ -136,6 +136,7 @@ export default function Header() {
 
   const EServiceSubLinks = [
     { href: "/apply-for-permit", label: "Apply for permit" },
+    { href: "/dashboard/apply/din-application", label: "Apply for DIN" },
     { href: "https://kasupdapermit.com", label: "Renew permit", external: true },
     { href: "#", label: "Stage Approvals" },
     { href: "#", label: "DIN" },
@@ -559,3 +560,4 @@ export default function Header() {
     </header>
   );
 }
+

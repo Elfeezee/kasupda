@@ -4,11 +4,18 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Tent, UserCheck, MessageSquareWarning, ArrowRight, FilePlus2, Building } from 'lucide-react';
+import { FileText, Tent, UserCheck, MessageSquareWarning, ArrowRight, FilePlus2, Building, Fingerprint } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
 const permitTypes = [
+  {
+    title: 'Developer ID (DIN)',
+    description: 'Register as a developer to get your unique identification number before applying for other permits.',
+    icon: Fingerprint,
+    href: '/dashboard/apply/din-application', 
+    actionText: 'Apply for DIN',
+  },
   {
     title: 'Building Permit Application',
     description: 'Apply for permits for new residential, commercial, or other types of buildings.',
@@ -17,12 +24,12 @@ const permitTypes = [
     actionText: 'Select Category',
   },
   {
-    title: 'Temporary Permit Application', // Updated title
-    description: 'Permits for street naming, outdoor structures, masts, advertisements, and shop owners.', // Updated description
-    icon: Tent, // Keeping Tent as the general icon for temporary permits group
-    href: '/dashboard/apply/temporary-permit', // Updated link to new sub-selection page
-    actionText: 'Select Category', // Updated action text
-    disabled: false, // Enabled this category
+    title: 'Temporary Permit Application',
+    description: 'Permits for street naming, outdoor structures, masts, advertisements, and shop owners.',
+    icon: Tent,
+    href: '/dashboard/apply/temporary-permit',
+    actionText: 'Select Category',
+    disabled: false,
   },
   {
     title: 'Consultant Licensing', 
@@ -59,7 +66,7 @@ export default function SelectPermitTypePage() {
           <FilePlus2 className="mr-3 h-7 w-7" /> Apply for a Permit or Service
         </CardTitle>
         <CardDescription>
-          Choose the type of application you want to start.
+          Choose the type of application you want to start. All developers must apply for a DIN first.
         </CardDescription>
       </CardHeader>
 
@@ -99,3 +106,4 @@ export default function SelectPermitTypePage() {
     </div>
   );
 }
+
