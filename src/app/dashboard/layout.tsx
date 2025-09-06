@@ -18,7 +18,7 @@ export default function DashboardLayout({
       <div className="flex min-h-[calc(100vh-var(--header-height,60px)-var(--footer-height,60px))]"> {/* Adjusted default heights slightly */}
         <Sidebar 
           collapsible="icon" 
-          className="border-r bg-red-500 dark:bg-red-700" // Added bright background for debugging
+          className="border-r"
         >
           <DashboardSidebar />
         </Sidebar>
