@@ -8,7 +8,7 @@ import { ListChecks, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-re
 import type { VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast.tsx';
 import { auth, db } from '@/lib/firebase/config';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { onAuthStateChanged, type User } from 'firebase/auth';
@@ -58,13 +58,13 @@ function MyApplicationsPageComponent() {
   const [applications, setApplications] = useState<StoredApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [authChecked, setAuthChecked] = useState(false); // New state to track auth check
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
+      setUser(currentUser);
+      setAuthChecked(true); // Mark auth as checked
+      if (!currentUser) {
         // If not logged in, redirect to login page after a short delay
         setTimeout(() => {
           router.push('/login');
@@ -103,14 +103,13 @@ function MyApplicationsPageComponent() {
         }
       };
       fetchApplications();
-    } else {
-      // If user is not logged in, stop loading and show empty list
+    } else if (authChecked) { // Only stop loading if auth has been checked
       setLoading(false);
       setApplications([]);
     }
-  }, [user, toast]);
+  }, [user, authChecked, toast]);
 
-  if (loading) {
+  if (!authChecked || loading) {
       return (
         <div className="space-y-8">
             <CardHeader className="px-0 pt-0">
@@ -118,7 +117,7 @@ function MyApplicationsPageComponent() {
                 <ListChecks className="mr-3 h-7 w-7" /> My Submitted Applications
                 </CardTitle>
                 <CardDescription>
-                Loading your application history from the database...
+                Verifying your session and loading application history...
                 </CardDescription>
             </CardHeader>
             <div className="text-center">Loading...</div>
