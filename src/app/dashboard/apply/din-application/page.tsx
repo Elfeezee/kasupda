@@ -1,8 +1,8 @@
 
 "use client";
 
-import React, { useState } from 'react';
-import { useForm, Controller, type FieldName } from 'react-hook-form';
+import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { saveApplication } from '@/app/actions/applicationActions';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 
@@ -60,9 +58,7 @@ const identificationOptions = [
 ];
 
 export default function DinApplicationPage() {
-  const { toast } = useToast();
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { register, handleSubmit, control, formState: { errors } } = useForm<DinApplicationFormValues>({
     resolver: zodResolver(dinApplicationSchema),
@@ -81,42 +77,12 @@ export default function DinApplicationPage() {
     }
   });
 
-  const onSubmit = async (data: DinApplicationFormValues) => {
-    setIsSubmitting(true);
-    
-    const formData = new FormData();
-    formData.append('type', "DIN Application");
-    formData.append('applicantName', `${data.firstName} ${data.surname}`);
-    formData.append('data', JSON.stringify(data));
-    
-    // Placeholder for User ID - in a real app this would come from the logged-in user session
-    // For now, we generate a simple placeholder ID
-    formData.append('userId', `user_${Date.now()}`);
-
-    try {
-        const result = await saveApplication(formData);
-
-        if (result.success) {
-             toast({
-                title: "DIN Application Submitted!",
-                description: `Your application to receive a Developer Identification Number is being processed. ID: ${result.applicationId}. You will be contacted about payment to complete the process.`,
-            });
-            // Redirect to a confirmation or status page
-            router.push('/dashboard/my-applications');
-        } else {
-            throw new Error(result.error || "An unknown error occurred.");
-        }
-
-    } catch (error) {
-        console.error("Submission failed:", error);
-        toast({
-            title: "Submission Failed",
-            description: error instanceof Error ? error.message : "Could not submit the application. Please try again.",
-            variant: "destructive",
-        });
-    } finally {
-        setIsSubmitting(false);
-    }
+  const onSubmit = (data: DinApplicationFormValues) => {
+    // Instead of submitting, navigate to the payment page with the data
+    const query = new URLSearchParams({
+        formData: JSON.stringify(data)
+    }).toString();
+    router.push(`/dashboard/apply/din-application/payment?${query}`);
   };
 
   return (
@@ -294,9 +260,8 @@ export default function DinApplicationPage() {
             <Button 
               type="submit" 
               className="w-full sm:w-auto py-3 text-base sm:text-lg"
-              disabled={isSubmitting}
             >
-                {isSubmitting ? 'Submitting...' : 'Proceed to Payment'}
+                Proceed to Payment
             </Button>
           </CardFooter>
         </form>
@@ -304,4 +269,3 @@ export default function DinApplicationPage() {
     </div>
   );
 }
-
