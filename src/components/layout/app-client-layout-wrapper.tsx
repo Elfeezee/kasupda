@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/toaster';
 import ScrollToTopButton from '@/components/ui/scroll-to-top-button';
 import { ThemeProvider } from '@/context/theme-provider';
 import { cn } from '@/lib/utils';
+import { ToastProvider } from '@/hooks/use-toast.tsx';
 
 export default function AppClientLayoutWrapper({
   children,
@@ -23,15 +24,17 @@ export default function AppClientLayoutWrapper({
 
   return (
     <ThemeProvider>
-      {showHeaderFooter && <Header />}
-      <main className={cn(
-        "flex-grow",
-      )}>
-        {children}
-      </main>
-      {showHeaderFooter && <Footer />}
-      <Toaster />
-      <ScrollToTopButton />
+      <ToastProvider>
+        {showHeaderFooter && <Header />}
+        <main className={cn(
+          "flex-grow",
+        )}>
+          {children}
+        </main>
+        {showHeaderFooter && <Footer />}
+        <Toaster />
+        <ScrollToTopButton />
+      </ToastProvider>
     </ThemeProvider>
   );
 }
