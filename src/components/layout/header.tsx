@@ -139,7 +139,6 @@ export default function Header() {
     { href: "/dashboard/apply/din-application", label: "Apply for DIN" },
     { href: "https://kasupdapermit.com", label: "Renew permit", external: true },
     { href: "#", label: "Stage Approvals" },
-    { href: "#", label: "DIN" },
   ];
   
   const mainNavLinks = [
@@ -560,4 +559,3 @@ export default function Header() {
     </header>
   );
 }
-
