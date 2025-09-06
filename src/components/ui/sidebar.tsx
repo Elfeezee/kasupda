@@ -77,6 +77,7 @@ const SidebarProvider = React.forwardRef<
     const [_open, _setOpen] = React.useState(defaultOpen)
 
     React.useEffect(() => {
+        setHasMounted(true);
         // On mount, read the cookie to set the initial state
         const cookieValue = document.cookie
             .split('; ')
@@ -86,7 +87,6 @@ const SidebarProvider = React.forwardRef<
         if (cookieValue !== undefined) {
             _setOpen(cookieValue === 'true');
         }
-        setHasMounted(true);
     }, []);
 
 
