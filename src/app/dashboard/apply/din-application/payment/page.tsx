@@ -23,8 +23,9 @@ function DinPaymentPageContent() {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            if (!currentUser) {
+            if (currentUser) {
+                setUser(currentUser);
+            } else {
                 toast({ title: 'Authentication Error', description: 'You must be logged in to proceed.', variant: 'destructive' });
                 router.push('/login');
             }
@@ -112,6 +113,10 @@ function DinPaymentPageContent() {
                 </CardFooter>
             </Card>
         )
+    }
+
+    if (!formData) {
+        return <div className="text-center">Loading payment details...</div>;
     }
 
     return (
