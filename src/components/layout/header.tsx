@@ -129,7 +129,7 @@ export default function Header() {
     { href: "/consultants", label: "Approved Consultants" },
     { href: "#", label: "Base Maps" },
     { href: "#", label: "Building Permit Application Guidelines" },
-    { href: "#", label: "Development Control Officers" },
+    { href: "/development-control-officers", label: "Development Control Officers" },
     { href: "#", label: "Inspection" },
     { href: "#", label: "Permit Process" },
   ];
