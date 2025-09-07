@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen } from "lucide-react";
+import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Metadata } from 'next';
 
@@ -284,8 +284,69 @@ export default function DevelopmentDesignGuidelinesPage() {
             </div>
           </section>
 
+          <section>
+            <h2 className="flex items-center text-2xl font-bold text-primary mb-4 border-b pb-2">
+              <DraftingCompass className="mr-3 h-7 w-7" /> Space Definition and their dimensions
+            </h2>
+            <div className="border rounded-lg overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>S/N</TableHead>
+                    <TableHead>Space Definitions</TableHead>
+                    <TableHead>Basic Minimum (m&sup2;)</TableHead>
+                    <TableHead>Minimum Side Dimension (m)</TableHead>
+                    <TableHead>Remarks</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow><TableCell>i</TableCell><TableCell>Living Room</TableCell><TableCell>12</TableCell><TableCell>3.0</TableCell><TableCell>Adopted the manual without any changes</TableCell></TableRow>
+                  <TableRow><TableCell>ii</TableCell><TableCell>Dining Room</TableCell><TableCell>7.5</TableCell><TableCell>2.4</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>iii</TableCell><TableCell>Bedrooms</TableCell><TableCell>10</TableCell><TableCell>3.0</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>iv</TableCell><TableCell>Toilets (Bath/WC)</TableCell><TableCell>3.6</TableCell><TableCell>1.5</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>v</TableCell><TableCell>Toilets (WC only)</TableCell><TableCell>1.5</TableCell><TableCell>0.90</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>vi</TableCell><TableCell>Garage</TableCell><TableCell>16.5</TableCell><TableCell>3.0</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>vii</TableCell><TableCell>Car Park</TableCell><TableCell>12.5</TableCell><TableCell>2.4</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>viii</TableCell><TableCell>Kitchenette</TableCell><TableCell>4</TableCell><TableCell>1.5</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>ix</TableCell><TableCell>Kitchen</TableCell><TableCell>6.0</TableCell><TableCell>1.8</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>x</TableCell><TableCell>Stores</TableCell><TableCell>3.0</TableCell><TableCell>1.2</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>xi</TableCell><TableCell>Corridors (Width)</TableCell><TableCell>1.5</TableCell><TableCell>1.2</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>xii</TableCell><TableCell>Headroom (Height)</TableCell><TableCell>2.85m</TableCell><TableCell>-</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow><TableCell>xiii</TableCell><TableCell>Balcony (Width)</TableCell><TableCell>1.2</TableCell><TableCell>0.9</TableCell><TableCell></TableCell></TableRow>
+                  <TableRow>
+                    <TableCell>xiv</TableCell>
+                    <TableCell>
+                        Staircase:
+                        <ul className="list-disc pl-5 mt-1">
+                            <li>Width</li>
+                            <li>Riser</li>
+                            <li>Thread</li>
+                        </ul>
+                    </TableCell>
+                    <TableCell>
+                      <ul className="list-none mt-1 space-y-2">
+                          <li>1.2m</li>
+                          <li>150mm</li>
+                          <li>250mm</li>
+                      </ul>
+                    </TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <div className="text-sm text-muted-foreground space-y-1 pt-4 list-outside">
+                <p>d. Room sizes do not include wardrobe space.</p>
+                <p>e. A lift shall be provided for the physically challenged in high rise residential buildings.</p>
+                <p>f. Courtyard to be 25% of floor area of adjoining rooms/corridors; minimum side dimension 3m.</p>
+            </div>
+          </section>
+
         </CardContent>
       </Card>
     </div>
   );
 }
+
+    
