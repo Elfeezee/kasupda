@@ -737,6 +737,188 @@ export default function DevelopmentDesignGuidelinesPage() {
             </div>
           </section>
         )
+    },
+    {
+        id: 'higher-institutions-standards',
+        title: 'GROUP 3 Higher Institutions',
+        keywords: 'higher institutions architectural standards nursery primary secondary school parking',
+        content: (
+            <section>
+                <h2 className="flex items-center text-2xl font-bold text-primary mb-4 border-b pb-2">
+                    <School className="mr-3 h-7 w-7" /> GROUP 3 Higher Institutions
+                </h2>
+                <p className="text-muted-foreground mb-4">
+                    Architectural Standards for various Categories of Schools shall be as stipulated in the Table below
+                </p>
+    
+                <h3 className="text-lg font-semibold mb-2 mt-6">Architectural Standards</h3>
+                <div className="border rounded-lg overflow-x-auto mb-6">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>CRITERIA</TableHead>
+                                <TableHead>NURSERY SCHOOL</TableHead>
+                                <TableHead>PRIMARY SCHOOL</TableHead>
+                                <TableHead>SECONDARY SCHOOL</TableHead>
+                                <TableHead colSpan={2} className="text-center">AREA</TableHead>
+                                <TableHead>HEAD ROOM (m)</TableHead>
+                            </TableRow>
+                            <TableRow>
+                                <TableHead></TableHead>
+                                <TableHead></TableHead>
+                                <TableHead></TableHead>
+                                <TableHead></TableHead>
+                                <TableHead>MIN</TableHead>
+                                <TableHead>PREFERRED</TableHead>
+                                <TableHead></TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>Maximum no. of pupils per class</TableCell>
+                                <TableCell>15</TableCell>
+                                <TableCell>30</TableCell>
+                                <TableCell>40</TableCell>
+                                <TableCell>36 m&sup2;</TableCell>
+                                <TableCell>42 m&sup2;</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Toilet</TableCell>
+                                <TableCell>1:10 persons</TableCell>
+                                <TableCell>1:15 person</TableCell>
+                                <TableCell>1:10 person</TableCell>
+                                <TableCell>0.9 x 1.5</TableCell>
+                                <TableCell>1.2 x 2.0</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Multipurpose Hall</TableCell>
+                                <TableCell>75</TableCell>
+                                <TableCell>150</TableCell>
+                                <TableCell>200</TableCell>
+                                <TableCell>300 m&sup2;</TableCell>
+                                <TableCell>450 m&sup2;</TableCell>
+                                <TableCell>6.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Staff toilet</TableCell>
+                                <TableCell>1:5 person</TableCell>
+                                <TableCell>1:5 person</TableCell>
+                                <TableCell>1:5 person</TableCell>
+                                <TableCell>0.9 x 1.5</TableCell>
+                                <TableCell>1.2 x 2.0</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Computer use</TableCell>
+                                <TableCell>1:5 person</TableCell>
+                                <TableCell>1:5 person</TableCell>
+                                <TableCell>1:2 person</TableCell>
+                                <TableCell>36 m&sup2;</TableCell>
+                                <TableCell>42 m&sup2;</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Admin. Block per staff</TableCell>
+                                <TableCell>1:2</TableCell>
+                                <TableCell>1:2</TableCell>
+                                <TableCell>1:2</TableCell>
+                                <TableCell>12 m&sup2;</TableCell>
+                                <TableCell>16 m&sup2;</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Shops area</TableCell>
+                                <TableCell>-</TableCell>
+                                <TableCell>-</TableCell>
+                                <TableCell>-</TableCell>
+                                <TableCell>12 m&sup2;</TableCell>
+                                <TableCell>16 m&sup2;</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Library area</TableCell>
+                                <TableCell>0.65m&sup2;/person</TableCell>
+                                <TableCell>0.65m&sup2;/person</TableCell>
+                                <TableCell>0.65m&sup2;/person</TableCell>
+                                <TableCell>150 m&sup2;</TableCell>
+                                <TableCell>180 m&sup2;</TableCell>
+                                <TableCell>3.5-4</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Clinic</TableCell>
+                                <TableCell>3.1m&sup2;/bed space</TableCell>
+                                <TableCell>3.1m&sup2;/bed space</TableCell>
+                                <TableCell>3.1m&sup2;/bedspace</TableCell>
+                                <TableCell>100 m&sup2;</TableCell>
+                                <TableCell>150 m&sup2;</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Office</TableCell>
+                                <TableCell>1:2/person</TableCell>
+                                <TableCell>1:2/person</TableCell>
+                                <TableCell>1:2/person</TableCell>
+                                <TableCell>12 m&sup2;</TableCell>
+                                <TableCell>16 m&sup2;</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Canteen</TableCell>
+                                <TableCell>0.85m&sup2;/person</TableCell>
+                                <TableCell>0.85m&sup2;/person</TableCell>
+                                <TableCell>0.85m&sup2;/person</TableCell>
+                                <TableCell>20 m&sup2;</TableCell>
+                                <TableCell>24 m&sup2;</TableCell>
+                                <TableCell>3.0</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+                <div className="text-sm text-muted-foreground space-y-1 pt-4">
+                    <p><span className="font-bold">Note:</span> For pupils of pre-school age in nursery schools and kindergarten buildings should be connected by covered walkways to provide shade and shelter. This also applies within individual hostels.</p>
+                </div>
+
+                <h3 className="text-lg font-semibold mb-2 mt-6">Parking Standards</h3>
+                 <div className="border rounded-lg overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Car Parking Requirements for Educational Developments.</TableHead>
+                                <TableHead></TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>Hostels related to schools, colleges training and military accommodation</TableCell>
+                                <TableCell>1 car space for every 3 bed spaces, plus staff accommodation, as in KD.PS 19residential hostels</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell>Primary and secondary schools</TableCell>
+                                <TableCell>1 car space for every member of staff.</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell>Day nurseries and crèches</TableCell>
+                                <TableCell>1 car space for every member of staff.</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell>Colleges of higher or further education and other educational establishments</TableCell>
+                                <TableCell>1 car space for every two members of staff plus 1 space for every 15 students.</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell></TableCell>
+                                <TableCell>1 Car space to every 5 member staff</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell></TableCell>
+                                <TableCell>1 Car space to every 5 member of staff</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+            </section>
+        )
     }
   ];
 
