@@ -23,6 +23,15 @@ const officers = [
   { name: "Hassan Abdullahi", area: "Kabala West, Ung.Muazu, Bakin Ruwa(A.A.Youghurt area)." },
   { name: "Sani Abdulkadir Jamoh", area: "Unguwan Dosa, Kwaru." },
   { name: "Kennedy Poul Galadima", area: "Kakuri Makera, Romi, Romi New extension, Federal Housing" },
+  { name: "Ahmed Usman Jajere", area: "Gonin Gora (West side), Government land, Government layout, Durumi, Lamigyi, Ung. Auta, Hayin katafawa, Hayin Dogo, UNG.Zhawu, Ung.Bije, UNG. Doma, Kakau." },
+  { name: "Ahmadu Bello", area: "Mando link road, National Eye Center, Prison Camp layout, Airport road." },
+  { name: "Yunusa Ahmed", area: "Rigasa North (Farin Gida), Dan Mani, Rimaye, Asikolaye, Bakin Ruwa(Albabello side) down to Train station." },
+  { name: "Damilola Ajumobi, assisted by Mustafa Barau, Esther John.", area: "Danbushiya, TUC,FMH, Yardan Allah Housing Estate,Rhyno, Dan honu2 down to Eastern Bypass." },
+  { name: "Ismail Ishaq (Danguggo)", area: "Gidan Daji, Sabon Gida, TPO833C, Kadaure, Ung.Ma'aji, Kyauta, Danhonu1, millennium City." },
+  { name: "Ahmed Abdulhamid assisted by Nelson Levy.", area: "Maigero1(water intake), Maigero2, Old Kamazou, Kamazo G.R.A Area." },
+  { name: "Abdulmalik Hamman Abba", area: "Barnawa, Narayi High'cost, NAFDAC layout." },
+  { name: "Salma P. Dyeri", area: "Ung. Gwari, Kawo, Rafin Gaza, Hayin Na'iya." },
+  { name: "Francis Simone", area: "Tsaunin Kura layout, Stello regularization plan, Chanchangi layout (our lady of Fatima), Ung. Bulus." },
 ];
 
 export default function DevelopmentControlOfficersPage() {
