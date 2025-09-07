@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass } from "lucide-react";
+import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass, Building } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Metadata } from 'next';
 
@@ -343,10 +343,84 @@ export default function DevelopmentDesignGuidelinesPage() {
             </div>
           </section>
 
+          <section>
+            <h2 className="flex items-center text-2xl font-bold text-primary mb-4 border-b pb-2">
+              <Building className="mr-3 h-7 w-7" /> Architectural Guidelines for Commercial/Office Facilities
+            </h2>
+            <div className="border rounded-lg overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Space</TableHead>
+                    <TableHead>Basic Min.</TableHead>
+                    <TableHead>Desirable Min.</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>Entrance Area</TableCell>
+                    <TableCell>20 - 25m&sup2;</TableCell>
+                    <TableCell>30 - 35m&sup2;</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Office Area</TableCell>
+                    <TableCell>12m&sup2;</TableCell>
+                    <TableCell>16m&sup2;</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Shop Area</TableCell>
+                    <TableCell>12m&sup2;</TableCell>
+                    <TableCell>16m&sup2;</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Parking Space</TableCell>
+                    <TableCell colSpan={2} className="text-center">1 parking space per 75m&sup2; floor area</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Toilets</TableCell>
+                    <TableCell>0.9 x 1.8</TableCell>
+                    <TableCell>1.2 x 2.0 / 1 toilet / 15</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      Stair cases (width)
+                    </TableCell>
+                    <TableCell>
+                        <ul className="list-none space-y-1">
+                            <li>Width 1.5m</li>
+                            <li>Riser 150mm</li>
+                            <li>Tread 230</li>
+                        </ul>
+                    </TableCell>
+                    <TableCell>
+                        <ul className="list-none space-y-1">
+                            <li>1.8m</li>
+                            <li>175mm</li>
+                            <li>300mm (T+2R=550-700mm Max.)</li>
+                        </ul>
+                    </TableCell>
+                  </TableRow>
+                   <TableRow>
+                    <TableCell>Conference / Meeting Area</TableCell>
+                    <TableCell>0.65m&sup2; / person</TableCell>
+                    <TableCell>0.85m&sup2; / person</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Cafeteria / Restaurant Area</TableCell>
+                    <TableCell>0.65m&sup2; / person</TableCell>
+                    <TableCell>0.85m&sup2; / person</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <div className="text-sm text-muted-foreground space-y-1 pt-4 list-outside">
+                <p><span className="font-bold">Note:</span> Lifts shall be provided for building of 3 suspended floors and above.</p>
+                <p>Ramps should be provided at entry points for disabled persons in all commercial/offices from ground floor.</p>
+            </div>
+          </section>
+
         </CardContent>
       </Card>
     </div>
   );
 }
-
-    
