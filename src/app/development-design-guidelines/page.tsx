@@ -506,6 +506,13 @@ export default function DevelopmentDesignGuidelinesPage() {
                                 <TableCell className="font-medium">Shops (take-away food shops with fewer than 8 customer seats).</TableCell>
                                 <TableCell>A maximum of 1 car space for every 40m&sup2; gross floor area (Gross Floor Area GFA) with provision of at least 1 for every shop, plus access to an off street delivery bay.</TableCell>
                             </TableRow>
+                             <TableRow>
+                                <TableCell colSpan={2}>
+                                    <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
+                                        <li>The parking standards include provision for essential operational parking and servicing, other shop workers and shoppers.</li>
+                                    </ul>
+                                </TableCell>
+                            </TableRow>
                             <TableRow>
                                 <TableCell colSpan={2}>There should be adequate provision for overnight parking of delivery vehicles and for the parking and maneuvering of vehicles in loading areas.</TableCell>
                             </TableRow>
@@ -544,6 +551,10 @@ export default function DevelopmentDesignGuidelinesPage() {
                         </TableBody>
                     </Table>
                 </div>
+              </div>
+              <div className="space-y-4 text-sm text-foreground pt-4">
+                  <p className="text-muted-foreground">As much as possible, consideration be given to the impact of trips generated on adjacent uses, particularly residential, and on the effect of casual on-street parking on traffic flows including any likely congestion of bus lay-bys and bus stops or interruptions to the free flow and safety of traffic or pedestrians.</p>
+                  <p className="text-muted-foreground">Proposals for individual shops that generate a requirement for 30 or more parking spaces should normally provide these adjacent to the store and include provision for disabled persons. The parking requirement for smaller shops may be "pooled" or commuted into public car parks.</p>
               </div>
             </div>
           </section>
