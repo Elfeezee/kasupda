@@ -122,7 +122,7 @@ export default function Header() {
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
     { href: "#", label: "Approved layout" },
-    { href: "#", label: "Base Maps" },
+    { href: "/pdf/base-maps.pdf", label: "Base Maps", download: true },
   ];
 
   const developmentControlSubLinks = [
@@ -251,7 +251,7 @@ export default function Header() {
                 >
                   {planningSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                      <Link href={link.href} className={getDropdownLinkClassName(link.href)} download={link.download}>{link.label}</Link>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -470,6 +470,7 @@ export default function Header() {
                               key={link.label}
                               href={link.href}
                               className={getMobileSubLinkClassName(link.href)}
+                               download={link.download}
                             >
                               {link.label}
                             </Link>
