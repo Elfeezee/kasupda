@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ListChecks, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
@@ -63,14 +63,13 @@ function MyApplicationsPageComponent() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setAuthChecked(true); // Auth state confirmed
-      if (!currentUser) {
-        // Redirect if not logged in
+      if (!currentUser && authChecked) { // Only redirect if auth has been checked once
         router.push('/login');
       }
+      setAuthChecked(true); // Auth state confirmed
     });
     return () => unsubscribe();
-  }, [router]);
+  }, [router, authChecked]); // Rerun when authChecked changes
 
   useEffect(() => {
     if (!user) return; // Don't fetch if no user
@@ -104,7 +103,7 @@ function MyApplicationsPageComponent() {
     fetchApplications();
   }, [user, toast]);
 
-  // Initial un-hydrated state
+  // Initial un-hydrated state or loading auth
   if (!authChecked) {
     return (
         <div className="space-y-8">
@@ -196,8 +195,8 @@ function MyApplicationsPageComponent() {
 // A wrapper component is needed because hooks like useToast and useEffect need to be in a Client Component.
 export default function MyApplicationsPage() {
     return (
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
             <MyApplicationsPageComponent />
-        </React.Suspense>
+        </Suspense>
     )
 }
