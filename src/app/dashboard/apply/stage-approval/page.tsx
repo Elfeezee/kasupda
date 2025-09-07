@@ -12,7 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon, CheckCircle } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Separator } from '@/components/ui/separator';
@@ -49,13 +49,14 @@ export default function StageApprovalPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
+      setUser(currentUser);
+      setAuthChecked(true);
+      if (!currentUser) {
         toast({ title: 'Authentication Error', description: 'You must be logged in to apply.', variant: 'destructive' });
         router.push('/login');
       }
@@ -118,6 +119,26 @@ export default function StageApprovalPage() {
         setIsSubmitting(false);
     }
   };
+
+  if (!authChecked || !user) {
+    return (
+      <div className="container mx-auto px-2 sm:px-4 py-8">
+        <Card className="max-w-3xl mx-auto">
+          <CardHeader>
+            <CardTitle className="text-xl sm:text-2xl font-bold text-primary">
+              Stage Approval Application
+            </CardTitle>
+            <CardDescription className="text-sm sm:text-base">
+              Verifying your session...
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-2 sm:px-4 py-8">

@@ -63,13 +63,13 @@ function MyApplicationsPageComponent() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      if (!currentUser && authChecked) { // Only redirect if auth has been checked once
+      setAuthChecked(true); // Auth state confirmed
+      if (!currentUser) {
         router.push('/login');
       }
-      setAuthChecked(true); // Auth state confirmed
     });
     return () => unsubscribe();
-  }, [router, authChecked]); // Rerun when authChecked changes
+  }, [router]);
 
   useEffect(() => {
     if (!user) return; // Don't fetch if no user
@@ -104,7 +104,7 @@ function MyApplicationsPageComponent() {
   }, [user, toast]);
 
   // Initial un-hydrated state or loading auth
-  if (!authChecked) {
+  if (!authChecked || !user) {
     return (
         <div className="space-y-8">
             <CardHeader className="px-0 pt-0">
@@ -116,25 +116,6 @@ function MyApplicationsPageComponent() {
                 </CardDescription>
             </CardHeader>
             <Card><CardContent className="pt-6">Loading...</CardContent></Card>
-        </div>
-    );
-  }
-  
-  // Confirmed not logged in
-  if (!user) {
-    return (
-         <div className="space-y-8">
-            <CardHeader className="px-0 pt-0">
-                <CardTitle className="text-2xl sm:text-3xl font-bold text-primary flex items-center">
-                <ListChecks className="mr-3 h-7 w-7" /> My Submitted Applications
-                </CardTitle>
-                 <CardDescription>Please log in to view your applications.</CardDescription>
-            </CardHeader>
-            <Card>
-                <CardContent className="pt-6">
-                    <p className="text-muted-foreground">Redirecting to login...</p>
-                </CardContent>
-            </Card>
         </div>
     );
   }
