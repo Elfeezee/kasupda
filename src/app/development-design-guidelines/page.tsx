@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ListChecks, AlertTriangle, Info, CheckCircle, Home } from "lucide-react";
+import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Metadata } from 'next';
 
@@ -125,6 +125,55 @@ export default function DevelopmentDesignGuidelinesPage() {
                   </TableRow>
                 </TableBody>
               </Table>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="flex items-center text-2xl font-bold text-primary mb-4 border-b pb-2">
+              <FilePen className="mr-3 h-7 w-7" /> Development Query Details
+            </h2>
+            <div className="border rounded-lg overflow-x-auto">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Type of Development</TableHead>
+                            <TableHead>Minor Quarries</TableHead>
+                            <TableHead>Major Quarries</TableHead>
+                            <TableHead>Remarks</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell>
+                                <ul className="list-none space-y-1">
+                                    <li>Bungalow Duplexes</li>
+                                    <li>Block of Flats or studio apartments</li>
+                                    <li>Block of flats</li>
+                                    <li>Block of Flats / Terrace</li>
+                                    <li>Studio Apartments</li>
+                                    <li>Bungalows Duplexes Maisonette</li>
+                                </ul>
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className="text-center text-primary">
+                                <CheckCircle className="h-6 w-6 inline-block" />
+                            </TableCell>
+                            <TableCell>
+                                <ul className="list-disc list-inside space-y-2 text-sm">
+                                    <li>Non-compliance with minimum standards for setbacks and functional space sizes.</li>
+                                    <li>Inadequate provision of designated parking spaces.</li>
+                                    <li>Submission of designs with building scales that exceed plot sizes.</li>
+                                    <li>Incomplete design submissions, omitting essential building features indicated on site plans.</li>
+                                    <li>Failure to provide complete design details for all building elements shown on the site plan.</li>
+                                    <li>Failure to meet the minimum 30% plot coverage requirement.</li>
+                                    <li>Omission of remodeling schedules from design submissions.</li>
+                                    <li>Incomplete or omitted section lines.</li>
+                                    <li>Failure to meet these standard requirements may necessitate revisions or redesigns, potentially leading to delays of billings.</li>
+                                </ul>
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
             </div>
           </section>
 
