@@ -80,8 +80,10 @@ export default function StageApprovalPage() {
   });
 
   const onSubmit = async (data: StageApprovalFormValues) => {
-    if (!user) {
-        toast({ title: "Error", description: "You are not logged in.", variant: "destructive" });
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+        toast({ title: "Error", description: "Authentication session expired. Please log in again.", variant: "destructive" });
+        router.push('/login');
         return;
     }
     setIsSubmitting(true);
@@ -89,7 +91,7 @@ export default function StageApprovalPage() {
     const formData = new FormData();
     formData.append('type', "Stage Approval Application");
     formData.append('applicantName', `${data.firstName} ${data.surname}`);
-    formData.append('userId', user.uid);
+    formData.append('userId', currentUser.uid);
     // Serialize the full data object
     formData.append('data', JSON.stringify(data));
 
