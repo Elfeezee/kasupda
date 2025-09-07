@@ -32,6 +32,12 @@ const officers = [
   { name: "Abdulmalik Hamman Abba", area: "Barnawa, Narayi High'cost, NAFDAC layout." },
   { name: "Salma P. Dyeri", area: "Ung. Gwari, Kawo, Rafin Gaza, Hayin Na'iya." },
   { name: "Francis Simone", area: "Tsaunin Kura layout, Stello regularization plan, Chanchangi layout (our lady of Fatima), Ung. Bulus." },
+  { name: "Kaza Zakariya", area: "Gbagyi Villa, Juji, ung.Gimbiya, Nitel Quarters, Sabo(Right hand side)." },
+  { name: "Gabriel Cornelius", area: "Sabo (left hand side), Burnt bricks, Mahuta, KSDPC layout." },
+  { name: "Marble Haruna", area: "Ung. Boro, Ung.Makama, Ung. Pama, Ung. Sunday, Old Television, NITEL layout (Television), Narayi Village." },
+  { name: "Abubakar Abdulrashid", area: "Ung.Sunusi, Kinkinau, Tudun Wada, Tudun Nupawa, Lodge Layout." },
+  { name: "Buhari Mohammed", area: "Agwa, Zokoroko, Kudendan." },
+  { name: "Salome Ishaya", area: "Nissi Village, Ung.Tasu, Kapam, NNPC Qtrs. Oil Village, Maraban Rido up to Kasuwan Magani." },
 ];
 
 export default function DevelopmentControlOfficersPage() {
