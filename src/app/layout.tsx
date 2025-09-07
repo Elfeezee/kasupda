@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'KASUPDA - Kaduna State Urban Planning and Development Authority',
-  description: 'Official portal for KASUPDA, Kaduna State.',
+  description: 'Official portal for KASUPDA, Kaduna State. Find development guidelines, apply for permits, and stay updated on urban planning initiatives.',
 };
 
 export default function RootLayout({

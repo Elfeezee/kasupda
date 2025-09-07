@@ -722,7 +722,7 @@ export default function DevelopmentDesignGuidelinesPage() {
                 </div>
                 
                 <h3 className="text-lg font-semibold mb-2 mt-6">GROUP 2 Senior Secondary</h3>
-                <div className="border rounded-lg overflow-x-auto">
+                <div className="border rounded-lg overflow-x-auto mb-6">
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -756,24 +756,10 @@ export default function DevelopmentDesignGuidelinesPage() {
                         </TableBody>
                     </Table>
                 </div>
-            </div>
-          </section>
-        )
-    },
-    {
-        id: 'higher-institutions-standards',
-        title: 'GROUP 3 Higher Institutions',
-        keywords: 'higher institutions architectural standards nursery primary secondary school parking',
-        content: (
-            <section>
-                <h2 className="flex items-center text-2xl font-bold text-primary mb-4 border-b pb-2">
-                    <School className="mr-3 h-7 w-7" /> GROUP 3 Higher Institutions
-                </h2>
-                <p className="text-muted-foreground mb-4">
+                 <h3 className="text-lg font-semibold mb-2 mt-6">GROUP 3 Higher Institutions</h3>
+                <p className="text-sm text-muted-foreground mb-4">
                     Architectural Standards for various Categories of Schools shall be as stipulated in the Table below
                 </p>
-    
-                <h3 className="text-lg font-semibold mb-2 mt-6">Architectural Standards</h3>
                 <div className="border rounded-lg overflow-x-auto mb-6">
                     <Table>
                         <TableHeader>
@@ -939,7 +925,8 @@ export default function DevelopmentDesignGuidelinesPage() {
                         </TableBody>
                     </Table>
                 </div>
-            </section>
+            </div>
+          </section>
         )
     }
   ];
