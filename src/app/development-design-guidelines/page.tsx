@@ -233,7 +233,7 @@ export default function DevelopmentDesignGuidelinesPage() {
                                     <li>Failure to meet the minimum 30% plot coverage requirement.</li>
                                     <li>Omission of remodeling schedules from design submissions.</li>
                                     <li>Incomplete or omitted section lines.</li>
-                                    <li>Failure to meet these standard requirements may necessitate revisions or redesigns, potentially leading to delays of billings.</li>
+                                    <li>Failure to meet these standard requirements may necessitate revisions or redesigns potentially leading to delays of billings.</li>
                                 </ul>
                             </TableCell>
                         </TableRow>
@@ -288,6 +288,28 @@ export default function DevelopmentDesignGuidelinesPage() {
                                     <li>The minimum distance between buildings within the site plan is sometimes not meet by applicants.</li>
                                     <li>Non-compliance with minimum standards for setbacks and functional space sizes.</li>
                                     <li>Inadequate provision of designated parking spaces.</li>
+                                </ul>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Educational institutions</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className="text-center text-primary">
+                                <CheckCircle className="h-6 w-6 inline-block" />
+                            </TableCell>
+                            <TableCell>
+                                <ul className="list-disc list-inside space-y-2 text-sm">
+                                    <li>Lack of provision of designated playground.</li>
+                                    <li>The minimum distance between buildings within the site plan is sometimes not meet by applicants.</li>
+                                    <li>Non-compliance with minimum standards for setbacks and functional space sizes.</li>
+                                    <li>Inadequate provision of designated parking spaces.</li>
+                                    <li>Submission of designs with building scales that exceed plot sizes.</li>
+                                    <li>Incomplete design submissions, omitting essential building features indicated on site plans.</li>
+                                    <li>Failure to provide complete design drawings for all building elements shown on the site plan.</li>
+                                    <li>Failure to meet the minimum 30% plot coverage requirement.</li>
+                                    <li>Omission of remodeling schedules from design submissions.</li>
+                                    <li>Incomplete or omitted section lines.</li>
+                                    <li>Failure to meet these standard requirements may necessitate revisions or redesigns potentially leading to delays of billings.</li>
                                 </ul>
                             </TableCell>
                         </TableRow>
