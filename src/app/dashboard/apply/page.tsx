@@ -10,13 +10,6 @@ import { useToast } from '@/hooks/use-toast';
 
 const permitTypes = [
   {
-    title: 'Developer ID (DIN)',
-    description: 'Register as a developer to get your unique identification number before applying for other permits.',
-    icon: Fingerprint,
-    href: '/dashboard/apply/din-application', 
-    actionText: 'Apply for DIN',
-  },
-  {
     title: 'Building Permit Application',
     description: 'Apply for permits for new residential, commercial, or other types of buildings.',
     icon: Building,
@@ -106,4 +99,3 @@ export default function SelectPermitTypePage() {
     </div>
   );
 }
-

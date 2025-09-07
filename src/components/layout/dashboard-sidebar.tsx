@@ -24,6 +24,7 @@ import {
   ReceiptText,
   FolderArchive,
   LogOut,
+  Fingerprint, 
   // Search, // Example usage, can be removed if not needed
   // Settings, // Example usage, can be removed if not needed
   // LifeBuoy, // Example usage, can be removed if not needed
@@ -34,7 +35,8 @@ import { useToast } from '@/hooks/use-toast';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/apply', label: 'Apply for Permit', icon: FilePlus2 }, // Updated link
+  { href: '/dashboard/apply/din-application', label: 'Apply for DIN', icon: Fingerprint },
+  { href: '/dashboard/apply', label: 'Apply for Permit', icon: FilePlus2 }, 
   { href: '/dashboard/my-applications', label: 'My Applications', icon: ListChecks },
   { href: '/dashboard/profile', label: 'My Profile', icon: UserCircle2, disabled: true }, // Placeholder
   { href: '/dashboard/payments', label: 'Payment History', icon: ReceiptText, disabled: true }, // Placeholder
