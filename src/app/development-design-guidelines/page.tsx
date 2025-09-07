@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass, Building, Car } from "lucide-react";
+import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass, Building, Car, ShoppingCart } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Metadata } from 'next';
 
@@ -265,6 +265,22 @@ export default function DevelopmentDesignGuidelinesPage() {
                                 <CheckCircle className="h-6 w-6 inline-block" />
                             </TableCell>
                         </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                Commercial Facilities
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className="text-center text-primary">
+                                <CheckCircle className="h-6 w-6 inline-block" />
+                            </TableCell>
+                            <TableCell>
+                                <ul className="list-disc list-inside space-y-2 text-sm">
+                                    <li>The minimum distance between buildings within the site plan is sometimes not meet by applicants.</li>
+                                    <li>Non-compliance with minimum standards for setbacks and functional space sizes.</li>
+                                    <li>Inadequate provision of designated parking spaces.</li>
+                                </ul>
+                            </TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </div>
@@ -472,6 +488,62 @@ export default function DevelopmentDesignGuidelinesPage() {
                <div className="pl-4">
                 <h3 className="font-semibold text-md mb-2">d. Parking Standards for Shopping Developments:</h3>
                 <p className="text-muted-foreground">Maximum provision with the exception of heavy goods vehicles.</p>
+              </div>
+            </div>
+          </section>
+
+           <section>
+            <h2 className="flex items-center text-2xl font-bold text-primary mb-4 border-b pb-2">
+              <ShoppingCart className="mr-3 h-7 w-7" /> Parking Guidelines for Shopping Developments
+            </h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">1. General Retail</h3>
+                <div className="border rounded-lg overflow-x-auto">
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell className="font-medium">Shops (take-away food shops with fewer than 8 customer seats).</TableCell>
+                                <TableCell>A maximum of 1 car space for every 40m&sup2; gross floor area (Gross Floor Area GFA) with provision of at least 1 for every shop, plus access to an off street delivery bay.</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell colSpan={2}>There should be adequate provision for overnight parking of delivery vehicles and for the parking and maneuvering of vehicles in loading areas.</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-2">2. Supermarkets, Superstores and Hypermarkets i.e. stores selling primarily food and groceries</h3>
+                 <div className="border rounded-lg overflow-x-auto">
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell className="font-medium">Over 1,200m&sup2;</TableCell>
+                                <TableCell>1 car space per 15m&sup2; GFA.</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell colSpan={2}>In addition, there should be adequate provision for overnight parking of delivery vehicles and for the parking and maneuvering of vehicles in loading areas.</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                 </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-2">3. Retail Warehouses and Garden Centers</h3>
+                 <div className="border rounded-lg overflow-x-auto">
+                    <Table>
+                        <TableBody>
+                             <TableRow>
+                                <TableCell className="font-medium">Over 1,200m&sup2;</TableCell>
+                                <TableCell>1 car space per 20m&sup2; GFA.</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell colSpan={2}>The floor area includes outdoor sales and display areas. In addition, there should be adequate provision for overnight parking of delivery vehicles and for the parking and maneuvering of vehicles in loading areas.</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
               </div>
             </div>
           </section>
