@@ -677,25 +677,24 @@ export default function DevelopmentDesignGuidelinesPage() {
                             <TableRow>
                                 <TableHead>S/No.</TableHead>
                                 <TableHead>Space</TableHead>
-                                <TableHead>Basic</TableHead>
+                                <TableHead>Basic Area</TableHead>
                                 <TableHead>Window %</TableHead>
-                                <TableHead>Min. Dim (m)</TableHead>
+                                <TableHead>Min Dim (m)</TableHead>
                                 <TableHead>Door (m)</TableHead>
                                 <TableHead>Head Room (m)</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow><TableCell>1.</TableCell><TableCell>Classroom</TableCell><TableCell>36m&sup2;</TableCell><TableCell>40</TableCell><TableCell>6</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>2.</TableCell><TableCell>Laboratory</TableCell><TableCell>50m&sup2;</TableCell><TableCell>30</TableCell><TableCell>9</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>3.</TableCell><TableCell>Sick Bay</TableCell><TableCell>5.1m&sup2;/bed space</TableCell><TableCell>30</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>4.</TableCell><TableCell>Laundry</TableCell><TableCell>9m&sup2;</TableCell><TableCell>10</TableCell><TableCell>3.0</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>5.</TableCell><TableCell>Kitchen</TableCell><TableCell>40% of Dining</TableCell><TableCell>10</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>6.</TableCell><TableCell>Dining Hall</TableCell><TableCell>0.85m&sup2;/Person</TableCell><TableCell>30</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>7.</TableCell><TableCell>Toilet</TableCell><TableCell>1.55m&sup2;</TableCell><TableCell>10</TableCell><TableCell>9</TableCell><TableCell>0.75</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>8.</TableCell><TableCell>Admin Block</TableCell><TableCell>40m&sup2;</TableCell><TableCell>20</TableCell><TableCell>5.0</TableCell><TableCell>0.9</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>9.</TableCell><TableCell>Library</TableCell><TableCell>36m&sup2;</TableCell><TableCell>20</TableCell><TableCell>6.0</TableCell><TableCell>0.9</TableCell><TableCell>3.0</TableCell></TableRow>
-                            <TableRow><TableCell>10.</TableCell><TableCell>Multi-purpose Hall</TableCell><TableCell>200m&sup2;</TableCell><TableCell>40</TableCell><TableCell>10</TableCell><TableCell>1.2</TableCell><TableCell>6.0</TableCell></TableRow>
-                            <TableRow><TableCell>11.</TableCell><TableCell>Hostel</TableCell><TableCell>5.1m&sup2;/bed space</TableCell><TableCell>10</TableCell><TableCell>-</TableCell><TableCell>0.9</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>1.</TableCell><TableCell>Play Area (Interior)</TableCell><TableCell>25m&sup2;</TableCell><TableCell>40</TableCell><TableCell>5.0</TableCell><TableCell>0.9</TableCell><TableCell>-</TableCell></TableRow>
+                            <TableRow><TableCell>2.</TableCell><TableCell>Kitchenette</TableCell><TableCell>6m&sup2;</TableCell><TableCell>10</TableCell><TableCell>2.0</TableCell><TableCell>0.75</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>3.</TableCell><TableCell>Laundry</TableCell><TableCell>6m&sup2;</TableCell><TableCell>10</TableCell><TableCell>2.0</TableCell><TableCell>0.75</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>4.</TableCell><TableCell>Toilet</TableCell><TableCell colSpan={5}>As in commercial</TableCell></TableRow>
+                            <TableRow><TableCell>5.</TableCell><TableCell>Office</TableCell><TableCell colSpan={5}>As in commercial</TableCell></TableRow>
+                            <TableRow><TableCell>6.</TableCell><TableCell>Classroom</TableCell><TableCell>36m&sup2;</TableCell><TableCell>30</TableCell><TableCell>6.0</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>7.</TableCell><TableCell>Laboratory</TableCell><TableCell>50m&sup2;</TableCell><TableCell>30</TableCell><TableCell>6.0</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>8.</TableCell><TableCell>Sick Bay</TableCell><TableCell>3.1m&sup2;/bedspace</TableCell><TableCell>40</TableCell><TableCell>4.0</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>9.</TableCell><TableCell>Multi-purpose Hall</TableCell><TableCell>150m&sup2;</TableCell><TableCell>30</TableCell><TableCell>10.0</TableCell><TableCell>1.2</TableCell><TableCell>6.0</TableCell></TableRow>
+                            <TableRow><TableCell>10.</TableCell><TableCell>Dining Area</TableCell><TableCell>0.85m&sup2;/person</TableCell><TableCell>30</TableCell><TableCell>4.0</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
                         </TableBody>
                     </Table>
                 </div>
@@ -724,10 +723,17 @@ export default function DevelopmentDesignGuidelinesPage() {
                                 <TableCell>1.5</TableCell>
                                 <TableCell>3.5</TableCell>
                             </TableRow>
+                            <TableRow><TableCell>2.</TableCell><TableCell>Laboratory</TableCell><TableCell>36m&sup2;</TableCell><TableCell>30</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>3.</TableCell><TableCell>Library</TableCell><TableCell>1.2m&sup2;/person</TableCell><TableCell>40</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>4.</TableCell><TableCell>Cafeteria</TableCell><TableCell>0.85m&sup2;/person</TableCell><TableCell>30</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>5.</TableCell><TableCell>Admin Block</TableCell><TableCell>40m&sup2;</TableCell><TableCell>10</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>6.</TableCell><TableCell>Multi-purpose Hall</TableCell><TableCell>0.65m&sup2;/person</TableCell><TableCell>30</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.5</TableCell></TableRow>
+                            <TableRow><TableCell>7.</TableCell><TableCell>Hostels</TableCell><TableCell>3.1m&sup2;/bed space</TableCell><TableCell>40</TableCell><TableCell>-</TableCell><TableCell>0.9</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>8.</TableCell><TableCell>Sick Bay</TableCell><TableCell>3.1m&sup2;/per bs</TableCell><TableCell>30</TableCell><TableCell>-</TableCell><TableCell>0.9</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>9.</TableCell><TableCell>Toilet</TableCell><TableCell>1.35m&sup2;</TableCell><TableCell>10</TableCell><TableCell>-</TableCell><TableCell>0.75</TableCell><TableCell>3.0</TableCell></TableRow>
                         </TableBody>
                     </Table>
                 </div>
-
             </div>
           </section>
         )
