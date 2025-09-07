@@ -130,7 +130,7 @@ export default function Header() {
     { href: "#", label: "Building Permit Application Guidelines" },
     { href: "/development-control-officers", label: "Development Control Officers" },
     { href: "#", label: "Inspection" },
-    { href: "#", label: "Permit Process" },
+    { href: "/permit-process", label: "Permit Process" },
   ];
 
   const EServiceSubLinks = [
