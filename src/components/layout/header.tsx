@@ -122,12 +122,11 @@ export default function Header() {
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
     { href: "#", label: "Approved layout" },
-    { href: "#", label: "Zoning" },
+    { href: "#", label: "Base Maps" },
   ];
 
   const developmentControlSubLinks = [
     { href: "/consultants", label: "Approved Consultants" },
-    { href: "#", label: "Base Maps" },
     { href: "#", label: "Building Permit Application Guidelines" },
     { href: "/development-control-officers", label: "Development Control Officers" },
     { href: "#", label: "Inspection" },
