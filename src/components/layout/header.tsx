@@ -122,7 +122,7 @@ export default function Header() {
   const planningSubLinks = [
     { href: "#", label: "Master plan" },
     { href: "#", label: "Approved layout" },
-    { href: "/pdf/base-maps.pdf", label: "Base Maps", download: true },
+    { href: "/pdf/base-maps.pdf", label: "Base Maps", external: true },
   ];
 
   const developmentControlSubLinks = [
@@ -251,7 +251,11 @@ export default function Header() {
                 >
                   {planningSubLinks.map((link) => (
                     <DropdownMenuItem key={link.label} asChild>
-                      <Link href={link.href} className={getDropdownLinkClassName(link.href)} download={link.download}>{link.label}</Link>
+                       {link.external ? (
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" className={getDropdownLinkClassName(link.href)}>{link.label}</a>
+                      ) : (
+                        <Link href={link.href} className={getDropdownLinkClassName(link.href)}>{link.label}</Link>
+                      )}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -466,14 +470,11 @@ export default function Header() {
                         </AccordionTrigger>
                         <AccordionContent className="pl-4 pb-1">
                           {planningSubLinks.map((link) => (
-                            <Link
-                              key={link.label}
-                              href={link.href}
-                              className={getMobileSubLinkClassName(link.href)}
-                               download={link.download}
-                            >
-                              {link.label}
-                            </Link>
+                             link.external ? (
+                                <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={getMobileSubLinkClassName(link.href)}>{link.label}</a>
+                              ) : (
+                                <Link key={link.label} href={link.href} className={getMobileSubLinkClassName(link.href)}>{link.label}</Link>
+                              )
                           ))}
                         </AccordionContent>
                       </AccordionItem>
