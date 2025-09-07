@@ -56,75 +56,91 @@ function MyApplicationsPageComponent() {
   const { toast } = useToast();
   const router = useRouter();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Manages data fetching state
   const [user, setUser] = useState<User | null>(null);
-  const [authChecked, setAuthChecked] = useState(false); // New state to track auth check
+  const [authChecked, setAuthChecked] = useState(false); // Manages auth state check
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setAuthChecked(true); // Mark auth as checked
+      setAuthChecked(true); // Auth state confirmed
       if (!currentUser) {
-        // If not logged in, redirect to login page after a short delay
-        setTimeout(() => {
-          router.push('/login');
-        }, 1000);
+        // Redirect if not logged in
+        router.push('/login');
       }
     });
     return () => unsubscribe();
   }, [router]);
 
   useEffect(() => {
-    if (user) {
-      const fetchApplications = async () => {
-        setLoading(true);
-        try {
-          const appsRef = collection(db, "applications");
-          const q = query(
-            appsRef, 
-            where("userId", "==", user.uid),
-            orderBy("date", "desc")
-          );
-          const querySnapshot = await getDocs(q);
-          const userApps = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          } as StoredApplication));
-          setApplications(userApps);
-        } catch (error) {
-          console.error("Error fetching user applications:", error);
-          toast({
-            title: "Error",
-            description: "Could not fetch your applications from the database.",
-            variant: "destructive",
-          });
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchApplications();
-    } else if (authChecked) { // Only stop loading if auth has been checked
-      setLoading(false);
-      setApplications([]);
-    }
-  }, [user, authChecked, toast]);
+    if (!user) return; // Don't fetch if no user
 
-  if (!authChecked || loading) {
-      return (
+    const fetchApplications = async () => {
+      setLoading(true);
+      try {
+        const appsRef = collection(db, "applications");
+        const q = query(
+          appsRef, 
+          where("userId", "==", user.uid),
+          orderBy("date", "desc")
+        );
+        const querySnapshot = await getDocs(q);
+        const userApps = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as StoredApplication));
+        setApplications(userApps);
+      } catch (error) {
+        console.error("Error fetching user applications:", error);
+        toast({
+          title: "Error",
+          description: "Could not fetch your applications from the database.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchApplications();
+  }, [user, toast]);
+
+  // Initial un-hydrated state
+  if (!authChecked) {
+    return (
         <div className="space-y-8">
             <CardHeader className="px-0 pt-0">
                 <CardTitle className="text-2xl sm:text-3xl font-bold text-primary flex items-center">
                 <ListChecks className="mr-3 h-7 w-7" /> My Submitted Applications
                 </CardTitle>
                 <CardDescription>
-                Verifying your session and loading application history...
+                Verifying your session...
                 </CardDescription>
             </CardHeader>
-            <div className="text-center">Loading...</div>
+            <Card><CardContent className="pt-6">Loading...</CardContent></Card>
         </div>
-      );
+    );
   }
-
+  
+  // Confirmed not logged in
+  if (!user) {
+    return (
+         <div className="space-y-8">
+            <CardHeader className="px-0 pt-0">
+                <CardTitle className="text-2xl sm:text-3xl font-bold text-primary flex items-center">
+                <ListChecks className="mr-3 h-7 w-7" /> My Submitted Applications
+                </CardTitle>
+                 <CardDescription>Please log in to view your applications.</CardDescription>
+            </CardHeader>
+            <Card>
+                <CardContent className="pt-6">
+                    <p className="text-muted-foreground">Redirecting to login...</p>
+                </CardContent>
+            </Card>
+        </div>
+    );
+  }
+  
+  // Logged in, show applications or loading/empty state
   return (
     <div className="space-y-8">
       <CardHeader className="px-0 pt-0">
@@ -137,12 +153,8 @@ function MyApplicationsPageComponent() {
         </CardDescription>
       </CardHeader>
 
-      {!user ? (
-        <Card>
-            <CardContent className="pt-6">
-                <p className="text-muted-foreground">Please log in to view your applications. Redirecting...</p>
-            </CardContent>
-        </Card>
+      {loading ? (
+         <Card><CardContent className="pt-6">Loading your applications...</CardContent></Card>
       ) : applications.length === 0 ? (
         <Card>
           <CardContent className="pt-6">
