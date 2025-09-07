@@ -227,6 +227,44 @@ export default function DevelopmentDesignGuidelinesPage() {
                                 </ul>
                             </TableCell>
                         </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                Luxury Flats; Service Flats;
+                            </TableCell>
+                             <TableCell></TableCell>
+                            <TableCell className="text-center text-primary">
+                                <CheckCircle className="h-6 w-6 inline-block" />
+                            </TableCell>
+                            <TableCell rowSpan={3}>
+                                <ul className="list-disc list-inside space-y-2 text-sm">
+                                    <li>The minimum distance between buildings within the site plan is sometimes not meet by applicants.</li>
+                                    <li>The orientation of the buildings is sometimes not properly arranged.</li>
+                                    <li>Non-compliance with minimum standards for setbacks and functional space sizes.</li>
+                                    <li>Inadequate provision of designated parking spaces.</li>
+                                    <li>Submission of designs with building scales that exceed plot sizes.</li>
+                                    <li>Incomplete design submissions, omitting essential building features indicated on site plans.</li>
+                                    <li>Failure to provide complete design drawings for all building elements shown on the site plan</li>
+                                </ul>
+                            </TableCell>
+                        </TableRow>
+                         <TableRow>
+                            <TableCell>
+                                Mixed Development
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className="text-center text-primary">
+                                <CheckCircle className="h-6 w-6 inline-block" />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                Condominiums; Mixed Development; Terrace Building.
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className="text-center text-primary">
+                                <CheckCircle className="h-6 w-6 inline-block" />
+                            </TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </div>
