@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass, Building } from "lucide-react";
+import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass, Building, Car } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Metadata } from 'next';
 
@@ -419,8 +419,67 @@ export default function DevelopmentDesignGuidelinesPage() {
             </div>
           </section>
 
+          <section>
+            <h2 className="flex items-center text-2xl font-bold text-primary mb-4 border-b pb-2">
+              <Car className="mr-3 h-7 w-7" /> Parking Guidelines for Commercial Facilities
+            </h2>
+            <div className="border rounded-lg overflow-x-auto mb-6">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Uses</TableHead>
+                    <TableHead>Requirements</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>Bed and Breakfast and Guest Houses</TableCell>
+                    <TableCell>1 car space per bedroom plus resident staff accommodation as in KD.PS 19 above.</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Hotels and Motels</TableCell>
+                    <TableCell>1 car space per bedroom, plus 1 space for every 7m&sup2; of net area used by the public, plus 1 luxury bus space per 100 bedrooms in hotels with more than 100 rooms, operational parking and servicing as appropriate.</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Restaurants and Cafés</TableCell>
+                    <TableCell>1 vehicle space per 7m&sup2; for areas used by the public. This is inclusive of operational and staff parking.</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <div className="space-y-4 text-sm text-foreground">
+              <p>Commercial buildings are to be designed to suit space and servicing requirements of potential users. However, the Authority shall also consider the implications of the proposed development being occupied by other users, being subdivided or units being combined. A similar approach may be adopted with retail uses:</p>
+              
+              <div className="pl-4">
+                <h3 className="font-semibold text-md mb-2">a. Standard for the Physically Challenged in Commercial Developments:</h3>
+                <p className="text-muted-foreground">Parking provision will be calculated on the basis of the 15% minimum standards set out in subsequent paragraphs. These should be clearly marked and reserved for the use of physically challenged persons. They should be located near to the entrance of the buildings for which they are provided.</p>
+              </div>
+
+              <div className="pl-4">
+                <h3 className="font-semibold text-md mb-2">b. Parking Dimensions:</h3>
+                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                    <li>Parking bay sizes are normally 2.4m wide by 4.8m long except where such bays are positioned parallel to the kerb where bay sizes should be 1.8m wide and 6.0m long.</li>
+                    <li>Parking bays for physically challenged people should normally be 3.6m wide by 4.8m long to provide sufficient room for side transfer between wheelchairs and cars or light vans. One (1), 1.2 meters wide, transfer space may service two parking bays.</li>
+                    <li>Heavy goods vehicle parking bays should normally be 3.5m wide by 15.25m long but can be varied according to the type of vehicle expected to use them.</li>
+                </ul>
+              </div>
+
+              <div className="pl-4">
+                <h3 className="font-semibold text-md mb-2">c. Heavy Goods Vehicles:</h3>
+                <p className="text-muted-foreground">Parking provision for Lorries and other heavy goods vehicles within the boundaries of development sites should be made in accordance with the standards set out in the tables below. These apply as minimum standards.</p>
+              </div>
+
+               <div className="pl-4">
+                <h3 className="font-semibold text-md mb-2">d. Parking Standards for Shopping Developments:</h3>
+                <p className="text-muted-foreground">Maximum provision with the exception of heavy goods vehicles.</p>
+              </div>
+            </div>
+          </section>
+
         </CardContent>
       </Card>
     </div>
   );
 }
+
+    
