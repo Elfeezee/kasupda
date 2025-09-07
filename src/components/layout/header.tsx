@@ -112,7 +112,7 @@ export default function Header() {
       label: "Development Design Vetting",
       isSubTrigger: true,
       subLinks: [
-        { href: "#", label: "Development Design Guidelines" },
+        { href: "/development-design-guidelines", label: "Development Design Guidelines" },
       ],
     },
   ];
