@@ -4,14 +4,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass, Building, Car, ShoppingCart, School, Search } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { Metadata } from 'next';
 import { Input } from '@/components/ui/input';
-
-// Metadata can be exported from client components
-export const metadata: Metadata = {
-  title: 'Architectural Design Guidelines | KASUPDA',
-  description: 'Architectural query guidelines and development standards for residential projects at KASUPDA.',
-};
 
 export default function DevelopmentDesignGuidelinesPage() {
   const [searchTerm, setSearchTerm] = useState('');
