@@ -104,7 +104,7 @@ export default function Header() {
       label: "Building Control",
       isSubTrigger: true,
       subLinks: [
-        { href: "/dashboard/apply/stage-approval", label: "Stage Approvals" },
+        { href: "/dashboard/apply/stage-approval", label: "Apply for Stage approval" },
         { href: "#", label: "Certificate of Fitness and Habitation" },
       ],
     },
@@ -137,7 +137,7 @@ export default function Header() {
     { href: "/apply-for-permit", label: "Apply for permit" },
     { href: "/dashboard/apply/din-application", label: "Apply for DIN" },
     { href: "https://kasupdapermit.com", label: "Renew permit", external: true },
-    { href: "/dashboard/apply/stage-approval", label: "Stage Approvals" },
+    { href: "/dashboard/apply/stage-approval", label: "Apply for Stage approval" },
   ];
   
   const mainNavLinks = [
