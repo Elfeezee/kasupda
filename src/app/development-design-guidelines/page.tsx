@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass, Building, Car, ShoppingCart } from "lucide-react";
+import { ListChecks, AlertTriangle, Info, CheckCircle, Home, FilePen, DraftingCompass, Building, Car, ShoppingCart, School } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Metadata } from 'next';
 
@@ -559,10 +559,134 @@ export default function DevelopmentDesignGuidelinesPage() {
             </div>
           </section>
 
+          <section>
+            <h2 className="flex items-center text-2xl font-bold text-primary mb-4 border-b pb-2">
+                <School className="mr-3 h-7 w-7" /> Educational Institutions
+            </h2>
+            <div>
+                <h3 className="text-lg font-semibold mb-2">Planning Standards</h3>
+                <ul className="list-decimal list-inside space-y-2 text-sm text-muted-foreground mb-4">
+                    <li>All school site designs shall allow for use of any local recreational facility intended for the use of the residents served by the primary school.</li>
+                    <li>Landscaping of school sites shall meet the minimum requirements of the residential area in which it is located.</li>
+                    <li>Areas of impervious surface shall not exceed 20% of total site.</li>
+                    <li>Structures within primary schools shall be of single floors and where not feasible, shall not exceed two (2) floors.</li>
+                    <li>Post primary institutions shall not exceed three (3) floors.</li>
+                    <li>Facilities that will serve purely academic uses shall not exceed four (4) floors.</li>
+                    <li>There shall be a functional separation of pedestrian and vehicular traffic.</li>
+                    <li>All noise producing activities shall be zoned away to keep disturbances away from classrooms.</li>
+                </ul>
+                <p className="text-sm text-muted-foreground mb-4">The planning standards in the table below shall apply to primary and secondary schools. While the standards set for recreational facilities is minimum. Other standards may vary depending on priority of the school and amount of land available.</p>
+
+                <h3 className="text-lg font-semibold mb-2 mt-6">Planning Standards for Educational Institutions</h3>
+                <div className="border rounded-lg overflow-x-auto mb-6">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Facility</TableHead>
+                                <TableHead>Plot % Coverage</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>Academic Building</TableCell>
+                                <TableCell>30 - 45%</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Admin Block</TableCell>
+                                <TableCell>0.2 - 1%</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Staff Housing, Hostels</TableCell>
+                                <TableCell>&lt; 5%</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Recreational Facility</TableCell>
+                                <TableCell>&lt; 30%</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+
+                <div className="border rounded-lg overflow-x-auto mb-6">
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell className="font-medium">Ancillary Facilities - school workshop, laboratories etc.</TableCell>
+                                <TableCell>As appropriate</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+                
+                <div className="mb-6 space-y-1 text-sm">
+                    <p><span className="font-semibold">GROUP 1:</span> (Nursery, Primary & Junior Secondary)</p>
+                    <p><span className="font-semibold">GROUP 2:</span> (Senior Secondary)</p>
+                    <p><span className="font-semibold">GROUP 3:</span> (Higher Institutions)</p>
+                </div>
+
+                <h3 className="text-lg font-semibold mb-2 mt-6">GROUP 1 Nursery, Primary and Junior Secondary</h3>
+                <div className="border rounded-lg overflow-x-auto mb-6">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>S/No.</TableHead>
+                                <TableHead>Space</TableHead>
+                                <TableHead>Basic</TableHead>
+                                <TableHead>Window %</TableHead>
+                                <TableHead>Min. Dim (m)</TableHead>
+                                <TableHead>Door (m)</TableHead>
+                                <TableHead>Head Room (m)</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow><TableCell>1.</TableCell><TableCell>Classroom</TableCell><TableCell>36m&sup2;</TableCell><TableCell>40</TableCell><TableCell>6</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>2.</TableCell><TableCell>Laboratory</TableCell><TableCell>50m&sup2;</TableCell><TableCell>30</TableCell><TableCell>9</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>3.</TableCell><TableCell>Sick Bay</TableCell><TableCell>5.1m&sup2;/bed space</TableCell><TableCell>30</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>4.</TableCell><TableCell>Laundry</TableCell><TableCell>9m&sup2;</TableCell><TableCell>10</TableCell><TableCell>3.0</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>5.</TableCell><TableCell>Kitchen</TableCell><TableCell>40% of Dining</TableCell><TableCell>10</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>6.</TableCell><TableCell>Dining Hall</TableCell><TableCell>0.85m&sup2;/Person</TableCell><TableCell>30</TableCell><TableCell>-</TableCell><TableCell>1.2</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>7.</TableCell><TableCell>Toilet</TableCell><TableCell>1.55m&sup2;</TableCell><TableCell>10</TableCell><TableCell>9</TableCell><TableCell>0.75</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>8.</TableCell><TableCell>Admin Block</TableCell><TableCell>40m&sup2;</TableCell><TableCell>20</TableCell><TableCell>5.0</TableCell><TableCell>0.9</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>9.</TableCell><TableCell>Library</TableCell><TableCell>36m&sup2;</TableCell><TableCell>20</TableCell><TableCell>6.0</TableCell><TableCell>0.9</TableCell><TableCell>3.0</TableCell></TableRow>
+                            <TableRow><TableCell>10.</TableCell><TableCell>Multi-purpose Hall</TableCell><TableCell>200m&sup2;</TableCell><TableCell>40</TableCell><TableCell>10</TableCell><TableCell>1.2</TableCell><TableCell>6.0</TableCell></TableRow>
+                            <TableRow><TableCell>11.</TableCell><TableCell>Hostel</TableCell><TableCell>5.1m&sup2;/bed space</TableCell><TableCell>10</TableCell><TableCell>-</TableCell><TableCell>0.9</TableCell><TableCell>3.0</TableCell></TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+                
+                <h3 className="text-lg font-semibold mb-2 mt-6">GROUP 2 Senior Secondary</h3>
+                <div className="border rounded-lg overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>S/N</TableHead>
+                                <TableHead>Space</TableHead>
+                                <TableHead>Basic Area</TableHead>
+                                <TableHead>Window %</TableHead>
+                                <TableHead>Min Dim (m)</TableHead>
+                                <TableHead>Door (m)</TableHead>
+                                <TableHead>Head Room (m)</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>1</TableCell>
+                                <TableCell>Lecture Hall</TableCell>
+                                <TableCell>0.85 m&sup2;/person</TableCell>
+                                <TableCell>40</TableCell>
+                                <TableCell>-</TableCell>
+                                <TableCell>1.5</TableCell>
+                                <TableCell>3.5</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </div>
+
+            </div>
+          </section>
+
         </CardContent>
       </Card>
     </div>
   );
 }
-
-    
