@@ -82,7 +82,7 @@ export default function DevelopmentDesignGuidelinesPage() {
                     <TableCell>Bungalow, Duplexes, Block of Flats or studio apartments</TableCell>
                     <TableCell>60</TableCell>
                     <TableCell>Building line subject to min. of 4m <br/> F: 4 (<span className="text-red-600">3</span>) <br/> S: 2; 2, (<span className="text-red-600">1.5</span>) <br/> B: 2 (<span className="text-red-600">1.5</span>)</TableCell>
-                    <TableCell rowSpan={4} className="text-center align-middle writing-vertical-rl -rotate-180 p-2 border-l border-r">
+                    <TableCell rowSpan={7} className="text-center align-middle writing-vertical-rl -rotate-180 p-2 border-l border-r">
                       AVERAGE HEIGHT OF THE BUILDINGS (3 METRES)
                     </TableCell>
                     <TableCell>1 - 3</TableCell>
@@ -123,8 +123,63 @@ export default function DevelopmentDesignGuidelinesPage() {
                     <TableCell>Parking: 6; Soft landscaping 20% (min.); Swimming pool; Games court; Gazebo; Gate/generator house; 10 trees (min.)</TableCell>
                     <TableCell>Max 2</TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell rowSpan={2}>&ge;2500m&sup2; &lt; 5000m&sup2;</TableCell>
+                    <TableCell rowSpan={2}>Special Residential Plot</TableCell>
+                    <TableCell>Luxury Flats; Service Flats;</TableCell>
+                    <TableCell rowSpan={2}>40</TableCell>
+                    <TableCell>F: 6<br/>S: 4; 4<br/>B: 4</TableCell>
+                    <TableCell rowSpan={2}>** 4 - 6</TableCell>
+                    <TableCell rowSpan={2}>2</TableCell>
+                    <TableCell>Soft landscaping of not less than 30%; Swimming pool Games court Gazebo; Gate/generator house; Lift; 10 trees</TableCell>
+                    <TableCell rowSpan={2}>N/A</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Mixed Development</TableCell>
+                    <TableCell>F: 6<br/>* S: 8; 8<br/>* B: 6</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>&ge; 5000m&sup2;</TableCell>
+                    <TableCell>Comprehensive Development</TableCell>
+                    <TableCell>Condominiums; Mixed Development; Terrace Building.</TableCell>
+                    <TableCell>40</TableCell>
+                    <TableCell>F: 15<br/>S: 8; 8<br/>B: 6</TableCell>
+                    <TableCell>4 (min)</TableCell>
+                    <TableCell>2</TableCell>
+                    <TableCell>Parking; Soft landscaping; Outdoor Recreational facilities; Shopping; Day care; Swimming</TableCell>
+                    <TableCell>N/A</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>-</TableCell>
+                    <TableCell>Mass Housing</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>1 - 4</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>Parking: 2 per unit; Outdoor recreation; day care/crèche; retail shops; soft landscaping 20%; power plant; firefighting facilities; clinic; solid waste mgt; Centralized water supply system; encourage central sewage</TableCell>
+                    <TableCell>N/A</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>-</TableCell>
+                    <TableCell>Ancillary residential facilities</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>*** Crèches</TableCell>
+                    <TableCell>N/A</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
+            </div>
+             <div className="text-sm text-muted-foreground space-y-1 pt-4">
+                <p><span className="font-bold">*</span> Where applicable</p>
+                <p><span className="font-bold">**</span> All residential developments having more than three (3) suspended floors require a lift</p>
+                <p><span className="font-bold">***</span> 1/5 of the depth of the shortest plot in the block shall be set aside as the building line subject to the minimum of 6m front setback</p>
             </div>
           </section>
 
