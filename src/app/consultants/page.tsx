@@ -22,6 +22,9 @@ const consultants = [
   "JUBAI ASSOCIATES",
   "PLAN-IT",
   "MAFAKS CONSULTANCY SERVICES LTD",
+  "AA GWADABE NIGERIA LIMITED",
+  "LAMINDE AND SONS",
+  "KHALNAZ NIGERIA LIMITED",
 ];
 
 export default function ApprovedConsultantsPage() {
