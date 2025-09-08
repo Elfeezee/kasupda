@@ -60,7 +60,7 @@ export default function Home() {
                     </Link>
                   </Button>
                   <Button size="lg" asChild>
-                    <Link href="https://kasupdapermit.com" target="_blank" rel="noopener noreferrer">
+                    <Link href="https://permit.kasupda.kdsg.gov.ng/" target="_blank" rel="noopener noreferrer">
                       Renew Permit
                       <RefreshCcw className="ml-2 h-5 w-5" />
                     </Link>
