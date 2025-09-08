@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 };
 
 const directors = [
-  { name: "Director General", imageUrl: "/image/dg.jpg", hint: "person portrait" },
-  { name: "Director 1", imageUrl: "/image/director1.jpg", hint: "person portrait" },
-  { name: "Director 2", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Director 3", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Director 4", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Director 5", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director General", title: "Director General", imageUrl: "/image/dg.jpg", hint: "person portrait" },
+  { name: "Director Development Control", title: "Director", imageUrl: "/image/director-4.jpg", hint: "person portrait" },
+  { name: "Director Admin and Supply", title: "Director", imageUrl: "/image/director-2.JPG", hint: "person portrait" },
+  { name: "Director 3", title: "Director", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director 4", title: "Director", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director 5", title: "Director", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
 ];
 
 export default function AboutPage() {
@@ -81,7 +81,7 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent className="p-6">
                   <CardTitle className="text-xl font-semibold">{director.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-1">Director</p>
+                  <p className="text-sm text-muted-foreground mt-1">{director.title}</p>
                 </CardContent>
               </Card>
             ))}
