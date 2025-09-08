@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, ListFilter, Search, Package } from 'lucide-react';
+import { MoreHorizontal, ListFilter, Search, ClipboardCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
   Table,
@@ -22,7 +22,7 @@ import type { VariantProps } from 'class-variance-authority';
 import { format, parseISO } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase/config';
-import { collection, getDocs, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, query, where, orderBy } from 'firebase/firestore';
 
 
 // Define the structure of an application from Firestore
@@ -61,7 +61,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
 };
 
 
-export default function ManageApplicationsPage() {
+export default function StageApprovalsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
@@ -73,7 +73,7 @@ export default function ManageApplicationsPage() {
     setLoading(true);
     try {
       const applicationsRef = collection(db, "applications");
-      const q = query(applicationsRef, orderBy("date", "desc"));
+      const q = query(applicationsRef, where("type", "==", "Stage Approval Application"), orderBy("date", "desc"));
       const querySnapshot = await getDocs(q);
       const loadedApplications = querySnapshot.docs.map(doc => {
         return { id: doc.id, ...doc.data() } as StoredApplication;
@@ -83,7 +83,7 @@ export default function ManageApplicationsPage() {
       console.error("Error fetching applications:", error);
       toast({
         title: "Error",
-        description: "Failed to load applications from the database.",
+        description: "Failed to load stage approval applications from the database.",
         variant: "destructive",
       });
     } finally {
@@ -104,7 +104,6 @@ export default function ManageApplicationsPage() {
         const appDocRef = doc(db, 'applications', appId);
         await updateDoc(appDocRef, { status: newStatus });
         
-        // Update local state to reflect change immediately
         setApplications(prevApps => 
             prevApps.map(app => 
                 app.id === appId ? { ...app, status: newStatus } : app
@@ -140,10 +139,10 @@ export default function ManageApplicationsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <Package className="h-6 w-6 text-primary" />
+            <ClipboardCheck className="h-6 w-6 text-primary" />
             <div>
-              <CardTitle>All Applications</CardTitle>
-              <CardDescription>View, filter, and manage all submitted applications from the database.</CardDescription>
+              <CardTitle>Stage Approval Applications</CardTitle>
+              <CardDescription>Manage all submitted stage approval requests for construction projects.</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -152,7 +151,7 @@ export default function ManageApplicationsPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search by applicant name or ID..." 
+                placeholder="Search by applicant, ID, or permit ID..." 
                 className="pl-10" 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -172,7 +171,6 @@ export default function ManageApplicationsPage() {
                 <DropdownMenuItem onClick={() => setStatusFilter('Pending')}>Pending</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setStatusFilter('Approved')}>Approved</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setStatusFilter('Rejected')}>Rejected</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatusFilter('Processing')}>Processing</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -183,7 +181,7 @@ export default function ManageApplicationsPage() {
                 <TableRow>
                   <TableHead>Application ID</TableHead>
                   <TableHead>Applicant</TableHead>
-                  <TableHead>Type</TableHead>
+                  <TableHead>Original Permit ID</TableHead>
                   <TableHead>Date Submitted</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
@@ -193,7 +191,7 @@ export default function ManageApplicationsPage() {
                 {loading ? (
                     <TableRow>
                         <TableCell colSpan={6} className="h-24 text-center">
-                            Loading applications from database...
+                            Loading stage approval applications...
                         </TableCell>
                     </TableRow>
                 ) : filteredApplications.length > 0 ? (
@@ -201,7 +199,7 @@ export default function ManageApplicationsPage() {
                     <TableRow key={app.id}>
                       <TableCell className="font-medium text-xs">{app.id}</TableCell>
                       <TableCell>{app.applicantName}</TableCell>
-                      <TableCell className="text-sm">{app.type}</TableCell>
+                       <TableCell className="font-medium text-xs">{app.data.originalPermitId || 'N/A'}</TableCell>
                       <TableCell>{app.date ? format(parseISO(app.date), 'dd/MM/yyyy') : 'N/A'}</TableCell>
                       <TableCell>
                         <StatusBadge status={app.status as ApplicationStatus} />
@@ -230,7 +228,7 @@ export default function ManageApplicationsPage() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={6} className="h-24 text-center">
-                      No applications found.
+                      No stage approval applications found.
                     </TableCell>
                   </TableRow>
                 )}

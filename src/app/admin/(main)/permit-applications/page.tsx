@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, ListFilter, Search, Package } from 'lucide-react';
+import { MoreHorizontal, ListFilter, Search, Building } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
   Table,
@@ -22,8 +22,7 @@ import type { VariantProps } from 'class-variance-authority';
 import { format, parseISO } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase/config';
-import { collection, getDocs, doc, updateDoc, query, orderBy } from 'firebase/firestore';
-
+import { collection, getDocs, doc, updateDoc, query, where, orderBy } from 'firebase/firestore';
 
 // Define the structure of an application from Firestore
 export interface StoredApplication {
@@ -61,7 +60,17 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
 };
 
 
-export default function ManageApplicationsPage() {
+const PERMIT_TYPES = [
+    "Building Permit (Individual)",
+    "Building Permit (Organization)",
+    "Mast Installation Permit",
+    "Outdoor Advertisement Permit",
+    "Outdoor Structure Permit",
+    "Temporary Shop Owners Permit",
+    "Street Naming Permit",
+];
+
+export default function PermitApplicationsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
@@ -73,7 +82,11 @@ export default function ManageApplicationsPage() {
     setLoading(true);
     try {
       const applicationsRef = collection(db, "applications");
-      const q = query(applicationsRef, orderBy("date", "desc"));
+      const q = query(
+        applicationsRef, 
+        where("type", "in", PERMIT_TYPES), 
+        orderBy("date", "desc")
+      );
       const querySnapshot = await getDocs(q);
       const loadedApplications = querySnapshot.docs.map(doc => {
         return { id: doc.id, ...doc.data() } as StoredApplication;
@@ -83,7 +96,7 @@ export default function ManageApplicationsPage() {
       console.error("Error fetching applications:", error);
       toast({
         title: "Error",
-        description: "Failed to load applications from the database.",
+        description: "Failed to load permit applications from the database.",
         variant: "destructive",
       });
     } finally {
@@ -104,7 +117,6 @@ export default function ManageApplicationsPage() {
         const appDocRef = doc(db, 'applications', appId);
         await updateDoc(appDocRef, { status: newStatus });
         
-        // Update local state to reflect change immediately
         setApplications(prevApps => 
             prevApps.map(app => 
                 app.id === appId ? { ...app, status: newStatus } : app
@@ -140,10 +152,10 @@ export default function ManageApplicationsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <Package className="h-6 w-6 text-primary" />
+            <Building className="h-6 w-6 text-primary" />
             <div>
-              <CardTitle>All Applications</CardTitle>
-              <CardDescription>View, filter, and manage all submitted applications from the database.</CardDescription>
+              <CardTitle>Permit Applications</CardTitle>
+              <CardDescription>Manage all submitted building, temporary, and other permit applications.</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -172,7 +184,6 @@ export default function ManageApplicationsPage() {
                 <DropdownMenuItem onClick={() => setStatusFilter('Pending')}>Pending</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setStatusFilter('Approved')}>Approved</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setStatusFilter('Rejected')}>Rejected</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatusFilter('Processing')}>Processing</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -193,7 +204,7 @@ export default function ManageApplicationsPage() {
                 {loading ? (
                     <TableRow>
                         <TableCell colSpan={6} className="h-24 text-center">
-                            Loading applications from database...
+                            Loading permit applications...
                         </TableCell>
                     </TableRow>
                 ) : filteredApplications.length > 0 ? (
@@ -230,7 +241,7 @@ export default function ManageApplicationsPage() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={6} className="h-24 text-center">
-                      No applications found.
+                      No permit applications found.
                     </TableCell>
                   </TableRow>
                 )}

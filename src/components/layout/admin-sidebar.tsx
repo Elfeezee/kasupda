@@ -21,6 +21,10 @@ import {
   Settings,
   LogOut,
   ArrowLeftToLine,
+  Building,
+  Fingerprint,
+  ClipboardCheck,
+  Package,
 } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -28,7 +32,10 @@ import { useToast } from '@/hooks/use-toast';
 
 const adminNavItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/applications', label: 'Applications', icon: FileText },
+  { href: '/admin/applications', label: 'All Applications', icon: Package },
+  { href: '/admin/permit-applications', label: 'Permit Applications', icon: Building },
+  { href: '/admin/din-applications', label: 'DIN Applications', icon: Fingerprint },
+  { href: '/admin/stage-approvals', label: 'Stage Approvals', icon: ClipboardCheck },
   { href: '/admin/users', label: 'Users', icon: Users },
   { href: '/admin/settings', label: 'Settings', icon: Settings, disabled: true },
 ];
@@ -80,7 +87,7 @@ export default function AdminSidebar() {
             <SidebarMenuItem key={item.label}>
               <SidebarMenuButton
                 onClick={() => handleNavigation(item.href, item.label, item.disabled)}
-                isActive={pathname === item.href || pathname.startsWith(item.href + '/')}
+                isActive={pathname === item.href || (item.href !== '/admin/dashboard' && pathname.startsWith(item.href + '/'))}
                 tooltip={state === 'collapsed' ? item.label : undefined}
                 aria-disabled={item.disabled}
                 className={cn(item.disabled && "opacity-50 cursor-not-allowed")}
