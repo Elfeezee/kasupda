@@ -32,7 +32,6 @@ const stageApprovalSchema = z.object({
   email: z.string().email("Invalid email address").optional().or(z.literal('')),
   
   // Project Details
-  stageOfCompletion: z.string().min(1, "Stage of completion is required."),
   fileNumber: z.string().optional(),
   kdlNumber: z.string().optional(),
   docCO: z.any().optional(),
@@ -60,7 +59,6 @@ export default function StageApprovalPage() {
       surname: "",
       phone1: "",
       email: "",
-      stageOfCompletion: "",
       fileNumber: "",
       kdlNumber: "",
       docCO: undefined,
@@ -207,6 +205,7 @@ export default function StageApprovalPage() {
 
             {/* Project Details Section */}
             <section>
+              <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-4">Project Details</h3>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -221,11 +220,6 @@ export default function StageApprovalPage() {
                     </div>
                 </div>
                 <div>
-                    <Label htmlFor="stageOfCompletion">Stage of Completion*</Label>
-                    <Input id="stageOfCompletion" {...register("stageOfCompletion")} placeholder="e.g., Foundation, Roofing, First Floor Slab" />
-                    {errors.stageOfCompletion && <p className="text-destructive text-xs mt-1">{errors.stageOfCompletion.message}</p>}
-                </div>
-                 <div>
                     <Label htmlFor="docCO">C of O Upload</Label>
                     <Input
                         id="docCO"
