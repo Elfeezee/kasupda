@@ -50,22 +50,19 @@ export default function StageApprovalPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false); // New state to track auth check
+  const [authChecked, setAuthChecked] = useState(false); // State to track if initial auth check is done
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push('/login');
+      }
       setAuthChecked(true); // Mark auth as checked
     });
     return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    // This effect runs only after the auth state has been checked
-    if (authChecked && !user) {
-      router.push('/login');
-    }
-  }, [user, authChecked, router]);
+  }, [router]);
 
 
   const { register, handleSubmit, control, formState: { errors } } = useForm<StageApprovalFormValues>({
@@ -123,8 +120,8 @@ export default function StageApprovalPage() {
     }
   };
 
-  // Render a loading state until the user object is confirmed to avoid flashing content.
-  if (!authChecked) {
+  // Render a loading state until the auth check is complete and we have a user.
+  if (!authChecked || !user) {
     return (
       <div className="container mx-auto px-2 sm:px-4 py-8">
         <Card className="max-w-3xl mx-auto">
