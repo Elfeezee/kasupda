@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 };
 
 const directors = [
-  { name: "Director 1", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Director 2", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director 1", imageUrl: "/image/director1.jpg", hint: "person portrait" },
+  { name: "Director 2", imageUrl: "/image/director2.jpg", hint: "person portrait" },
   { name: "Director 3", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
   { name: "Director 4", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
   { name: "Director 5", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
