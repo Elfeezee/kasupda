@@ -49,20 +49,18 @@ export default function StageApprovalPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setAuthChecked(true);
       if (!currentUser) {
-        toast({ title: 'Authentication Error', description: 'You must be logged in to apply.', variant: 'destructive' });
+        // Silently redirect to login if not authenticated, without a toast.
         router.push('/login');
       }
     });
     return () => unsubscribe();
-  }, [router, toast]);
+  }, [router]);
 
   const { register, handleSubmit, control, formState: { errors } } = useForm<StageApprovalFormValues>({
     resolver: zodResolver(stageApprovalSchema),
@@ -81,9 +79,8 @@ export default function StageApprovalPage() {
   });
 
   const onSubmit = async (data: StageApprovalFormValues) => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-        toast({ title: "Error", description: "Authentication session expired. Please log in again.", variant: "destructive" });
+    if (!user) {
+        toast({ title: "Authentication Error", description: "You must be logged in to submit an application. Please log in again.", variant: "destructive" });
         router.push('/login');
         return;
     }
@@ -92,7 +89,7 @@ export default function StageApprovalPage() {
     const formData = new FormData();
     formData.append('type', "Stage Approval Application");
     formData.append('applicantName', `${data.firstName} ${data.surname}`);
-    formData.append('userId', currentUser.uid);
+    formData.append('userId', user.uid);
     // Serialize the full data object
     formData.append('data', JSON.stringify(data));
 
@@ -120,7 +117,8 @@ export default function StageApprovalPage() {
     }
   };
 
-  if (!authChecked || !user) {
+  // Render a loading state until the user object is confirmed to avoid flashing content.
+  if (!user) {
     return (
       <div className="container mx-auto px-2 sm:px-4 py-8">
         <Card className="max-w-3xl mx-auto">
@@ -128,9 +126,6 @@ export default function StageApprovalPage() {
             <CardTitle className="text-xl sm:text-2xl font-bold text-primary">
               Stage Approval Application
             </CardTitle>
-            <CardDescription className="text-sm sm:text-base">
-              Verifying your session...
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">Loading...</p>
@@ -294,3 +289,5 @@ export default function StageApprovalPage() {
     </div>
   );
 }
+
+    
