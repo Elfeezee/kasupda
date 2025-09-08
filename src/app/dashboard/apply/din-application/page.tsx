@@ -42,6 +42,9 @@ const dinApplicationSchema = z.object({
     driversLicense: z.boolean().optional(),
   }).optional().default({}),
   idNumber: z.string().optional(),
+  fileNumber: z.string().optional(),
+  kdlNumber: z.string().optional(),
+  docCO: z.any().optional(),
   declaration: z.boolean().refine(val => val === true, {
     message: "You must agree to the declaration to submit."
   })
@@ -73,6 +76,9 @@ export default function DinApplicationPage() {
       email: "",
       identificationType: {},
       idNumber: "",
+      fileNumber: "",
+      kdlNumber: "",
+      docCO: undefined,
       declaration: false,
     }
   });
@@ -80,7 +86,12 @@ export default function DinApplicationPage() {
   const onSubmit = (data: DinApplicationFormValues) => {
     // Instead of submitting, navigate to the payment page with the data
     const query = new URLSearchParams({
-        formData: JSON.stringify(data)
+        formData: JSON.stringify(data, (key, value) => {
+          if (value instanceof FileList) {
+            return Array.from(value).map(file => ({ name: file.name, size: file.size, type: file.type }));
+          }
+          return value;
+        })
     }).toString();
     router.push(`/dashboard/apply/din-application/payment?${query}`);
   };
@@ -233,6 +244,29 @@ export default function DinApplicationPage() {
                 <Input id="idNumber" {...register("idNumber")} />
               </div>
               <Separator />
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="fileNumber">File Number</Label>
+                    <Input id="fileNumber" {...register("fileNumber")} />
+                    {errors.fileNumber && <p className="text-destructive text-xs mt-1">{errors.fileNumber.message}</p>}
+                  </div>
+                  <div>
+                    <Label htmlFor="kdlNumber">KDL Number</Label>
+                    <Input id="kdlNumber" {...register("kdlNumber")} />
+                    {errors.kdlNumber && <p className="text-destructive text-xs mt-1">{errors.kdlNumber.message}</p>}
+                  </div>
+              </div>
+               <div>
+                  <Label htmlFor="docCO">C of O Upload</Label>
+                  <Input
+                      id="docCO"
+                      type="file"
+                      {...register("docCO")}
+                      className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                  />
+                  {errors.docCO && <p className="text-destructive text-xs mt-1">{errors.docCO.message as string}</p>}
+              </div>
+              <Separator />
                {/* Declaration */}
               <div>
                   <Label className="text-md font-semibold">Declaration</Label>
@@ -269,3 +303,5 @@ export default function DinApplicationPage() {
     </div>
   );
 }
+
+    
