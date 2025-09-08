@@ -50,20 +50,14 @@ export default function StageApprovalPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false); // State to track if initial auth check is done
-
+  
+  // This simple check is enough since the page is protected by the dashboard layout
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        router.push('/login');
-      }
-      setAuthChecked(true); // Mark auth as checked
+        setUser(currentUser); // Set user, but don't redirect if null initially
     });
     return () => unsubscribe();
-  }, [router]);
-
+  }, []);
 
   const { register, handleSubmit, control, formState: { errors } } = useForm<StageApprovalFormValues>({
     resolver: zodResolver(stageApprovalSchema),
@@ -119,24 +113,6 @@ export default function StageApprovalPage() {
         setIsSubmitting(false);
     }
   };
-
-  // Render a loading state until the auth check is complete and we have a user.
-  if (!authChecked || !user) {
-    return (
-      <div className="container mx-auto px-2 sm:px-4 py-8">
-        <Card className="max-w-3xl mx-auto">
-          <CardHeader>
-            <CardTitle className="text-xl sm:text-2xl font-bold text-primary">
-              Stage Approval Application
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">Verifying your login status...</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-2 sm:px-4 py-8">
@@ -282,7 +258,7 @@ export default function StageApprovalPage() {
             <Button 
               type="submit" 
               className="w-full sm:w-auto py-3 text-base"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !user}
             >
                 {isSubmitting ? 'Submitting...' : 'Submit Stage Approval Application'}
             </Button>
@@ -292,5 +268,3 @@ export default function StageApprovalPage() {
     </div>
   );
 }
-
-    
