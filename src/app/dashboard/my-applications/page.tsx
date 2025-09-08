@@ -9,9 +9,8 @@ import type { VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { useToast } from '@/hooks/use-toast.tsx';
-import { auth, db } from '@/lib/firebase/config';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
-import { onAuthStateChanged, type User } from 'firebase/auth';
+import { db } from '@/lib/firebase/config';
+import { collection, query, getDocs, orderBy } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 
 // Reuse the type definition
@@ -54,46 +53,27 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
 
 function MyApplicationsPageComponent() {
   const { toast } = useToast();
-  const router = useRouter();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
-  const [loading, setLoading] = useState(true); // Manages data fetching state
-  const [user, setUser] = useState<User | null>(null);
-  const [authChecked, setAuthChecked] = useState(false); // Manages auth state check
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setAuthChecked(true); // Auth state confirmed
-      if (!currentUser) {
-        router.push('/login');
-      }
-    });
-    return () => unsubscribe();
-  }, [router]);
-
-  useEffect(() => {
-    if (!user) return; // Don't fetch if no user
-
     const fetchApplications = async () => {
       setLoading(true);
       try {
         const appsRef = collection(db, "applications");
-        const q = query(
-          appsRef, 
-          where("userId", "==", user.uid),
-          orderBy("date", "desc")
-        );
+        // Fetch all applications, ordered by date
+        const q = query(appsRef, orderBy("date", "desc"));
         const querySnapshot = await getDocs(q);
-        const userApps = querySnapshot.docs.map(doc => ({
+        const allApps = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         } as StoredApplication));
-        setApplications(userApps);
+        setApplications(allApps);
       } catch (error) {
-        console.error("Error fetching user applications:", error);
+        console.error("Error fetching applications:", error);
         toast({
           title: "Error",
-          description: "Could not fetch your applications from the database.",
+          description: "Could not fetch applications from the database.",
           variant: "destructive",
         });
       } finally {
@@ -101,26 +81,8 @@ function MyApplicationsPageComponent() {
       }
     };
     fetchApplications();
-  }, [user, toast]);
-
-  // Initial un-hydrated state or loading auth
-  if (!authChecked || !user) {
-    return (
-        <div className="space-y-8">
-            <CardHeader className="px-0 pt-0">
-                <CardTitle className="text-2xl sm:text-3xl font-bold text-primary flex items-center">
-                <ListChecks className="mr-3 h-7 w-7" /> My Submitted Applications
-                </CardTitle>
-                <CardDescription>
-                Verifying your session...
-                </CardDescription>
-            </CardHeader>
-            <Card><CardContent className="pt-6">Loading...</CardContent></Card>
-        </div>
-    );
-  }
+  }, [toast]);
   
-  // Logged in, show applications or loading/empty state
   return (
     <div className="space-y-8">
       <CardHeader className="px-0 pt-0">
@@ -129,7 +91,6 @@ function MyApplicationsPageComponent() {
         </CardTitle>
         <CardDescription>
           Track the status of all your permit applications and complaints.
-          {user && ` (Viewing for: ${user.displayName || user.email})`}
         </CardDescription>
       </CardHeader>
 
