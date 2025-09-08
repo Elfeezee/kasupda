@@ -32,7 +32,6 @@ const stageApprovalSchema = z.object({
   email: z.string().email("Invalid email address").optional().or(z.literal('')),
   
   // Project Details
-  originalPermitId: z.string().min(1, "Original Building Permit ID is required."),
   stageOfCompletion: z.string().min(1, "Stage of completion is required."),
   fileNumber: z.string().optional(),
   kdlNumber: z.string().optional(),
@@ -61,7 +60,6 @@ export default function StageApprovalPage() {
       surname: "",
       phone1: "",
       email: "",
-      originalPermitId: "",
       stageOfCompletion: "",
       fileNumber: "",
       kdlNumber: "",
@@ -209,13 +207,7 @@ export default function StageApprovalPage() {
 
             {/* Project Details Section */}
             <section>
-              <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-4">Project Details</h3>
               <div className="space-y-4">
-                 <div>
-                    <Label htmlFor="originalPermitId">Original Building Permit ID*</Label>
-                    <Input id="originalPermitId" {...register("originalPermitId")} placeholder="Enter the application ID of your approved building permit" />
-                    {errors.originalPermitId && <p className="text-destructive text-xs mt-1">{errors.originalPermitId.message}</p>}
-                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <Label htmlFor="fileNumber">File Number</Label>
