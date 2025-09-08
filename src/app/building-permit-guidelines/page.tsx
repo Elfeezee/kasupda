@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, FileText, Landmark } from "lucide-react";
+import { CheckCircle, FileText, Landmark, Church, School } from "lucide-react";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -24,7 +24,35 @@ const residentialRequirements = [
     "Structural drawing, Calculation sheet, Letter for Supervision/Responsibility for storey buildings.",
     "Builder's Document to be produced by Registered Builder for commercial Residential",
     "Geotechnical investigation Report (Soil Test) for Multi-storey development that exceeds two (2) floors.",
+    "PDF copy of all drawings on CD",
+    "Means of ID of applicant",
+    "Means of ID of representative (optional)",
+    "Copy of utility bill",
 ];
+
+const religiousRequirements = [
+    "Land title document (Digitized C of O, KADGIS Offer Letter, KADGIS Acknowledgment)",
+    "Site Analysis Report (SAR)",
+    "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)",
+    "Calculation sheet, Letter for Supervision/Responsibility for storey buildings.",
+    "Builder's Document to be produced by Registered Builder",
+    "Geotechnical investigation Report (Soil Test) for Multi storey development that exceeds two (2) floors.",
+    "Soft copy of all drawings on CD",
+    "Means of ID of applicant",
+    "Means of ID of representative (optional)",
+    "Copy of utility bill",
+    "Certificate of Registration with Bureau for Interfaith",
+    "KEPA EIA Certificate (could be submitted while application is in process)",
+];
+
+const publicInstitutionRequirements = [
+    "Land title document (Digitized C of O, KADGIS Offer Letter)",
+    "KADGIS Acknowledgment",
+    "Site Analysis Report (SAR)",
+    "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)",
+    "Calculation sheet, Letter for Supervision/Responsibility for storey buildings.",
+];
+
 
 export default function BuildingPermitGuidelinesPage() {
   return (
@@ -75,6 +103,35 @@ export default function BuildingPermitGuidelinesPage() {
                     ))}
                 </ul>
             </section>
+
+            <section>
+                <h2 className="text-xl font-semibold text-primary mb-3 flex items-center">
+                    <Church className="mr-2 h-5 w-5" /> B. Religious (Prayer House and Religious School)
+                </h2>
+                <ul className="space-y-4">
+                    {religiousRequirements.map((req, index) => (
+                        <li key={index} className="flex items-start">
+                            <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-1 shrink-0" />
+                            <span>{req}</span>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+
+            <section>
+                <h2 className="text-xl font-semibold text-primary mb-3 flex items-center">
+                    <School className="mr-2 h-5 w-5" /> C. Public Institution (School)
+                </h2>
+                <ul className="space-y-4">
+                    {publicInstitutionRequirements.map((req, index) => (
+                        <li key={index} className="flex items-start">
+                            <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-1 shrink-0" />
+                            <span>{req}</span>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+
         </CardContent>
       </Card>
     </div>
