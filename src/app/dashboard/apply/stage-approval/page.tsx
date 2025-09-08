@@ -36,6 +36,9 @@ const stageApprovalSchema = z.object({
   // Project Details
   originalPermitId: z.string().min(1, "Original Building Permit ID is required."),
   stageOfCompletion: z.string().min(1, "Stage of completion is required."),
+  fileNumber: z.string().optional(),
+  kdlNumber: z.string().optional(),
+  docCO: z.any().optional(),
 
   // Declaration
   declaration: z.boolean().refine(val => val === true, {
@@ -51,13 +54,16 @@ export default function StageApprovalPage() {
   const [user, setUser] = useState<User | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // This simple check is enough since the page is protected by the dashboard layout
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser); // Set user, but don't redirect if null initially
+        if (!currentUser) {
+            router.push('/login');
+        } else {
+            setUser(currentUser);
+        }
     });
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const { register, handleSubmit, control, formState: { errors } } = useForm<StageApprovalFormValues>({
     resolver: zodResolver(stageApprovalSchema),
@@ -71,6 +77,9 @@ export default function StageApprovalPage() {
       email: "",
       originalPermitId: "",
       stageOfCompletion: "",
+      fileNumber: "",
+      kdlNumber: "",
+      docCO: undefined,
       declaration: false,
     }
   });
@@ -88,7 +97,12 @@ export default function StageApprovalPage() {
     formData.append('applicantName', `${data.firstName} ${data.surname}`);
     formData.append('userId', user.uid);
     // Serialize the full data object
-    formData.append('data', JSON.stringify(data));
+    formData.append('data', JSON.stringify(data, (key, value) => {
+        if (value instanceof FileList) {
+            return Array.from(value).map(file => ({ name: file.name, size: file.size, type: file.type }));
+        }
+        return value;
+    }));
 
     try {
         const result = await saveApplication(formData);
@@ -113,6 +127,21 @@ export default function StageApprovalPage() {
         setIsSubmitting(false);
     }
   };
+  
+  if (!user) {
+      return (
+          <div className="container mx-auto px-2 sm:px-4 py-8">
+              <Card className="max-w-3xl mx-auto">
+                  <CardHeader>
+                      <CardTitle>Verifying your login status...</CardTitle>
+                      <CardDescription>
+                          Please wait while we check your authentication details.
+                      </CardDescription>
+                  </CardHeader>
+              </Card>
+          </div>
+      )
+  }
 
   return (
     <div className="container mx-auto px-2 sm:px-4 py-8">
@@ -220,10 +249,32 @@ export default function StageApprovalPage() {
                     <Input id="originalPermitId" {...register("originalPermitId")} placeholder="Enter the application ID of your approved building permit" />
                     {errors.originalPermitId && <p className="text-destructive text-xs mt-1">{errors.originalPermitId.message}</p>}
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <Label htmlFor="fileNumber">File Number</Label>
+                        <Input id="fileNumber" {...register("fileNumber")} placeholder="Enter the file number" />
+                        {errors.fileNumber && <p className="text-destructive text-xs mt-1">{errors.fileNumber.message}</p>}
+                    </div>
+                    <div>
+                        <Label htmlFor="kdlNumber">KDL Number</Label>
+                        <Input id="kdlNumber" {...register("kdlNumber")} placeholder="Enter the KDL number" />
+                        {errors.kdlNumber && <p className="text-destructive text-xs mt-1">{errors.kdlNumber.message}</p>}
+                    </div>
+                </div>
                 <div>
                     <Label htmlFor="stageOfCompletion">Stage of Completion*</Label>
                     <Input id="stageOfCompletion" {...register("stageOfCompletion")} placeholder="e.g., Foundation, Roofing, First Floor Slab" />
                     {errors.stageOfCompletion && <p className="text-destructive text-xs mt-1">{errors.stageOfCompletion.message}</p>}
+                </div>
+                 <div>
+                    <Label htmlFor="docCO">C of O Upload</Label>
+                    <Input
+                        id="docCO"
+                        type="file"
+                        {...register("docCO")}
+                        className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+                    />
+                    {errors.docCO && <p className="text-destructive text-xs mt-1">{errors.docCO.message as string}</p>}
                 </div>
               </div>
             </section>
@@ -268,3 +319,5 @@ export default function StageApprovalPage() {
     </div>
   );
 }
+
+    
