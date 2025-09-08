@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, FileText, Landmark, Church, School } from "lucide-react";
+import { CheckCircle, FileText, Landmark, Church, School, Leaf, Building2 } from "lucide-react";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -51,6 +51,32 @@ const publicInstitutionRequirements = [
     "Site Analysis Report (SAR)",
     "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)",
     "Calculation sheet, Letter for Supervision/Responsibility for storey buildings.",
+    "Builder's Document to be produced by Registered Builder",
+    "Geotechnical investigation Report (Soil Test) for Multi storey development that exceeds two (2) floors.",
+    "PDF copy of all drawings on CD",
+    "Means of ID of applicant",
+    "Means of ID of representative (optional)",
+    "Copy of utility bill",
+    "Clearance from Quality Assurance",
+    "KEPA EIA Certificate (could be submitted while APPLICATION is in process)"
+];
+
+const agriculturalRequirements = [
+    "Land title document (Digitized C of O, KADGIS Offer Letter, KADGIS Acknowledgment)",
+    "Site Analysis Report (SAR)",
+    "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)",
+    "Calculation sheet, Letter for Supervision/Responsibility for storey buildings.",
+    "Builder's Document to be produced by Registered Builder",
+    "Geotechnical investigation Report (Soil Test) for Multi storey development that exceeds two (2) floors.",
+    "PDF copy of all drawings on CD",
+    "Means of ID of applicant.",
+    "KEPA EIA Certificate (if there are complimentary permanent structures)",
+];
+
+const commercialIndustrialRequirements = [
+    "Land title document (Digitized C of O, KADGIS Offer Letter, KADGIS Acknowledgment)",
+    "Site Analysis Report (SAR)",
+    "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)",
 ];
 
 
@@ -124,6 +150,34 @@ export default function BuildingPermitGuidelinesPage() {
                 </h2>
                 <ul className="space-y-4">
                     {publicInstitutionRequirements.map((req, index) => (
+                        <li key={index} className="flex items-start">
+                            <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-1 shrink-0" />
+                            <span>{req}</span>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+            
+            <section>
+                <h2 className="text-xl font-semibold text-primary mb-3 flex items-center">
+                    <Leaf className="mr-2 h-5 w-5" /> D. Agricultural
+                </h2>
+                <ul className="space-y-4">
+                    {agriculturalRequirements.map((req, index) => (
+                        <li key={index} className="flex items-start">
+                            <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-1 shrink-0" />
+                            <span>{req}</span>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+            
+            <section>
+                <h2 className="text-xl font-semibold text-primary mb-3 flex items-center">
+                    <Building2 className="mr-2 h-5 w-5" /> E. Commercial and Industrial
+                </h2>
+                <ul className="space-y-4">
+                    {commercialIndustrialRequirements.map((req, index) => (
                         <li key={index} className="flex items-start">
                             <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-1 shrink-0" />
                             <span>{req}</span>
