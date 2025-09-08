@@ -11,10 +11,11 @@ export const metadata: Metadata = {
 const directors = [
   { name: "Director General", title: "Director General", imageUrl: "/image/dg.jpg", hint: "person portrait" },
   { name: "Director Development Control", title: "Director", imageUrl: "/image/director-4.jpg", hint: "person portrait" },
+  { name: "Director Monitoring and Compliance", title: "Director", imageUrl: "/image/director-3.jpg", hint: "person portrait" },
   { name: "Director Admin and Supply", title: "Director", imageUrl: "/image/director-2.JPG", hint: "person portrait" },
-  { name: "Director 3", title: "Director", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Director 4", title: "Director", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
-  { name: "Director 5", title: "Director", imageUrl: "https://placehold.co/300x300.png", hint: "person portrait" },
+  { name: "Director of Account and Finance", title: "Director", imageUrl: "/image/director-5.jpg", hint: "person portrait" },
+  { name: "Director Urban Palnning and Research", title: "Director", imageUrl: "/image/director-6.JPG", hint: "person portrait" },
+ 
 ];
 
 export default function AboutPage() {

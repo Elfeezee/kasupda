@@ -127,7 +127,7 @@ export default function Header() {
 
   const developmentControlSubLinks = [
     { href: "/consultants", label: "Approved Consultants" },
-    { href: "#", label: "Building Permit Application Guidelines" },
+    { href: "/building-permit-guidelines", label: "Building Permit Application Guidelines" },
     { href: "/development-control-officers", label: "Development Control Officers" },
     { href: "/inspection", label: "Inspection" },
     { href: "/permit-process", label: "Permit Process" },
