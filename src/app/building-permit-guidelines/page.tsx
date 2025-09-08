@@ -77,6 +77,14 @@ const commercialIndustrialRequirements = [
     "Land title document (Digitized C of O, KADGIS Offer Letter, KADGIS Acknowledgment)",
     "Site Analysis Report (SAR)",
     "Complete working Drawings (Architectural, Structural, Mechanical and Electrical)",
+    "Calculation sheet, Letter for Supervision/ Responsibility for storey buildings.",
+    "Builder's Document to be produced by Registered Builder",
+    "Geotechnical investigation Report (Soil Test) for Multi storey development that exceeds two (2) floors.",
+    "PDF copy of all drawings on CD",
+    "Means of ID of applicant",
+    "Means of ID of representative (optional)",
+    "Copy of utility bill",
+    "KEPA EIA Certificate (could be submitted while APPLICATION is in process)",
 ];
 
 
