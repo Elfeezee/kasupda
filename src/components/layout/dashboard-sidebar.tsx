@@ -40,9 +40,9 @@ const navItems = [
   { href: '/dashboard/apply', label: 'Apply for Permit', icon: FilePlus2 },
   { href: '/dashboard/apply/stage-approval', label: 'Apply for Stage Approval', icon: ClipboardCheck },
   { href: '/dashboard/my-applications', label: 'My Applications', icon: ListChecks },
-  { href: '/dashboard/profile', label: 'My Profile', icon: UserCircle2, disabled: true }, // Placeholder
-  { href: '/dashboard/payments', label: 'Payment History', icon: ReceiptText, disabled: true }, // Placeholder
-  { href: '/dashboard/documents', label: 'My Documents', icon: FolderArchive, disabled: true }, // Placeholder
+  { href: '/dashboard/profile', label: 'My Profile', icon: UserCircle2, disabled: false },
+  { href: '/dashboard/payments', label: 'Payment History', icon: ReceiptText, disabled: false },
+  { href: '/dashboard/documents', label: 'My Documents', icon: FolderArchive, disabled: false },
 ];
 
 export default function DashboardSidebar() {
