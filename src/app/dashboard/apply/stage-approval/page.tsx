@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -19,8 +19,6 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from "@/hooks/use-toast";
 import { saveApplication } from '@/app/actions/applicationActions';
 import { useRouter } from 'next/navigation';
-import { onAuthStateChanged, type User } from 'firebase/auth';
-import { auth } from '@/lib/firebase/config';
 
 const stageApprovalSchema = z.object({
   // Applicant Details
@@ -51,20 +49,8 @@ type StageApprovalFormValues = z.infer<typeof stageApprovalSchema>;
 export default function StageApprovalPage() {
   const { toast } = useToast();
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        if (!currentUser) {
-            router.push('/login');
-        } else {
-            setUser(currentUser);
-        }
-    });
-    return () => unsubscribe();
-  }, [router]);
-
   const { register, handleSubmit, control, formState: { errors } } = useForm<StageApprovalFormValues>({
     resolver: zodResolver(stageApprovalSchema),
     mode: "onChange",
@@ -85,17 +71,13 @@ export default function StageApprovalPage() {
   });
 
   const onSubmit = async (data: StageApprovalFormValues) => {
-    if (!user) {
-        toast({ title: "Authentication Error", description: "You must be logged in to submit an application. Please log in again.", variant: "destructive" });
-        router.push('/login');
-        return;
-    }
     setIsSubmitting(true);
     
     const formData = new FormData();
     formData.append('type', "Stage Approval Application");
     formData.append('applicantName', `${data.firstName} ${data.surname}`);
-    formData.append('userId', user.uid);
+    // Use a placeholder userId since we removed auth
+    formData.append('userId', 'anonymous_user');
     // Serialize the full data object
     formData.append('data', JSON.stringify(data, (key, value) => {
         if (value instanceof FileList) {
@@ -128,21 +110,6 @@ export default function StageApprovalPage() {
     }
   };
   
-  if (!user) {
-      return (
-          <div className="container mx-auto px-2 sm:px-4 py-8">
-              <Card className="max-w-3xl mx-auto">
-                  <CardHeader>
-                      <CardTitle>Verifying your login status...</CardTitle>
-                      <CardDescription>
-                          Please wait while we check your authentication details.
-                      </CardDescription>
-                  </CardHeader>
-              </Card>
-          </div>
-      )
-  }
-
   return (
     <div className="container mx-auto px-2 sm:px-4 py-8">
       <Card className="max-w-3xl mx-auto">
@@ -309,7 +276,7 @@ export default function StageApprovalPage() {
             <Button 
               type="submit" 
               className="w-full sm:w-auto py-3 text-base"
-              disabled={isSubmitting || !user}
+              disabled={isSubmitting}
             >
                 {isSubmitting ? 'Submitting...' : 'Submit Stage Approval Application'}
             </Button>
@@ -319,5 +286,3 @@ export default function StageApprovalPage() {
     </div>
   );
 }
-
-    
