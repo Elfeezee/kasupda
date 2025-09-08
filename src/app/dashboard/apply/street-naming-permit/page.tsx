@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, Controller, type FieldName } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -22,6 +22,8 @@ import { cn } from '@/lib/utils';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { saveApplication } from '@/app/actions/applicationActions';
 import { useRouter } from 'next/navigation';
+import { onAuthStateChanged, type User } from 'firebase/auth';
+import { auth } from '@/lib/firebase/config';
 
 const phoneRegex = /^\+?[0-9\s-()]+$/;
 
@@ -138,6 +140,20 @@ export default function StreetNamingPermitPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+            setUser(currentUser);
+        } else {
+            toast({ title: 'Authentication Error', description: 'You must be logged in to proceed.', variant: 'destructive' });
+            router.push('/login');
+        }
+    });
+    return () => unsubscribe();
+  }, [router, toast]);
+
   const { register, handleSubmit, control, formState: { errors }, trigger, watch } = useForm<StreetNamingPermitFormValues>({
     resolver: zodResolver(streetNamingPermitSchema),
     mode: "onChange",
@@ -194,11 +210,15 @@ export default function StreetNamingPermitPage() {
   const watchedEducationLevel = watch("educationLevel");
 
   const onSubmit = async (data: StreetNamingPermitFormValues) => {
+    if (!user) {
+        toast({ title: "Error", description: "You must be logged in to submit an application.", variant: "destructive" });
+        return;
+    }
     setIsSubmitting(true);
     const formData = new FormData();
     formData.append('type', "Street Naming Permit");
     formData.append('applicantName', `${data.firstName} ${data.surname}`);
-    
+    formData.append('userId', user.uid);
     // Serialize the full data object, handling files
     formData.append('data', JSON.stringify(data, (key, value) => {
         if (value instanceof FileList) {
@@ -253,6 +273,19 @@ export default function StreetNamingPermitPage() {
       setCurrentStep(prev => prev - 1);
     }
   };
+
+  if (!user) {
+    return (
+        <div className="container mx-auto px-2 sm:px-4 py-8">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Loading...</CardTitle>
+                    <CardDescription>Verifying user session...</CardDescription>
+                </CardHeader>
+            </Card>
+        </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-2 sm:px-4 py-8">
