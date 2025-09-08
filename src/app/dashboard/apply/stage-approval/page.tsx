@@ -50,17 +50,23 @@ export default function StageApprovalPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+  const [authChecked, setAuthChecked] = useState(false); // New state to track auth check
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      if (!currentUser) {
-        // Silently redirect to login if not authenticated, without a toast.
-        router.push('/login');
-      }
+      setAuthChecked(true); // Mark auth as checked
     });
     return () => unsubscribe();
-  }, [router]);
+  }, []);
+
+  useEffect(() => {
+    // This effect runs only after the auth state has been checked
+    if (authChecked && !user) {
+      router.push('/login');
+    }
+  }, [user, authChecked, router]);
+
 
   const { register, handleSubmit, control, formState: { errors } } = useForm<StageApprovalFormValues>({
     resolver: zodResolver(stageApprovalSchema),
@@ -118,7 +124,7 @@ export default function StageApprovalPage() {
   };
 
   // Render a loading state until the user object is confirmed to avoid flashing content.
-  if (!user) {
+  if (!authChecked) {
     return (
       <div className="container mx-auto px-2 sm:px-4 py-8">
         <Card className="max-w-3xl mx-auto">
@@ -128,7 +134,7 @@ export default function StageApprovalPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground">Verifying your login status...</p>
           </CardContent>
         </Card>
       </div>
