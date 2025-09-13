@@ -40,3 +40,4 @@ pnpm-debug.log*
 next-env.d.ts
 # Firebase service account key
 .firebase/kasupda-portal-service-account.json
+src/lib/firebase/admin.ts
