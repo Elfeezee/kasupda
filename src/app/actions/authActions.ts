@@ -22,6 +22,7 @@ export interface AuthState {
   } | null;
   success: boolean;
   redirectTo?: string | null;
+  uid?: string;
 }
 
 export async function signUpWithEmail(
@@ -56,14 +57,10 @@ export async function signUpWithEmail(
       emailVerified: false, 
     });
 
-    // This is a simplified approach. In a production app, you would not pass the user's name
-    // in the URL. You would use session cookies or a similar mechanism to manage auth state.
-    const redirectName = userRecord.displayName || email.split('@')[0];
-
     return {
       message: 'Sign up successful! You can now log in.',
       success: true,
-      redirectTo: `/login?name=${encodeURIComponent(redirectName)}`,
+      redirectTo: `/login?name=${encodeURIComponent(userRecord.displayName || email.split('@')[0])}`,
       errors: null,
     };
 
@@ -89,26 +86,27 @@ const LoginSchema = z.object({
 });
 
 
-// NOTE: This is a simplified login for demonstration. 
-// It bypasses validation and redirects immediately.
 export async function loginWithEmail(
   options: { redirectTo?: string },
   prevState: AuthState,
   formData: FormData
 ): Promise<AuthState> {
 
-  const email = formData.get('email') as string || 'user@example.com';
-  const redirectName = email.split('@')[0];
+  // This is a server action, it should not use client-side Firebase SDK.
+  // This function is now a placeholder. The actual logic is on the client-side
+  // in /login/page.tsx which uses the Firebase client SDK for auth.
+  // We return a generic response. The redirection and state handling will be managed
+  // on the client upon successful authentication via the Firebase client SDK.
   
-  // Use the provided redirect path, or default to the user dashboard
-  const defaultRedirect = `/dashboard?name=${encodeURIComponent(redirectName)}`;
-  const redirectTo = options.redirectTo || defaultRedirect;
+  const redirectTo = options.redirectTo || '/dashboard';
   
+  // This server action doesn't perform the login, so we just prep the client
   return {
-      message: 'Login Successful!',
-      success: true,
+      message: 'Client-side login will be attempted.',
+      success: false, // It's not successful until the client says so
       redirectTo: redirectTo,
       errors: null,
   };
 }
+
 

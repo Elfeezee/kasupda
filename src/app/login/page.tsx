@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useEffect, useActionState } from 'react';
+import React, { useEffect, useState, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,9 +10,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from "@/components/ui/separator";
 import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
-import { loginWithEmail, type AuthState } from '@/app/actions/authActions';
+import { auth } from '@/lib/firebase/config';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -25,28 +26,82 @@ function SubmitButton() {
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
-  
-  // Bind the action with a null options object for default redirect behavior
-  const loginAction = loginWithEmail.bind(null, {});
-  const initialState: AuthState = { message: null, success: false, errors: null };
-  const [state, formAction] = useActionState(loginAction, initialState);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (state.success && state.redirectTo) {
+  const redirectTo = searchParams.get('redirectTo') || '/dashboard';
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
       toast({
         title: 'Login Successful!',
         description: 'Redirecting to your dashboard...',
       });
-      router.push(state.redirectTo);
-    } else if (!state.success && state.message) {
+
+      // Pass user's name for welcome message, though this will be replaced by session management
+      const redirectName = user.displayName || user.email?.split('@')[0];
+      const redirectPath = `${redirectTo}?name=${encodeURIComponent(redirectName || 'User')}`;
+      router.push(redirectPath);
+
+    } catch (error: any) {
+      let errorMessage = "An unknown error occurred.";
+      switch (error.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+          errorMessage = "Invalid email or password. Please try again.";
+          break;
+        case 'auth/invalid-email':
+          errorMessage = "Please enter a valid email address.";
+          break;
+        default:
+          errorMessage = "Failed to log in. Please try again later.";
+          break;
+      }
+      setError(errorMessage);
       toast({
         title: 'Login Error',
-        description: state.message,
+        description: errorMessage,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      toast({
+        title: 'Google Sign-In Successful!',
+        description: 'Redirecting to your dashboard...',
+      });
+       const redirectName = user.displayName || user.email?.split('@')[0];
+       const redirectPath = `${redirectTo}?name=${encodeURIComponent(redirectName || 'User')}`;
+       router.push(redirectPath);
+
+    } catch (error) {
+       console.error("Google Sign-In Error:", error);
+       toast({
+        title: 'Google Sign-In Error',
+        description: 'Could not sign in with Google. Please try again.',
         variant: 'destructive',
       });
     }
-  }, [state, router, toast]);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-var(--header-height,100px)-var(--footer-height,100px))]">
@@ -56,19 +111,21 @@ export default function LoginPage() {
           <CardDescription>Sign in to access your KASUPDA dashboard.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={formAction} className="grid grid-cols-1 gap-6">
+          <form onSubmit={handleLogin} className="grid grid-cols-1 gap-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
-              <Input id="email" name="email" type="email" placeholder="you@example.com" required />
-              {state.errors?.email && <p className="text-destructive text-xs mt-1">{state.errors.email[0]}</p>}
+              <Input id="email" name="email" type="email" placeholder="you@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" placeholder="••••••••" required />
-              {state.errors?.password && <p className="text-destructive text-xs mt-1">{state.errors.password[0]}</p>}
+              <Input id="password" name="password" type="password" placeholder="••••••••" required value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
+
+            {error && <p className="text-destructive text-xs mt-1 text-center">{error}</p>}
             
-            <SubmitButton />
+            <Button type="submit" className="w-full text-lg py-3" disabled={isSubmitting}>
+                {isSubmitting ? 'Logging in...' : 'Login'}
+            </Button>
           </form>
           
           <div className="text-center mt-6 text-sm">
@@ -87,12 +144,7 @@ export default function LoginPage() {
             className="w-full flex items-center justify-center space-x-2 py-3 text-base" 
             variant="outline" 
             type="button" 
-            onClick={() => { 
-                toast({
-                    title: 'Google Sign-In',
-                    description: 'Google Sign-In is not implemented in this prototype.',
-                });
-             }}
+            onClick={handleGoogleSignIn}
           >
             <FcGoogle className="text-2xl" />
             <span>Login with Google</span>

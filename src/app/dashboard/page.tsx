@@ -9,13 +9,23 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Clock, CalendarDays, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { onAuthStateChanged, type User } from 'firebase/auth';
+import { auth } from '@/lib/firebase/config';
 
 const DashboardPage: React.FC = () => {
-  const searchParams = useSearchParams();
-  const userName = searchParams.get('name') || 'User';
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const [currentDate, setCurrentDate] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     // This code now runs only on the client, after hydration
@@ -28,6 +38,12 @@ const DashboardPage: React.FC = () => {
     
     return () => clearInterval(timer);
   }, []);
+  
+  if (loading) {
+    return <div className="text-center p-8">Loading dashboard...</div>;
+  }
+
+  const userName = user?.displayName || user?.email?.split('@')[0] || 'User';
 
   return (
     <div className="w-full space-y-8">

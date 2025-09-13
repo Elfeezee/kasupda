@@ -9,9 +9,10 @@ import type { VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { useToast } from '@/hooks/use-toast.tsx';
-import { db } from '@/lib/firebase/config';
-import { collection, query, getDocs, orderBy } from 'firebase/firestore';
+import { db, auth } from '@/lib/firebase/config';
+import { collection, query, getDocs, orderBy, where } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 
 // Reuse the type definition
 import type { StoredApplication } from '@/app/admin/applications/page';
@@ -53,27 +54,43 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
 
 function MyApplicationsPageComponent() {
   const { toast } = useToast();
+  const router = useRouter();
   const [applications, setApplications] = useState<StoredApplication[]>([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        // Not logged in, redirect to login page
+        router.push('/login?redirectTo=/dashboard/my-applications');
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
+  useEffect(() => {
+    if (!user) return; // Don't fetch if no user
+
     const fetchApplications = async () => {
       setLoading(true);
       try {
         const appsRef = collection(db, "applications");
-        // Fetch all applications, ordered by date
-        const q = query(appsRef, orderBy("date", "desc"));
+        // Query for applications where the userId matches the current user's UID
+        const q = query(appsRef, where("userId", "==", user.uid), orderBy("date", "desc"));
         const querySnapshot = await getDocs(q);
-        const allApps = querySnapshot.docs.map(doc => ({
+        const userApps = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         } as StoredApplication));
-        setApplications(allApps);
+        setApplications(userApps);
       } catch (error) {
-        console.error("Error fetching applications:", error);
+        console.error("Error fetching user applications:", error);
         toast({
           title: "Error",
-          description: "Could not fetch applications from the database.",
+          description: "Could not fetch your applications from the database.",
           variant: "destructive",
         });
       } finally {
@@ -81,7 +98,11 @@ function MyApplicationsPageComponent() {
       }
     };
     fetchApplications();
-  }, [toast]);
+  }, [user, toast]);
+  
+  if (!user) {
+    return <div className="text-center p-8">Redirecting to login...</div>;
+  }
   
   return (
     <div className="space-y-8">
@@ -137,7 +158,7 @@ function MyApplicationsPageComponent() {
 // A wrapper component is needed because hooks like useToast and useEffect need to be in a Client Component.
 export default function MyApplicationsPage() {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className="text-center p-8">Loading...</div>}>
             <MyApplicationsPageComponent />
         </Suspense>
     )
