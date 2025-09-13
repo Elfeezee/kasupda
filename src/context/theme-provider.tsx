@@ -13,10 +13,10 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<string>('light');
-  // Add a mounted state to prevent rendering theme-dependent UI on the server
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // This effect runs only on the client
     const storedTheme = localStorage.getItem('kasupda-theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
@@ -27,12 +27,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       currentTheme = 'dark';
     }
 
-    setThemeState(currentTheme);
-    if (currentTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    setTheme(currentTheme);
     setMounted(true);
   }, []);
 
@@ -53,11 +48,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   
   const value = { theme, setTheme, toggleTheme };
 
-  // Prevents hydration mismatch by not rendering theme-dependent UI until mounted on the client
+  // To prevent hydration mismatch, we can return null or a placeholder on the server/first render
   if (!mounted) {
-    return <ThemeContext.Provider value={value}></ThemeContext.Provider>;
+    // You can optionally render a skeleton or nothing here
+    // Returning children directly but wrapped in provider with default value might be one way,
+    // but better to avoid rendering theme-dependent UI until mounted.
+    return (
+       <ThemeContext.Provider value={value}>
+        {/* Render children, but they won't have the correct theme on initial server render. 
+            The `suppressHydrationWarning` on <html> tag is key. */}
+        {children}
+       </ThemeContext.Provider>
+    );
   }
-
 
   return (
     <ThemeContext.Provider value={value}>

@@ -10,7 +10,7 @@ export default function Footer() {
   const [currentYear, setCurrentYear] = useState<number | null>(null);
 
   useEffect(() => {
-    // This now runs only on the client
+    // This now runs only on the client, after initial render
     setCurrentYear(new Date().getFullYear());
   }, []);
 
