@@ -55,12 +55,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Prevents hydration mismatch by not rendering theme-dependent UI until mounted on the client
   if (!mounted) {
-    return (
-      <ThemeContext.Provider value={value}>
-        <div style={{ visibility: 'hidden' }}>{children}</div>
-      </ThemeContext.Provider>
-    );
+    return <ThemeContext.Provider value={value}></ThemeContext.Provider>;
   }
+
 
   return (
     <ThemeContext.Provider value={value}>
