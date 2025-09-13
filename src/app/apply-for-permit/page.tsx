@@ -6,13 +6,15 @@ import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail, type AuthState } from '@/app/actions/authActions';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '@/lib/firebase/config';
 
 
 function SubmitButton() {
@@ -48,6 +50,27 @@ export default function ApplyForPermitPage() {
       });
     }
   }, [state, router, toast]);
+
+  const handleGoogleSignUp = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      toast({
+        title: 'Google Sign-Up Successful!',
+        description: `Welcome, ${user.displayName}! Redirecting to dashboard...`,
+      });
+      // A new user signed up via Google is already logged in, so redirect to dashboard
+      router.push('/dashboard');
+    } catch (error) {
+       console.error("Google Sign-Up Error:", error);
+       toast({
+        title: 'Google Sign-Up Error',
+        description: 'Could not sign up with Google. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[calc(100vh-var(--header-height,100px)-var(--footer-height,100px))]">
@@ -101,20 +124,12 @@ export default function ApplyForPermitPage() {
             className="w-full flex items-center justify-center space-x-2 py-3 text-base" 
             variant="outline" 
             type="button" 
-            onClick={() => { 
-                toast({
-                    title: 'Google Sign-Up',
-                    description: 'Google Sign-Up is not implemented in this prototype.',
-                });
-             }}
+            onClick={handleGoogleSignUp}
           >
             <FcGoogle className="text-2xl" />
             <span>Sign Up with Google</span>
           </Button>
         </CardContent>
-         <CardFooter className="justify-center mt-2 pb-6">
-          {/* Footer content can be added here if needed, or removed if empty */}
-        </CardFooter>
       </Card>
     </div>
   );

@@ -78,35 +78,3 @@ export async function signUpWithEmail(
     };
   }
 }
-
-
-const LoginSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address.' }),
-  password: z.string().min(1, { message: 'Password cannot be empty.' }),
-});
-
-
-export async function loginWithEmail(
-  options: { redirectTo?: string },
-  prevState: AuthState,
-  formData: FormData
-): Promise<AuthState> {
-
-  // This is a server action, it should not use client-side Firebase SDK.
-  // This function is now a placeholder. The actual logic is on the client-side
-  // in /login/page.tsx which uses the Firebase client SDK for auth.
-  // We return a generic response. The redirection and state handling will be managed
-  // on the client upon successful authentication via the Firebase client SDK.
-  
-  const redirectTo = options.redirectTo || '/dashboard';
-  
-  // This server action doesn't perform the login, so we just prep the client
-  return {
-      message: 'Client-side login will be attempted.',
-      success: false, // It's not successful until the client says so
-      redirectTo: redirectTo,
-      errors: null,
-  };
-}
-
-
