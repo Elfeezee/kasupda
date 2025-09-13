@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail, type AuthState } from '@/app/actions/authActions';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 
 
@@ -32,6 +32,17 @@ export default function ApplyForPermitPage() {
   
   const initialState: AuthState = { message: null, success: false, errors: null };
   const [state, formAction] = useActionState(signUpWithEmail, initialState);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // If user is already logged in (e.g., after Google sign-up), redirect them.
+        router.push('/dashboard');
+      }
+    });
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [router]);
 
   useEffect(() => {
     if (state.success) {
@@ -54,14 +65,13 @@ export default function ApplyForPermitPage() {
   const handleGoogleSignUp = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      await signInWithPopup(auth, provider);
       toast({
         title: 'Google Sign-Up Successful!',
-        description: `Welcome, ${user.displayName}! Redirecting to dashboard...`,
+        description: `Redirecting to dashboard...`,
       });
-      // A new user signed up via Google is already logged in, so redirect to dashboard
-      router.push('/dashboard');
+      // The onAuthStateChanged listener will handle the redirect.
+      // router.push('/dashboard');
     } catch (error) {
        console.error("Google Sign-Up Error:", error);
        toast({

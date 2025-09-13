@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from "@/hooks/use-toast";
 import { auth } from '@/lib/firebase/config';
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 
 function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
   return (
@@ -33,6 +33,19 @@ export default function LoginPage() {
 
   const redirectTo = searchParams.get('redirectTo') || '/dashboard';
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // If user is already logged in, redirect them.
+        router.push(redirectTo);
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [router, redirectTo]);
+
+
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
@@ -45,7 +58,8 @@ export default function LoginPage() {
         title: 'Login Successful!',
         description: 'Redirecting to your dashboard...',
       });
-      router.push(redirectTo);
+      // The onAuthStateChanged listener will handle the redirect.
+      // router.push(redirectTo);
 
     } catch (error: any) {
       let errorMessage = "An unknown error occurred.";
@@ -81,7 +95,8 @@ export default function LoginPage() {
         title: 'Google Sign-In Successful!',
         description: 'Redirecting to your dashboard...',
       });
-      router.push(redirectTo);
+      // The onAuthStateChanged listener will handle the redirect.
+      // router.push(redirectTo);
 
     } catch (error) {
        console.error("Google Sign-In Error:", error);
