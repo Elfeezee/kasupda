@@ -1,22 +1,33 @@
-
-// src/lib/firebase/config.ts
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth }s from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+// Import the functions you need from the SDKs you need
+import { initializeApp, getApps } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore }from "firebase/firestore";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "kasupda-portal-425814.firebaseapp.com",
-  projectId: "kasupda-portal-42581
-  storageBucket: "kasupda-portal-425814.appspot.com",
-  messagingSenderId: "297839652531",
-  appId: "1:297839652531:web:e7839383e6b5cb57f72159"
+  apiKey: "AIzaSyA0cEB3HNvSdfMP025za6Xj3StYf6iiuFc",
+  authDomain: "kasupdaportalpro.firebaseapp.com",
+  projectId: "kasupdaportalpro",
+  storageBucket: "kasupdaportalpro.appspot.com",
+  messagingSenderId: "465998096959",
+  appId: "1:465998096959:web:113fe37c42d308236a668a",
+  measurementId: "G-CYC7YQWCN0"
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, auth, db };
+// Initialize Analytics if supported
+let analytics;
+if (typeof window !== 'undefined') {
+  isSupported().then(supported => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  });
+}
+
+export { app, auth, db, analytics };

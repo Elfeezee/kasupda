@@ -23,21 +23,9 @@ import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 
 const stageApprovalSchema = z.object({
-  // Applicant Details
-  title: z.string().optional(),
-  firstName: z.string().min(1, "First name is required"),
-  middleName: z.string().optional(),
-  surname: z.string().min(1, "Surname is required"),
-  gender: z.enum(["Male", "Female"], { required_error: "Gender is required" }),
-  dateOfBirth: z.date({ required_error: "Date of birth is required" }),
-  phone1: z.string().min(1, "Phone number is required").regex(/^\+?[0-9\s-()]+$/, "Invalid phone number format"),
-  email: z.string().email("Invalid email address").optional().or(z.literal('')),
-  
   // Project Details
-  fileNumber: z.string().optional(),
-  kdlNumber: z.string().optional(),
-  docCO: z.any().optional(),
-
+  originalPermitId: z.string().min(5, "Original Permit ID is required"),
+  
   // Declaration
   declaration: z.boolean().refine(val => val === true, {
     message: "You must agree to the declaration to submit the application."
@@ -68,15 +56,7 @@ export default function StageApprovalPage() {
     resolver: zodResolver(stageApprovalSchema),
     mode: "onChange",
     defaultValues: {
-      title: "",
-      firstName: "",
-      middleName: "",
-      surname: "",
-      phone1: "",
-      email: "",
-      fileNumber: "",
-      kdlNumber: "",
-      docCO: undefined,
+      originalPermitId: "",
       declaration: false,
     }
   });
@@ -90,7 +70,8 @@ export default function StageApprovalPage() {
     
     const formData = new FormData();
     formData.append('type', "Stage Approval Application");
-    formData.append('applicantName', `${data.firstName} ${data.surname}`);
+    // Use user's display name from auth, or a fallback
+    formData.append('applicantName', user.displayName || user.email || "KASUPDA Applicant");
     formData.append('userId', user.uid);
     formData.append('data', JSON.stringify(data, (key, value) => {
         if (value instanceof FileList) {
@@ -140,115 +121,14 @@ export default function StageApprovalPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-8">
-            {/* Applicant Details Section */}
-            <section>
-              <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-4">Applicant Details</h3>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                    <Label htmlFor="title">Title</Label>
-                    <Input id="title" {...register("title")} />
-                    </div>
-                    <div className="md:col-span-1">
-                    <Label htmlFor="firstName">First Name*</Label>
-                    <Input id="firstName" {...register("firstName")} />
-                    {errors.firstName && <p className="text-destructive text-xs mt-1">{errors.firstName.message}</p>}
-                    </div>
-                    <div>
-                    <Label htmlFor="middleName">Middle Name</Label>
-                    <Input id="middleName" {...register("middleName")} />
-                    </div>
-                    <div>
-                    <Label htmlFor="surname">Surname*</Label>
-                    <Input id="surname" {...register("surname")} />
-                    {errors.surname && <p className="text-destructive text-xs mt-1">{errors.surname.message}</p>}
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <Label>Gender*</Label>
-                        <Controller
-                            name="gender"
-                            control={control}
-                            render={({ field }) => (
-                            <RadioGroup onValueChange={field.onChange} value={field.value} className="flex items-center space-x-4 mt-2">
-                                <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="Male" id="male" />
-                                <Label htmlFor="male" className="font-normal text-sm">Male</Label>
-                                </div>
-                                <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="Female" id="female" />
-                                <Label htmlFor="female" className="font-normal text-sm">Female</Label>
-                                </div>
-                            </RadioGroup>
-                            )}
-                        />
-                        {errors.gender && <p className="text-destructive text-xs mt-1">{errors.gender.message}</p>}
-                    </div>
-                    <div>
-                        <Label htmlFor="dateOfBirth">Date of Birth*</Label>
-                        <Controller
-                            name="dateOfBirth"
-                            control={control}
-                            render={({ field }) => (
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                <Button variant={"outline"} className="w-full justify-start text-left font-normal mt-1">
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                                </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
-                                <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
-                                </PopoverContent>
-                            </Popover>
-                            )}
-                        />
-                        {errors.dateOfBirth && <p className="text-destructive text-xs mt-1">{errors.dateOfBirth.message}</p>}
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <Label htmlFor="phone1">Phone Number*</Label>
-                        <Input id="phone1" type="tel" {...register("phone1")} />
-                        {errors.phone1 && <p className="text-destructive text-xs mt-1">{errors.phone1.message}</p>}
-                    </div>
-                    <div>
-                        <Label htmlFor="email">Email Address</Label>
-                        <Input id="email" type="email" {...register("email")} />
-                        {errors.email && <p className="text-destructive text-xs mt-1">{errors.email.message}</p>}
-                    </div>
-                </div>
-              </div>
-            </section>
-            
-            <Separator />
-
             {/* Project Details Section */}
             <section>
               <h3 className="text-lg font-semibold text-primary border-b pb-2 mb-4">Project Details</h3>
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <Label htmlFor="fileNumber">File Number</Label>
-                        <Input id="fileNumber" {...register("fileNumber")} placeholder="Enter the file number" />
-                        {errors.fileNumber && <p className="text-destructive text-xs mt-1">{errors.fileNumber.message}</p>}
-                    </div>
-                    <div>
-                        <Label htmlFor="kdlNumber">KDL Number</Label>
-                        <Input id="kdlNumber" {...register("kdlNumber")} placeholder="Enter the KDL number" />
-                        {errors.kdlNumber && <p className="text-destructive text-xs mt-1">{errors.kdlNumber.message}</p>}
-                    </div>
-                </div>
                 <div>
-                    <Label htmlFor="docCO">C of O Upload</Label>
-                    <Input
-                        id="docCO"
-                        type="file"
-                        {...register("docCO")}
-                        className="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
-                    />
-                    {errors.docCO && <p className="text-destructive text-xs mt-1">{errors.docCO.message as string}</p>}
+                    <Label htmlFor="originalPermitId">Original Building Permit ID*</Label>
+                    <Input id="originalPermitId" {...register("originalPermitId")} placeholder="Enter the ID of your approved building permit" />
+                    {errors.originalPermitId && <p className="text-destructive text-xs mt-1">{errors.originalPermitId.message}</p>}
                 </div>
               </div>
             </section>

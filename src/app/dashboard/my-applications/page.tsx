@@ -8,7 +8,7 @@ import { ListChecks, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-re
 import type { VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
-import { useToast } from '@/hooks/use-toast.tsx';
+import { useToast } from '@/hooks/use-toast';
 import { db, auth } from '@/lib/firebase/config';
 import { collection, query, getDocs, orderBy, where } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
@@ -100,6 +100,10 @@ function MyApplicationsPageComponent() {
     fetchApplications();
   }, [user, toast]);
   
+  if (loading) {
+    return <div className="text-center p-8">Loading your applications...</div>;
+  }
+
   if (!user) {
     return <div className="text-center p-8">Redirecting to login...</div>;
   }
@@ -115,9 +119,7 @@ function MyApplicationsPageComponent() {
         </CardDescription>
       </CardHeader>
 
-      {loading ? (
-         <Card><CardContent className="pt-6">Loading your applications...</CardContent></Card>
-      ) : applications.length === 0 ? (
+      {applications.length === 0 ? (
         <Card>
           <CardContent className="pt-6">
             <p className="text-muted-foreground">You have not submitted any applications yet.</p>

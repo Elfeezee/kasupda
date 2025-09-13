@@ -8,11 +8,13 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase/config';
-import { doc, getDoc, query, collection, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { query, collection, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
     const { toast } = useToast();
+    const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [profileData, setProfileData] = useState({ name: '', email: '', phone: '', din: 'Not available', address: 'Not available' });
     const [loading, setLoading] = useState(true);
@@ -48,7 +50,7 @@ export default function ProfilePage() {
                         profile.din = `KASUPDA-${uniquePart}`;
                     }
 
-                    // Query for the latest application to get address
+                    // Query for the latest application to get address and potentially more info
                      const latestAppQuery = query(
                         collection(db, "applications"),
                         where("userId", "==", currentUser.uid),
@@ -57,7 +59,16 @@ export default function ProfilePage() {
                     );
                     const latestAppSnapshot = await getDocs(latestAppQuery);
                      if (!latestAppSnapshot.empty) {
-                        const appData = latestAppSnapshot.docs[0].data().data; // Get the nested data object
+                        const appDoc = latestAppSnapshot.docs[0];
+                        const appData = appDoc.data().data; // Get the nested data object
+                        
+                        // Overwrite with more specific data from applications if available
+                        profile.name = appDoc.data().applicantName || profile.name;
+
+                        // Try to find a phone number in the form data
+                        profile.phone = appData.phone1 || appData.orgPhone || profile.phone;
+                        
+                        // Try to find an address
                         if(appData.appStreetName && appData.appCityTown) {
                            profile.address = `${appData.appHouseNo || ''} ${appData.appStreetName}, ${appData.appDistrict || ''}, ${appData.appCityTown}, ${appData.appState}`.replace(/ ,/g,',').replace(/ +/g,' ').trim();
                         } else if(appData.siteStreetName && appData.siteCityTown) {
@@ -78,13 +89,13 @@ export default function ProfilePage() {
                 setLoading(false);
 
             } else {
-                // Handle not logged in
                 setUser(null);
                 setLoading(false);
+                router.push('/login?redirectTo=/dashboard/profile');
             }
         });
         return () => unsubscribe();
-    }, [toast]);
+    }, [toast, router]);
 
     const handleActionClick = (actionName: string) => {
         toast({
@@ -99,6 +110,10 @@ export default function ProfilePage() {
             {isLoading ? <Skeleton className="h-5 w-48" /> : <p className="font-medium">{value || 'N/A'}</p>}
         </div>
     );
+    
+    if (loading) {
+        return <div className="text-center p-8">Loading profile...</div>
+    }
 
     return (
         <div className="space-y-8">

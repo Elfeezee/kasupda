@@ -1,7 +1,6 @@
 
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import { SidebarTrigger } from '@/components/ui/sidebar'; // For mobile toggle
 import { format } from 'date-fns';
@@ -11,21 +10,27 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
+import { useRouter } from 'next/navigation';
 
 const DashboardPage: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const [currentDate, setCurrentDate] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
         setUser(currentUser);
-        setLoading(false);
+      } else {
+        router.push('/login?redirectTo=/dashboard');
+      }
+      setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     // This code now runs only on the client, after hydration
@@ -41,6 +46,11 @@ const DashboardPage: React.FC = () => {
   
   if (loading) {
     return <div className="text-center p-8">Loading dashboard...</div>;
+  }
+  
+  if (!user) {
+    // This will be shown briefly before redirection
+    return <div className="text-center p-8">Redirecting to login...</div>;
   }
 
   const userName = user?.displayName || user?.email?.split('@')[0] || 'User';

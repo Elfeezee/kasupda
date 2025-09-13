@@ -1,8 +1,7 @@
 
 "use client";
 
-import React, { useEffect, useState, useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,11 +14,10 @@ import { useToast } from "@/hooks/use-toast";
 import { auth } from '@/lib/firebase/config';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
+function SubmitButton({ isSubmitting }: { isSubmitting: boolean }) {
   return (
-    <Button type="submit" className="w-full text-lg py-3" disabled={pending}>
-      {pending ? 'Logging in...' : 'Login'}
+    <Button type="submit" className="w-full text-lg py-3" disabled={isSubmitting}>
+      {isSubmitting ? 'Logging in...' : 'Login'}
     </Button>
   );
 }
@@ -41,18 +39,13 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      await signInWithEmailAndPassword(auth, email, password);
       
       toast({
         title: 'Login Successful!',
         description: 'Redirecting to your dashboard...',
       });
-
-      // Pass user's name for welcome message, though this will be replaced by session management
-      const redirectName = user.displayName || user.email?.split('@')[0];
-      const redirectPath = `${redirectTo}?name=${encodeURIComponent(redirectName || 'User')}`;
-      router.push(redirectPath);
+      router.push(redirectTo);
 
     } catch (error: any) {
       let errorMessage = "An unknown error occurred.";
@@ -83,15 +76,12 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
+      await signInWithPopup(auth, provider);
       toast({
         title: 'Google Sign-In Successful!',
         description: 'Redirecting to your dashboard...',
       });
-       const redirectName = user.displayName || user.email?.split('@')[0];
-       const redirectPath = `${redirectTo}?name=${encodeURIComponent(redirectName || 'User')}`;
-       router.push(redirectPath);
+      router.push(redirectTo);
 
     } catch (error) {
        console.error("Google Sign-In Error:", error);
@@ -123,9 +113,7 @@ export default function LoginPage() {
 
             {error && <p className="text-destructive text-xs mt-1 text-center">{error}</p>}
             
-            <Button type="submit" className="w-full text-lg py-3" disabled={isSubmitting}>
-                {isSubmitting ? 'Logging in...' : 'Login'}
-            </Button>
+            <SubmitButton isSubmitting={isSubmitting} />
           </form>
           
           <div className="text-center mt-6 text-sm">
