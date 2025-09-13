@@ -29,7 +29,7 @@ export async function signUpWithEmail(
   prevState: AuthState, 
   formData: FormData
 ): Promise<AuthState> {
-  const { auth } = initializeFirebaseAdmin();
+  const { auth, db } = initializeFirebaseAdmin();
 
   const validatedFields = SignUpSchema.safeParse({
     applicantName: formData.get('applicantName'),
@@ -49,6 +49,7 @@ export async function signUpWithEmail(
   const { applicantName, email, phone, password } = validatedFields.data;
 
   try {
+    // 1. Create the user in Firebase Auth
     const userRecord = await auth.createUser({
       email,
       password,
@@ -56,6 +57,17 @@ export async function signUpWithEmail(
       phoneNumber: phone,
       emailVerified: false, 
     });
+
+    // 2. Create the user document in Firestore
+    await db.collection('users').doc(userRecord.uid).set({
+      uid: userRecord.uid,
+      name: applicantName,
+      email: email,
+      phone: phone,
+      role: 'Applicant', // Default role for new users
+      createdAt: new Date().toISOString(),
+    });
+
 
     return {
       message: 'Sign up successful! You can now log in.',

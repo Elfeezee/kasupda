@@ -16,71 +16,79 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuPortal } from '@/components/ui/dropdown-menu';
 import { format, parseISO } from 'date-fns';
 import { db } from '@/lib/firebase/config';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
-import type { StoredApplication } from '../applications/page';
+import { collection, getDocs, doc, updateDoc, query, orderBy } from 'firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
 
 
-// Define a user structure based on application data
+// Define a user structure based on firestore data
 interface AppUser {
-  id: string; // Using userId as the unique ID
+  uid: string;
   name: string;
   email: string;
-  role: 'Applicant' | 'Admin'; // Simple roles for now
-  joined: string; // Date of first application
-  applicationCount: number;
+  phone?: string;
+  role: 'Applicant' | 'Admin';
+  createdAt: string;
 }
 
 export default function ManageUsersPage() {
   const [users, setUsers] = useState<AppUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const { toast } = useToast();
 
-  useEffect(() => {
-    const deriveUsersFromApplications = async () => {
+  const fetchUsers = React.useCallback(async () => {
       setLoading(true);
       try {
-        const q = query(collection(db, "applications"), orderBy("date", "asc"));
+        const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
-        const applications = querySnapshot.docs.map(doc => doc.data() as Omit<StoredApplication, 'id'>);
-
-        const userMap = new Map<string, AppUser>();
-
-        applications.forEach(app => {
-          // A user is uniquely identified by their userId
-          const userId = app.userId;
-          if (!userId) return; // Skip if no user ID
-
-          if (userMap.has(userId)) {
-            const existingUser = userMap.get(userId)!;
-            existingUser.applicationCount += 1;
-            // No need to update join date since we are ordering by asc date
-          } else {
-            userMap.set(userId, {
-              id: userId,
-              name: app.applicantName,
-              // Attempt to get email from data, otherwise create a placeholder
-              email: app.data.email || app.data.orgEmail || `user-${userId.substring(0,5)}@kasupda.gov.ng`,
-              role: 'Applicant',
-              joined: app.date,
-              applicationCount: 1,
-            });
-          }
-        });
-
-        const derivedUsers = Array.from(userMap.values()).sort((a, b) => new Date(b.joined).getTime() - new Date(a.joined).getTime());
-        setUsers(derivedUsers);
+        const fetchedUsers = querySnapshot.docs.map(doc => doc.data() as AppUser);
+        setUsers(fetchedUsers);
       } catch (error) {
-          console.error("Failed to derive users from Firestore:", error);
+          console.error("Failed to fetch users from Firestore:", error);
+           toast({
+            title: "Error",
+            description: "Failed to load users from the database.",
+            variant: "destructive",
+        });
       } finally {
           setLoading(false);
       }
-    };
-    
-    deriveUsersFromApplications();
-  }, []);
+  }, [toast]);
+
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  const handleRoleChange = async (uid: string, newRole: 'Admin' | 'Applicant') => {
+    try {
+        const userDocRef = doc(db, 'users', uid);
+        await updateDoc(userDocRef, { role: newRole });
+
+        // Update local state to reflect change immediately
+        setUsers(prevUsers =>
+            prevUsers.map(user =>
+                user.uid === uid ? { ...user, role: newRole } : user
+            )
+        );
+
+        toast({
+            title: "User Role Updated",
+            description: `The user's role has been changed to ${newRole}.`,
+        });
+    } catch (error) {
+        console.error("Error updating user role:", error);
+        toast({
+            title: 'Error',
+            description: 'Could not update the user role in the database.',
+            variant: 'destructive',
+        });
+    }
+  };
+
 
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -95,7 +103,7 @@ export default function ManageUsersPage() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Manage Users</CardTitle>
-              <CardDescription>View, search, and manage user accounts derived from applications.</CardDescription>
+              <CardDescription>View, search, and manage user roles.</CardDescription>
             </div>
             <Button className="gap-2" disabled>
               <UserPlus className="h-4 w-4" /> Add New User
@@ -121,9 +129,9 @@ export default function ManageUsersPage() {
                 <TableRow>
                   <TableHead>User</TableHead>
                   <TableHead>Email</TableHead>
+                  <TableHead>Phone</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Date Joined</TableHead>
-                  <TableHead>Apps</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -131,12 +139,12 @@ export default function ManageUsersPage() {
                 {loading ? (
                     <TableRow>
                         <TableCell colSpan={6} className="h-24 text-center">
-                            Loading user data from database...
+                            Loading users from database...
                         </TableCell>
                     </TableRow>
                 ) : filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => (
-                    <TableRow key={user.id}>
+                    <TableRow key={user.uid}>
                         <TableCell className="font-medium">
                         <div className="flex items-center gap-3">
                             <Avatar>
@@ -147,11 +155,11 @@ export default function ManageUsersPage() {
                         </div>
                         </TableCell>
                         <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.phone || 'N/A'}</TableCell>
                         <TableCell>
                         <Badge variant={user.role === 'Admin' ? 'destructive' : 'secondary'}>{user.role}</Badge>
                         </TableCell>
-                        <TableCell>{user.joined ? format(parseISO(user.joined), 'dd/MM/yyyy') : 'N/A'}</TableCell>
-                        <TableCell>{user.applicationCount}</TableCell>
+                        <TableCell>{user.createdAt ? format(parseISO(user.createdAt), 'dd/MM/yyyy') : 'N/A'}</TableCell>
                         <TableCell className="text-right">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -162,8 +170,21 @@ export default function ManageUsersPage() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem disabled>Edit User</DropdownMenuItem>
-                            <DropdownMenuItem disabled>View Applications</DropdownMenuItem>
+                             <DropdownMenuSub>
+                                <DropdownMenuSubTrigger>
+                                <span>Change Role</span>
+                                </DropdownMenuSubTrigger>
+                                <DropdownMenuPortal>
+                                <DropdownMenuSubContent>
+                                    <DropdownMenuItem onClick={() => handleRoleChange(user.uid, 'Admin')} disabled={user.role === 'Admin'}>
+                                        Make Admin
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleRoleChange(user.uid, 'Applicant')} disabled={user.role === 'Applicant'}>
+                                        Make Applicant
+                                    </DropdownMenuItem>
+                                </DropdownMenuSubContent>
+                                </DropdownMenuPortal>
+                            </DropdownMenuSub>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-destructive" disabled>Delete User</DropdownMenuItem>
                             </DropdownMenuContent>
@@ -174,7 +195,7 @@ export default function ManageUsersPage() {
                 ) : (
                      <TableRow>
                         <TableCell colSpan={6} className="h-24 text-center">
-                            No users found. Submit an application to see users here.
+                            No users found.
                         </TableCell>
                     </TableRow>
                 )}
